@@ -1,8 +1,8 @@
 package com.example.pataventura
 
-import org.junit.Test
+import junit.framework.Assert.assertEquals
+import org.testng.annotations.Test
 
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).

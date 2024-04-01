@@ -1,4 +1,4 @@
-package com.example.pataventura.presentation.screens.loginCliente
+package com.example.pataventura.ui.screens.loginCliente
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

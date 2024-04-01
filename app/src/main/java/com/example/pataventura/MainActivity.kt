@@ -9,7 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.pataventura.presentation.screens.loginCliente.LoginClienteViewModel
+import com.example.pataventura.ui.screens.loginCliente.LoginClienteScreen
+import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
+import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaScreen
+import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
+import com.example.pataventura.ui.screens.registro.RegistroDosScreen
+import com.example.pataventura.ui.screens.registro.RegistroUnoScreen
+import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.theme.PataVenturaTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val loginClienteViewModel: LoginClienteViewModel by viewModels()
     private val loginViewModel: LoginClienteViewModel by viewModels()
+    private val registroViewModel: RegistroViewModel by viewModels()
+    private val registroMascotaViewModel: RegistroMascotaViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -27,8 +35,12 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //Greeting("Android")
-                    LoginScreen( loginViewModel)
+                    //LoginScreen( loginViewModel)
                     //LoginClienteScreen( loginClienteViewModel)
+                    //RegistroUnoScreen(registroViewModel)
+                    //RegistroDosScreen(registroViewModel)
+                    RegistroMascotaScreen(registroMascotaViewModel)
+
                 }
             }
         }

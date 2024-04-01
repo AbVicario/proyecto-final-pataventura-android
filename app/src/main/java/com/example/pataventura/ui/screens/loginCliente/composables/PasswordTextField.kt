@@ -1,4 +1,4 @@
-package com.example.pataventura.presentation.screens.loginCliente.composables
+package com.example.pataventura.ui.screens.loginCliente.composables
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -47,6 +47,8 @@ fun PasswordTextField(password: String, onTextChange: (String) -> Unit) {
             unfocusedLeadingIconColor = Tierra,
             focusedTrailingIconColor = Tierra,
             unfocusedTrailingIconColor = Tierra,
+            focusedPlaceholderColor = Tierra,
+            unfocusedPlaceholderColor = Tierra
 
 
         )

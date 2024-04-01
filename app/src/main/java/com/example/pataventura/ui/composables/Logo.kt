@@ -1,4 +1,4 @@
-package com.example.pataventura.presentation.composables
+package com.example.pataventura.ui.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size

@@ -1,4 +1,4 @@
-package com.example.pataventura.presentation.screens.loginCliente.composables
+package com.example.pataventura.ui.screens.loginCliente.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,7 +32,9 @@ fun EmailTextField(email: String, onTextFieldChange: (String) -> Unit) {
             unfocusedContainerColor = Color.White,
             focusedContainerColor = Color.White,
             focusedLeadingIconColor = Tierra,
-            unfocusedLeadingIconColor = Tierra
+            unfocusedLeadingIconColor = Tierra,
+            focusedPlaceholderColor = Tierra,
+            unfocusedPlaceholderColor = Tierra
 
         )
     )
