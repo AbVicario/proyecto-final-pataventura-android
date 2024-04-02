@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.HeaderLogin
@@ -46,7 +47,7 @@ import com.example.pataventura.ui.theme.VerdeOliva
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun LoginClienteScreen(
-    /*navController: NavController,*/
+    navController: NavController,
     loginClienteViewModel: LoginClienteViewModel
 ) {
     Scaffold() {
@@ -55,13 +56,13 @@ fun LoginClienteScreen(
                 .fillMaxSize(),
         ) {
             HeaderLogin()
-            BodyLoginCliente()
+            BodyLoginCliente(navController, loginClienteViewModel)
 
         }
     }
 }
 @Composable
-fun BodyLoginCliente() {
+fun BodyLoginCliente(navController: NavController, loginClienteViewModel:LoginClienteViewModel) {
     Box(modifier = Modifier
         .fillMaxSize()
     ) {
@@ -77,8 +78,12 @@ fun BodyLoginCliente() {
                 fontWeight = FontWeight.Bold,
                 fontFamily = CustomFontFamily
             )
-            LoginButton(text = "Tutor")
-            LoginButton(text = "Cuidador")
+            LoginButton(text = "Tutor",
+                onClick ={ loginClienteViewModel.onPressLoginButton(navController)}
+            )
+            LoginButton(text = "Cuidador",
+                onClick = {loginClienteViewModel.onPressLoginButton(navController)}
+            )
         }
 
     }
@@ -87,39 +92,4 @@ fun BodyLoginCliente() {
 
 
 
-@Composable
-fun LoginCliente(/*navController: NavController,*/ loginClienteViewModel: LoginClienteViewModel) {
-    val email: String by loginClienteViewModel.email.observeAsState(initial = "")
-    val password: String by loginClienteViewModel.password.observeAsState(initial = "")
-    Box(
-        modifier = Modifier,
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 50.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            EmailTextField(email = email) {
-                loginClienteViewModel.onEmailChange(
-                    it
-                )
-            }
-            Spacer(modifier = Modifier.size(10.dp))
-            PasswordTextField(password = password) {
-                loginClienteViewModel.onPasswordChange(
-                    it
-                )
-            }
-            Spacer(modifier = Modifier.size(20.dp))
-            LoginButton(text = "Acceder")
-
-           // CustomText(text = "ó", color = Color.Black, fontSize = 20.sp )
-
-
-        }
-    }
-}
 

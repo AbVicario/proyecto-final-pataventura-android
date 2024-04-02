@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomOutlinedTextEmail
 import com.example.pataventura.ui.composables.CustomOutlinedTextHome
@@ -42,7 +43,7 @@ import com.example.pataventura.ui.theme.Verde
 import javax.net.ssl.HostnameVerifier
 
 @Composable
-fun BodyRegistroDos(registroViewModel: RegistroViewModel) {
+fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -72,26 +73,26 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel) {
             IconButtonImage()
             Spacer(modifier = Modifier.width(10.dp))
 
-            CustomOutlinedTextPerfil(placeholder = "Nombre:"){
+            CustomOutlinedTextPerfil(placeholder = "Nombre:", false){
                 registroViewModel.onNombreChange(
                     it
                 )
             }
 
         }
-        CustomOutlinedTextPerfil(placeholder = "Apellidos:"){
+        CustomOutlinedTextPerfil(placeholder = "Apellidos:", false){
             registroViewModel.onApellidosChange(
                 it
             )
         }
 
-        CustomOutlinedTextPhone(placeholder = "Teléfono" ){
+        CustomOutlinedTextPhone(placeholder = "Teléfono" , false){
             registroViewModel.onPhoneChange(
                 it
             )
         }
 
-        CustomOutlinedTextHome(placeholder = "Dirección" ){
+        CustomOutlinedTextHome(placeholder = "Dirección", true ){
             registroViewModel.onHomeChange(
                 it
             )
@@ -102,14 +103,15 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel) {
                 .fillMaxWidth(0.7f)
                 .height(50.dp)
         ) {
-            LoginButton(text = "Suiguiente")
+            LoginButton(text = "Suiguiente",
+                onClick = {registroViewModel.onPressRegistroDos(navController)})
         }
     }
     }
 }
 
 @Composable
-fun BodyRegistroUno(registroViewModel: RegistroViewModel) {
+fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavController ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -133,26 +135,26 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel) {
             color = Verde, fontSize = 20.sp,
             fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
         )
-        CustomOutlinedTextPerfil(placeholder = "Alias:"){
+        CustomOutlinedTextPerfil(placeholder = "Alias:", false){
             registroViewModel.onAliasChange(
                 it
             )
         }
 
         //Icon()
-        CustomOutlinedTextEmail(placeholder = "Email:"){
+        CustomOutlinedTextEmail(placeholder = "Email:", false){
             registroViewModel.onEmailChange(
                 it
             )
         }
 
-        CustomOutlinedTextPass(placeholder = "Contraseña:" ){
+        CustomOutlinedTextPass(placeholder = "Contraseña:" , false ){
             registroViewModel.onPasswordChange(
                 it
             )
         }
 
-        CustomOutlinedTextPass(placeholder = "Repetir contraseña" ){
+        CustomOutlinedTextPass(placeholder = "Repetir contraseña", false ){
             registroViewModel.onRepetirChange(
                 it
             )
@@ -162,7 +164,8 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel) {
                 .fillMaxWidth(0.7f)
                 .height(50.dp)
         ) {
-            LoginButton(text = "Suiguiente")
+            LoginButton(text = "Suiguiente",
+                onClick = {registroViewModel.onPressRegistroUno(navController)})
         }
 
     }

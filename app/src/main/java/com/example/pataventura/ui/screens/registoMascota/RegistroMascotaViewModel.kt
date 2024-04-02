@@ -90,7 +90,7 @@ class RegistroMascotaViewModel @Inject constructor(
     }
 
     fun onFinalizarPress(navController: NavController) {
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             val nombre = _nombre.value
             val tipo = _tipo.value
             val numChip = _numChip.value
@@ -101,14 +101,10 @@ class RegistroMascotaViewModel @Inject constructor(
                 return@launch
             }else{
                 navController.navigate(route = "home")
+
             }
-
-            //val isSuccessful = authenticateGuestUseCase.login(email, password)
-
-            /*if (isSuccessful) {
-                navController.navigate(route = "home")
-            }*/
-        }
+        }*/
+        navController.navigate(route = "home") //Para que no rompa
     }
 
 }

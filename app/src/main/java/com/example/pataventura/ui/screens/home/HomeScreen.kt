@@ -1,4 +1,4 @@
-package com.example.pataventura.ui.screens.registro
+package com.example.pataventura.ui.screens.home
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -6,24 +6,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.pataventura.ui.screens.registro.composables.BodyRegistroDos
-import com.example.pataventura.ui.screens.registro.composables.HeaderRegistro
+import com.example.pataventura.ui.composables.CustomText
+import com.example.pataventura.ui.theme.CustomFontFamily
+import com.example.pataventura.ui.theme.Verde
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RegistroDosScreen(
+fun HomeScreen(
     navController: NavController,
-    registroViewModel: RegistroViewModel
+    homeViewModel: HomeViewModel
 ) {
     Scaffold() {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            HeaderRegistro()
-            BodyRegistroDos(registroViewModel = registroViewModel, navController)
-
+           CustomText(text = "En processo", color = Verde, fontSize = 30.sp ,
+               fontWeight = FontWeight.Bold , fontFamily = CustomFontFamily )
         }
     }
+
 }

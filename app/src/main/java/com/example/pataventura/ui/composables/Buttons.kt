@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 import com.example.pataventura.ui.theme.Verde30
@@ -65,12 +66,12 @@ fun CustomButtonStyle(): ButtonColors {
 }
 
 @Composable
-fun LoginButton(text: String) {
+fun LoginButton(text: String ,  onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 40.dp)
-            .clickable { }
+            .clickable { onClick() }
             .size(width = 200.dp, height = 60.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(VerdeOliva),
