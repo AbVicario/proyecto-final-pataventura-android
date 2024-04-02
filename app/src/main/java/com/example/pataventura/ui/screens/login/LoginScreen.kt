@@ -1,9 +1,6 @@
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,43 +15,42 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomOutlinedTextEmail
 import com.example.pataventura.ui.composables.CustomOutlinedTextPass
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.HeaderLogin
 import com.example.pataventura.ui.composables.LoginButton
-import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
+import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.VerdeOliva
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun LoginScreen(
-    loginClienteViewModel: LoginClienteViewModel
+    navController: NavController,
+    loginViewModel: LoginViewModel
 ) {
-    val email: String by loginClienteViewModel.email.observeAsState(initial = "")
-    val password: String by loginClienteViewModel.password.observeAsState(initial = "")
     Scaffold() {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
             HeaderLogin()
-            BodyLogin(loginClienteViewModel)
+            BodyLogin(loginViewModel, navController)
         }
     }
 
 }
 @Composable
-fun BodyLogin(loginClienteViewModel:LoginClienteViewModel) {
+fun BodyLogin(loginViewModel:LoginViewModel, navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -71,13 +67,16 @@ fun BodyLogin(loginClienteViewModel:LoginClienteViewModel) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            CustomOutlinedTextEmail(placeholder = "Email:") {
-                loginClienteViewModel.onEmailChange(
+            val textFieldEmail =
+            CustomOutlinedTextEmail(placeholder = "Email:",
+                loginViewModel.tieneError.get()) {
+                loginViewModel.onEmailChange(
                     it
                 )
             }
-            CustomOutlinedTextPass(placeholder = "Password:") {
-                loginClienteViewModel.onEmailChange(
+            CustomOutlinedTextPass(placeholder = "Password:",
+                loginViewModel.tieneError.get()) {
+                loginViewModel.onPasswordChange(
                     it
                 )
             }
@@ -87,7 +86,9 @@ fun BodyLogin(loginClienteViewModel:LoginClienteViewModel) {
                     .fillMaxWidth(0.7f)
                     .height(50.dp)
             ) {
-                LoginButton(text = "Acceder")
+                LoginButton(text = "Acceder",
+                    onClick= { loginViewModel.onLoginPress(navController) }
+                )
             }
 
             Row(
@@ -103,7 +104,8 @@ fun BodyLogin(loginClienteViewModel:LoginClienteViewModel) {
                     text = "Acceder con Google",
                     color = VerdeOliva, fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = CustomFontFamily
+                    fontFamily = CustomFontFamily,
+                    Modifier.clickable { loginViewModel.onGooglePress(navController) }
                 )
             }
 
@@ -119,7 +121,8 @@ fun BodyLogin(loginClienteViewModel:LoginClienteViewModel) {
                     text = "Registrase",
                     color = VerdeOliva, fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = CustomFontFamily
+                    fontFamily = CustomFontFamily,
+                    Modifier.clickable { loginViewModel.onRegistrarsePress(navController) }
                 )
             }
 

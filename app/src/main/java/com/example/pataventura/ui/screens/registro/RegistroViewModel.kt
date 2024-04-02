@@ -3,7 +3,10 @@ package com.example.pataventura.ui.screens.registro
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,6 +70,40 @@ class RegistroViewModel @Inject constructor(
 
     fun onHomeChange(direccion: String) {
         _direccion.postValue(direccion)
+    }
+
+    fun onPressRegistroUno(navController: NavController) {
+        /*viewModelScope.launch {
+            val email = _email.value
+            val alias = _alias.value
+            val password = _password.value
+            val repetirPassword = _repetirPassword.value
+
+            if (email.isNullOrBlank() || password.isNullOrBlank() ||
+                alias.isNullOrBlank() || repetirPassword.isNullOrBlank()) {
+                return@launch
+            }else{
+                navController.navigate(route = "registerTwo")
+            }
+        }*/
+        navController.navigate(route = "registerTwo")
+    }
+
+    fun onPressRegistroDos(navController: NavController) {
+        /*viewModelScope.launch {
+            val nombre = _nombre.value
+            val apellidos = _apellidos.value
+            val telefono = _telefono.value
+
+            if (nombre.isNullOrBlank() || apellidos.isNullOrBlank()
+                || telefono.isNullOrBlank()) {
+                return@launch
+            }else{
+
+                //navController.navigate(route = "registerMascota")
+            }
+        }*/
+        navController.navigate(route = "registerMascota")
     }
 
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.InformationButton
 import com.example.pataventura.ui.screens.registro.composables.BodyRegistroUno
@@ -36,7 +37,7 @@ import com.example.pataventura.ui.screens.registro.composables.HeaderRegistro
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RegistroUnoScreen(
-    /*navController: NavController,*/
+    navController: NavController,
     registroViewModel: RegistroViewModel
 ) {
     Scaffold() {
@@ -45,7 +46,7 @@ fun RegistroUnoScreen(
                 .fillMaxSize(),
         ) {
             HeaderRegistro()
-            BodyRegistroUno(registroViewModel = registroViewModel)
+            BodyRegistroUno(registroViewModel = registroViewModel, navController = navController)
 
         }
     }

@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascota
 import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascotaDesplegable
@@ -34,7 +35,8 @@ import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
-fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel) {
+fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel,
+                        navController:NavController) {
     var itemsTipo = listOf<String>(
         "Perro",
         "Gato"
@@ -201,7 +203,8 @@ fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel) {
                     .height(40.dp)
                 )
             {
-                LoginButton(text = "Finalizar")
+                LoginButton(text = "Finalizar",
+                    onClick = {registroMascotaViewModel.onFinalizarPress(navController)} )
             }
         }
     }

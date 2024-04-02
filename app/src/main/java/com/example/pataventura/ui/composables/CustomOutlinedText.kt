@@ -80,8 +80,10 @@ import java.util.Locale
 
 
 @Composable
-fun CustomOutlinedTextPass(placeholder: String, onTextFieldChange: (String) -> Unit) {
+fun CustomOutlinedTextPass(placeholder: String, opcional: Boolean,
+                           onTextFieldChange: (String) -> Unit) {
     var isPasswordVisible by remember { mutableStateOf(false) }
+    var isItemSelected by remember { mutableStateOf(opcional) }
     var text by remember {
         mutableStateOf("")
     }
@@ -90,6 +92,7 @@ fun CustomOutlinedTextPass(placeholder: String, onTextFieldChange: (String) -> U
         value = text,
         onValueChange = {
             text = it
+            isItemSelected = true
             onTextFieldChange(it)
         },
         textStyle = TextStyle(fontSize = 20.sp),
@@ -123,8 +126,8 @@ fun CustomOutlinedTextPass(placeholder: String, onTextFieldChange: (String) -> U
             unfocusedTrailingIconColor = Tierra,
             focusedLabelColor = Tierra,
             unfocusedLabelColor = Tierra,
-            focusedBorderColor = Tierra,
-            unfocusedBorderColor = Tierra,
+            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
+            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
             focusedLeadingIconColor = Tierra,
             unfocusedLeadingIconColor = Tierra,
             focusedPlaceholderColor = Tierra,
@@ -136,10 +139,11 @@ fun CustomOutlinedTextPass(placeholder: String, onTextFieldChange: (String) -> U
 
 
 @Composable
-fun CustomOutlinedTextEmail(placeholder: String, onTextFieldChange: (String) -> Unit) {
+fun CustomOutlinedTextEmail(placeholder: String, tieneError: Boolean, onTextFieldChange: (String) -> Unit) {
     var text by remember {
         mutableStateOf("")
     }
+
 
     OutlinedTextField(
         value = text,
@@ -165,8 +169,8 @@ fun CustomOutlinedTextEmail(placeholder: String, onTextFieldChange: (String) -> 
             focusedContainerColor = Color.White,
             focusedLabelColor = Tierra,
             unfocusedLabelColor = Tierra,
-            focusedBorderColor = Tierra,
-            unfocusedBorderColor = Tierra,
+            focusedBorderColor = if(tieneError) Color.Red else Tierra,
+            unfocusedBorderColor = if(tieneError) Color.Red else Tierra,
             focusedLeadingIconColor = Tierra,
             unfocusedLeadingIconColor = Tierra,
             focusedPlaceholderColor = Tierra,
@@ -177,15 +181,18 @@ fun CustomOutlinedTextEmail(placeholder: String, onTextFieldChange: (String) -> 
 }
 
 @Composable
-fun CustomOutlinedTextPerfil(placeholder: String, onTextFieldChange: (String) -> Unit) {
+fun CustomOutlinedTextPerfil(placeholder: String, opcional: Boolean,
+                             onTextFieldChange: (String) -> Unit) {
     var text by remember {
         mutableStateOf("")
     }
+    var isItemSelected by remember { mutableStateOf(opcional) }
 
     OutlinedTextField(
         value = text,
         onValueChange = {
             text = it
+            isItemSelected = true
             onTextFieldChange(it)
         },
         textStyle = TextStyle(fontSize = 20.sp),
@@ -206,8 +213,8 @@ fun CustomOutlinedTextPerfil(placeholder: String, onTextFieldChange: (String) ->
             focusedContainerColor = Color.White,
             focusedLabelColor = Tierra,
             unfocusedLabelColor = Tierra,
-            focusedBorderColor = Tierra,
-            unfocusedBorderColor = Tierra,
+            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
+            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
             focusedLeadingIconColor = Tierra,
             unfocusedLeadingIconColor = Tierra,
             focusedPlaceholderColor = Tierra,
@@ -496,7 +503,9 @@ fun ObtenerColor(item:String): Color {
 
 
 @Composable
-fun CustomOutlinedTextPhone(placeholder: String, onTextFieldChange: (String) -> Unit) {
+fun CustomOutlinedTextPhone(placeholder: String, opcional: Boolean,
+                            onTextFieldChange: (String) -> Unit) {
+    var isItemSelected by remember { mutableStateOf(opcional) }
     var text by remember {
         mutableStateOf("")
     }
@@ -505,6 +514,7 @@ fun CustomOutlinedTextPhone(placeholder: String, onTextFieldChange: (String) -> 
         value = text,
         onValueChange = {
             text = it
+            isItemSelected = true
             onTextFieldChange(it)
         },
         textStyle = TextStyle(fontSize = 20.sp),
@@ -525,8 +535,8 @@ fun CustomOutlinedTextPhone(placeholder: String, onTextFieldChange: (String) -> 
             focusedContainerColor = Color.White,
             focusedLabelColor = Tierra,
             unfocusedLabelColor = Tierra,
-            focusedBorderColor = Tierra,
-            unfocusedBorderColor = Tierra,
+            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
+            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
             focusedLeadingIconColor = Tierra,
             unfocusedLeadingIconColor = Tierra,
             focusedPlaceholderColor = Tierra,
@@ -537,15 +547,18 @@ fun CustomOutlinedTextPhone(placeholder: String, onTextFieldChange: (String) -> 
 }
 
 @Composable
-fun CustomOutlinedTextHome(placeholder: String, onTextFieldChange: (String) -> Unit) {
+fun CustomOutlinedTextHome(placeholder: String, opcional: Boolean,
+                           onTextFieldChange: (String) -> Unit) {
     var text by remember {
         mutableStateOf("")
     }
+    var isItemSelected by remember { mutableStateOf(opcional) }
 
     OutlinedTextField(
         value = text,
         onValueChange = {
             text = it
+            isItemSelected = true
             onTextFieldChange(it)
         },
         textStyle = TextStyle(fontSize = 20.sp),
@@ -566,8 +579,8 @@ fun CustomOutlinedTextHome(placeholder: String, onTextFieldChange: (String) -> U
             focusedContainerColor = Color.White,
             focusedLabelColor = Tierra,
             unfocusedLabelColor = Tierra,
-            focusedBorderColor = Tierra,
-            unfocusedBorderColor = Tierra,
+            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
+            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
             focusedLeadingIconColor = Tierra,
             unfocusedLeadingIconColor = Tierra,
             focusedPlaceholderColor = Tierra,
