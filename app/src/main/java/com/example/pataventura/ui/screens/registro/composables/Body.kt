@@ -112,28 +112,31 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(top=24.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.silueta_perro_registro),
-            contentDescription = "Silueta gato", Modifier.fillMaxSize()
+            contentDescription = "Silueta perro", Modifier.fillMaxSize()
         )
 
         Column(
             Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(top = 15.dp, bottom = 10.dp),
+                .padding(bottom = 10.dp),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally) {
 
         CustomText(
-            text = "Introduce los datos de tu servicio",
+            text = "Introduce tus datos  ",
             color = Verde, fontSize = 20.sp,
             fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
         )
 
-        //Icon()
+        CustomOutlinedTextPerfil(placeholder = "Alias:", opcional = false){
+            registroViewModel.onAliasChange(it)
+        }
+
         CustomOutlinedTextEmail(placeholder = "Email:", false){
             registroViewModel.onEmailChange(
                 it
@@ -156,7 +159,7 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
                 .fillMaxWidth(0.7f)
                 .height(50.dp)
         ) {
-            LoginButton(text = "Finalizar",
+            LoginButton(text = "Siguiente",
                 onClick = {registroViewModel.onPressRegistroUno(navController)})
         }
 

@@ -1,5 +1,6 @@
 package com.example.pataventura.ui.screens.registro.composables
 
+import android.annotation.SuppressLint
 import android.graphics.DrawFilter
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,12 +42,41 @@ import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
+
 @Composable
-fun HeaderRegistro() {
+fun HeaderRegistro(){
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.2f)
+            .background(Color.Transparent)
+    ){
+
+        HeaderBox()
+        Row (horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically){
+            Image(painter = painterResource(id = R.drawable.perro_registro),
+                contentDescription = "Perro",
+                Modifier
+                    .size(180.dp))
+
+            Image(painter = painterResource(id = R.drawable.nombre),
+                contentDescription = "Nombre aplicación",
+                Modifier
+                    .size(200.dp))
+        }
+
+    }
+
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun HeaderBox(){
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.2f)
+            .fillMaxHeight(0.93f)
             .clip(RoundedCornerShape(bottomEnd = 40.dp))
             .background(Verde)
     ) {
@@ -53,119 +84,6 @@ fun HeaderRegistro() {
             painter = painterResource(id = R.drawable.huella),
             contentDescription = "Huella", Modifier.fillMaxSize()
         )
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Box(Modifier.fillMaxWidth(0.47f)) {
-                Image(
-                    painter = painterResource(id = R.drawable.perro_registro),
-                    contentDescription = "Perro",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            Image(
-                painter = painterResource(id = R.drawable.nombre),
-                contentDescription = "Nombre",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(end = 30.dp)
-            )
-        }
-    }
-    /*val colorsWithWidth = listOf<Pair<Color,Float>>(
-        Verde to 70f,
-        Color.Black to 30f
-    )*/
-    //ColoredBare(colorsWithWidth = colorsWithWidth)
-}
 
-
-/*@Composable
-fun ColoredBar(colorsWithWidth: List<Pair<Color, Float>>) {
-    Canvas(
-        modifier = Modifier
-            .height(400.dp)
-            .fillMaxWidth()
-    ) {
-        val totalHeight = size.height
-        var usedHeight = 0f
-        colorsWithWidth.forEach { (color, height) ->
-            val colorHeight = totalHeight * (height / 100f)
-            drawRect(
-                color = color,
-                topLeft = Offset(usedHeight, 0f),
-                size = Size(colorHeight, size.height)
-            )
-            usedHeight += colorHeight
-        }
-    }
-}*/
-/*@Composable
-fun ColoredBaree(colorsWithWidth: List<Pair<Color, Float>>) {
-    Canvas(
-        modifier = Modifier
-            .fillMaxHeight(0.2f)
-            .fillMaxWidth()
-            //.clip(RoundedCornerShape(bottomEnd = 40.dp))
-    ) {
-        val totalWidth = size.height
-        var usedWidth = 0f
-        colorsWithWidth.forEachIndexed { index, (color, width) ->
-            val colorWidth = totalWidth * (width / 100f)
-            if (index == 0) { // Ajusta el índice según sea necesario
-                drawRoundRect(
-                    cornerRadius = CornerRadius(
-                        [topLeft = 0f, 0f}],
-                        topRight = 0f,
-                        bottomRight = 40f,
-                        bottomLeft = 0f
-                    ),
-                    color = color,
-                    topLeft = Offset(0f, usedWidth),
-                    size = Size(size.width, colorWidth),
-
-                )
-            } else {
-                drawRect(
-                    color = color,
-                    topLeft = Offset(0f, usedWidth),
-                    size = Size(size.width, colorWidth)
-                )
-            }
-            usedWidth += colorWidth
-        }
     }
 }
-
-@Composable
-fun ColoredBare(colorsWithWidth: List<Pair<Color, Float>>) {
-    Box(modifier = Modifier
-        .height(400.dp)
-        .fillMaxWidth()
-    ) {
-        Canvas(
-            modifier = Modifier
-                .height(400.dp)
-                .fillMaxWidth()
-        ) {
-            val totalWidth = size.width
-            var usedWidth = 0f
-            colorsWithWidth.forEach { (color, width) ->
-                val colorWidth = totalWidth * (width / 100f)
-                drawRect(
-                    color = color,
-                    topLeft = Offset(0f, usedWidth),
-                    size = Size(size.width, colorWidth)
-                )
-                usedWidth += colorWidth
-            }
-
-        }
-        Image(
-            painter = painterResource(id = R.drawable.perro_registro),
-            contentDescription = "Perro",
-            modifier = Modifier.fillMaxHeight()
-        )
-    }
-}*/

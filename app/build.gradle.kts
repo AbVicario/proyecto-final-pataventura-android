@@ -84,6 +84,10 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.1")
 
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+
+    //maps
+    implementation ("com.google.maps.android:maps-compose:2.11.4")
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
 }
 
 kapt {
