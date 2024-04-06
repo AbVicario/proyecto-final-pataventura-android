@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.core.navigations.NavigationHost
 import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.login.LoginViewModel
@@ -18,6 +19,7 @@ import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaScreen
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
 import com.example.pataventura.ui.screens.registro.RegistroDosScreen
+import com.example.pataventura.ui.screens.registro.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroUnoScreen
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.theme.PataVenturaTheme
@@ -30,6 +32,7 @@ class MainActivity : ComponentActivity() {
     private val registroViewModel: RegistroViewModel by viewModels()
     private val registroMascotaViewModel: RegistroMascotaViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
+    private val registroServicioViewModel: RegistroServicioViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -44,7 +47,9 @@ class MainActivity : ComponentActivity() {
                         registerMascotaViewModel = registroMascotaViewModel,
                         loginViewModel = loginViewModel,
                         loginClienteViewModel = loginClienteViewModel,
-                        homeViewModel = homeViewModel
+                        homeViewModel = homeViewModel,
+                        registroServicioViewModel = registroServicioViewModel
+
                     )
                     //Greeting("Android")
                     //LoginScreen( loginViewModel)

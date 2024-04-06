@@ -15,6 +15,8 @@ import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaScreen
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
 import com.example.pataventura.ui.screens.registro.RegistroDosScreen
+import com.example.pataventura.ui.screens.registro.RegistroServicioScreen
+import com.example.pataventura.ui.screens.registro.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroUnoScreen
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 
@@ -24,12 +26,13 @@ fun NavigationHost(
     registerMascotaViewModel: RegistroMascotaViewModel,
     loginViewModel: LoginViewModel,
     loginClienteViewModel: LoginClienteViewModel,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    registroServicioViewModel: RegistroServicioViewModel
 ) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Destinations.LoginCliente.route
+        startDestination = Destinations.RegistroServicio.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -48,6 +51,9 @@ fun NavigationHost(
         }
         composable(Destinations.Home.route) {
             HomeScreen(navController, homeViewModel)
+        }
+        composable(Destinations.RegistroServicio.route) {
+            RegistroServicioScreen(navController, registroServicioViewModel)
         }
 
     }

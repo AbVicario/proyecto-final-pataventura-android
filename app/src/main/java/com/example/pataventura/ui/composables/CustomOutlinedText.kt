@@ -270,6 +270,52 @@ fun CustomOutlinedTextPerfilMascota(singleLine: Boolean ,placeholder: String,
 }
 
 @Composable
+fun CustomOutlinedTextDescripcionServicio(singleLine: Boolean ,placeholder: String,
+                                    keyboardType : KeyboardType,
+                                    opcional : Boolean,
+                                    onTextFieldChange: (String) -> Unit) {
+    var text by remember {
+        mutableStateOf("")
+    }
+    var isItemSelected by remember { mutableStateOf(opcional) }
+
+    OutlinedTextField(
+        value = text,
+        onValueChange = {
+            text = it
+            isItemSelected = true
+            onTextFieldChange(it)
+        },
+        textStyle = TextStyle(fontSize = 20.sp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        singleLine = singleLine,
+        maxLines = 1,
+        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
+            modifier = Modifier
+                .background(Color.White)
+                .padding(horizontal = 2.dp))},
+        //leadingIcon = { Icon(Icons.Default.Pets, null) },
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            focusedLabelColor = Tierra,
+            unfocusedLabelColor = Tierra,
+            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
+            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
+            focusedLeadingIconColor = Tierra,
+            unfocusedLeadingIconColor = Tierra,
+            focusedPlaceholderColor = Tierra,
+            unfocusedPlaceholderColor = Tierra
+
+        ),
+    )
+}
+
+@Composable
 fun CustomOutlinedTextPerfilMascotaDesplegable(
     items: List<String>,
     placeholder: String,
