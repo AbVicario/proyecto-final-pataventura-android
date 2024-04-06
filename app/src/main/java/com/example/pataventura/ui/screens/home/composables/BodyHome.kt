@@ -79,7 +79,7 @@ fun BodyHome(){
 
         CustomOutlinedTextPerfilMascotaDesplegable(
             items = listaServicios,
-            placeholder = listaServicios[0],
+            placeholder = "Tipo de servicio",
             keyboardType = KeyboardType.Text,
             opcional = false,
             onTextFieldChange = {},
