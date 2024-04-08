@@ -35,69 +35,73 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.example.pataventura.ui.theme.Verde
 import okhttp3.internal.wait
+import javax.annotation.meta.When
 
 @Composable
-fun BottomBar(){
+fun BottomBar(selectedIcon: ImageVector, onIconSelected: (ImageVector) -> Unit) {
     val listaIconos: List<Pair<ImageVector, Boolean>> = listOf(
-        Icons.Default.Home to true,
-        Icons.Default.CalendarMonth to false,
-        Icons.Default.Pets to false,
-        Icons.Default.NotificationsNone to false,
-        Icons.Default.Person to false
+        Icons.Default.Home to (Icons.Default.Home == selectedIcon),
+        Icons.Default.CalendarMonth to (Icons.Default.CalendarMonth == selectedIcon),
+        Icons.Default.Pets to (Icons.Default.Pets == selectedIcon),
+        Icons.Default.NotificationsNone to (Icons.Default.NotificationsNone == selectedIcon),
+        Icons.Default.Person to (Icons.Default.Person == selectedIcon)
     )
+
     Box(
         Modifier
             .fillMaxWidth()
             .height(65.dp)
-            .background(Color.Transparent)){
+            .background(Color.Transparent)
+    ) {
         Box(
             Modifier
                 .background(Verde)
                 .height(50.dp)
                 .fillMaxWidth()
-                .align(Alignment.BottomStart)){
+                .align(Alignment.BottomStart)
+        ) {
 
         }
-        Row (
+        Row(
             Modifier
                 .fillMaxHeight()
                 .fillMaxWidth()
                 .padding(horizontal = 30.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically){
-
-            for (item in listaIconos){
-                if(item.second){
-                    MyIconButtonSelected(icon = item.first)
-                }else{
-                    MyIconButton(icon = item.first)
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            listaIconos.forEach { (icon, isSelected) ->
+                if (isSelected) {
+                    MyIconButtonSelected(icon = icon, onClick = { onIconSelected(icon) })
+                } else {
+                    MyIconButton(icon = icon, onClick = { onIconSelected(icon) })
                 }
-
             }
         }
     }
 }
 
 @Composable
-fun MyIconButton(icon: ImageVector){
-    Box(modifier = Modifier
-        .background(Verde)
-        .clickable { }
-    ){
-        Icon(icon, null,Modifier.padding(top = 11.dp), tint=Color.White, )
+fun MyIconButton(icon: ImageVector, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .clickable { onClick() }
+            .background(Verde)
+    ) {
+        Icon(icon, contentDescription = null, tint = Color.White, modifier = Modifier.padding(top = 11.dp))
     }
 }
 
 @Composable
-fun MyIconButtonSelected(icon: ImageVector){
-    Column(modifier = Modifier
-        .clickable { },
-    ){
+fun MyIconButtonSelected(icon: ImageVector, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier.clickable { onClick() }
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxHeight()
                 .width(45.dp)
-        ){
+        ) {
             Box(
                 Modifier
                     .fillMaxWidth()
@@ -109,25 +113,23 @@ fun MyIconButtonSelected(icon: ImageVector){
                 modifier = Modifier
                     .size(45.dp)
                     .border(1.dp, Color.Gray.copy(0.4f), RoundedCornerShape(100f))
-                    .shadow(6.dp, RoundedCornerShape(100f), clip = true) // Agregar sombra al contenedor del círculo
+                    .shadow(6.dp, RoundedCornerShape(100f), clip = true) // Add shadow to circle container
                     .align(Alignment.TopStart)
-            ){
+            ) {
                 Box(
                     modifier = Modifier
                         .size(45.dp)
                         .background(Verde, RoundedCornerShape(100f))
                         .align(Alignment.Center)
-                ){
+                ) {
                     Icon(
                         icon,
-                        null,
-                        Modifier.align(Alignment.Center),
+                        contentDescription = null,
+                        modifier = Modifier.align(Alignment.Center),
                         tint = Color.White
                     )
                 }
             }
         }
-
-
     }
 }

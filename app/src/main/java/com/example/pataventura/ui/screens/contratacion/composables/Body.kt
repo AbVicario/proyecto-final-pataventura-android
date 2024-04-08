@@ -37,6 +37,7 @@ import com.example.pataventura.ui.composables.CustomOutlinedTextContrato
 import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascota
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.DatePickerWithDialog
+import com.example.pataventura.ui.composables.MyCustomButton
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 import java.time.LocalDate
@@ -88,25 +89,7 @@ fun MyRowButtons() {
     }
 }
 
-@Composable
-fun MyCustomButton(texto: String, color: Color) {
 
-   Column(
-       Modifier
-           .height(45.dp)
-           .width(120.dp)
-           .background(color, shape = RoundedCornerShape(10.dp))
-           .clickable { },
-       verticalArrangement = Arrangement.Center,
-       horizontalAlignment = Alignment.CenterHorizontally,
-
-    ){
-        CustomText(text = texto, color = Color.White,
-            fontSize = 20.sp, fontWeight = FontWeight.Bold,
-            fontFamily = CustomFontFamily )
-    }
-
-}
 
 
 @Composable
