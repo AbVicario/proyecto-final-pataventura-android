@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.pataventura.ui.screens.contratacion.ContratacionScreen
+import com.example.pataventura.ui.screens.contratacion.ContratacionViewModel
 import com.example.pataventura.ui.screens.home.HomeScreen
 import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.login.LoginViewModel
@@ -27,7 +29,9 @@ fun NavigationHost(
     loginViewModel: LoginViewModel,
     loginClienteViewModel: LoginClienteViewModel,
     homeViewModel: HomeViewModel,
-    registroServicioViewModel: RegistroServicioViewModel
+    registroServicioViewModel: RegistroServicioViewModel,
+    contratacionViewModel: ContratacionViewModel
+
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -54,6 +58,9 @@ fun NavigationHost(
         }
         composable(Destinations.RegistroServicio.route) {
             RegistroServicioScreen(navController, registroServicioViewModel)
+        }
+        composable(Destinations.Contratacion.route) {
+            ContratacionScreen(navController, contratacionViewModel)
         }
 
     }

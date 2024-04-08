@@ -8,10 +8,12 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.core.navigations.NavigationHost
+import com.example.pataventura.ui.screens.contratacion.ContratacionViewModel
 import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteScreen
@@ -23,6 +25,7 @@ import com.example.pataventura.ui.screens.registro.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroUnoScreen
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.theme.PataVenturaTheme
+import com.google.maps.android.compose.GoogleMap
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,6 +36,7 @@ class MainActivity : ComponentActivity() {
     private val registroMascotaViewModel: RegistroMascotaViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
     private val registroServicioViewModel: RegistroServicioViewModel by viewModels()
+    private val contratacionViewModel: ContratacionViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -48,7 +52,8 @@ class MainActivity : ComponentActivity() {
                         loginViewModel = loginViewModel,
                         loginClienteViewModel = loginClienteViewModel,
                         homeViewModel = homeViewModel,
-                        registroServicioViewModel = registroServicioViewModel
+                        registroServicioViewModel = registroServicioViewModel,
+                        contratacionViewModel = contratacionViewModel,
 
                     )
                     //Greeting("Android")

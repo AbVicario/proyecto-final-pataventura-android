@@ -56,6 +56,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -66,6 +67,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.ConfigurationCompat
 import coil.size.Size
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Tierra
@@ -270,6 +272,52 @@ fun CustomOutlinedTextPerfilMascota(singleLine: Boolean ,placeholder: String,
 }
 
 @Composable
+fun CustomOutlinedTextContrato(singleLine: Boolean ,placeholder: String,
+                                    keyboardType : KeyboardType,
+                                    opcional : Boolean,
+                                    onTextFieldChange: (String) -> Unit) {
+    var text by remember {
+        mutableStateOf("")
+    }
+    var isItemSelected by remember { mutableStateOf(opcional) }
+
+    OutlinedTextField(
+        value = text,
+        onValueChange = {
+            text = it
+            isItemSelected = true
+            onTextFieldChange(it)
+        },
+        textStyle = TextStyle(fontSize = 20.sp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(260.dp),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        singleLine = singleLine,
+        maxLines = 1,
+        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
+            modifier = Modifier
+                .background(Color.White)
+                .padding(horizontal = 2.dp))},
+        //leadingIcon = { Icon(Icons.Default.Pets, null) },
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            focusedLabelColor = Tierra,
+            unfocusedLabelColor = Tierra,
+            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
+            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
+            focusedLeadingIconColor = Tierra,
+            unfocusedLeadingIconColor = Tierra,
+            focusedPlaceholderColor = Tierra,
+            unfocusedPlaceholderColor = Tierra
+
+        ),
+    )
+}
+
+@Composable
 fun CustomOutlinedTextDescripcionServicio(singleLine: Boolean ,placeholder: String,
                                     keyboardType : KeyboardType,
                                     opcional : Boolean,
@@ -392,6 +440,8 @@ fun CustomOutlinedTextPerfilMascotaDesplegable(
         )
     }
 }
+
+
 @Composable
 fun CustomOutlinedTextPerfilMascotaDesplegableColor(
     items: List<String>,

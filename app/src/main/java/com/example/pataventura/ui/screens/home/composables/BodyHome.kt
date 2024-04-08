@@ -1,18 +1,12 @@
 package com.example.pataventura.ui.screens.home.composables
 
-import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
-import android.widget.ImageButton
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.Manifest.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,38 +16,36 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.pataventura.R
-import com.example.pataventura.ui.composables.BottomBar
 import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascotaDesplegable
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.GoogleMap
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
+import com.google.android.gms.*
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.util.jar.Manifest
+import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun BodyHome(){
     var listaServicios = listOf("Guardería", "Paseo")
+    var map : GoogleMap
     Column (
         Modifier
             .fillMaxSize()
@@ -105,15 +97,39 @@ fun ImageButton(painter: Int){
     }
 }
 
+
 @Composable
-@OptIn(ExperimentalCoroutinesApi::class)
 fun MyBoxMap() {
-    GoogleMap(
+    /*val context = LocalContext.current
+    val api = GoogleApiClient.Builder(context)
+        .addApi(LocationServices.API)
+        .build()
+    val locationClient = remember {
+        LocationServices.FusedLocationApi.getLocationAvailability(api)
+    }
+
+    val lastLocation = LocationServices.FusedLocationApi.getLastLocation(api)
+    val marker = LatLng(lastLocation.latitude, lastLocation.longitude)*/
+
+    val singapore = LatLng(1.35, 103.87)
+    val singaporeState = MarkerState(position = singapore)
+    val  cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(singapore, 10f)
+    }
+
+
+  GoogleMap(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 40.dp)
             .clip(RoundedCornerShape(10.dp))
-            .fillMaxHeight(0.9f)
-    )
+            .fillMaxHeight(0.9f),
+      cameraPositionState = cameraPositionState
+    ){
+      Marker(state = singaporeState, title = "Hellow World")
+    }
+
 }
+
+
 
