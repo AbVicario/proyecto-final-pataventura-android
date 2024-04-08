@@ -15,6 +15,8 @@ import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.core.navigations.NavigationHost
 import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
 import com.example.pataventura.ui.screens.contratacion.ContratacionViewModel
+import com.example.pataventura.ui.screens.historia_mascota.HistorialCuidadorViewModel
+import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewModel
 import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteScreen
@@ -41,6 +43,8 @@ class MainActivity : ComponentActivity() {
     private val contratacionViewModel: ContratacionViewModel by viewModels()
     private val perfilTrabajadorViewModel: PerfilTrabajadorViewModel by viewModels()
     private val calendarioViewModel: CalendarioViewModel by viewModels()
+    private val historialMascotaViewModel: HistorialMascotaViewModel by viewModels()
+    private val historialCuidadorViewModel: HistorialCuidadorViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -60,6 +64,8 @@ class MainActivity : ComponentActivity() {
                         contratacionViewModel = contratacionViewModel,
                         perfilTrabajadorViewModel = perfilTrabajadorViewModel,
                         calendarioViewModel = calendarioViewModel,
+                        historialMascotaViewModel= historialMascotaViewModel,
+                        historialCuidadorViewModel= historialCuidadorViewModel,
 
                     )
                 }

@@ -11,6 +11,10 @@ import com.example.pataventura.ui.screens.calendario.CalendarioScreen
 import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
 import com.example.pataventura.ui.screens.contratacion.ContratacionScreen
 import com.example.pataventura.ui.screens.contratacion.ContratacionViewModel
+import com.example.pataventura.ui.screens.historia_mascota.HistorialCuidadorScreen
+import com.example.pataventura.ui.screens.historia_mascota.HistorialCuidadorViewModel
+import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaScreen
+import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewModel
 import com.example.pataventura.ui.screens.home.HomeScreen
 import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.login.LoginViewModel
@@ -37,12 +41,14 @@ fun NavigationHost(
     contratacionViewModel: ContratacionViewModel,
     perfilTrabajadorViewModel: PerfilTrabajadorViewModel,
     calendarioViewModel: CalendarioViewModel,
+    historialMascotaViewModel: HistorialMascotaViewModel,
+    historialCuidadorViewModel: HistorialCuidadorViewModel,
 
     ) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Destinations.Calendario.route
+        startDestination = Destinations.HistorialCuidador.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -73,6 +79,12 @@ fun NavigationHost(
         }
         composable(Destinations.Calendario.route) {
             CalendarioScreen(navController, calendarioViewModel)
+        }
+        composable(Destinations.HistorialMascota.route) {
+            HistorialMascotaScreen(navController, historialMascotaViewModel)
+        }
+        composable(Destinations.HistorialCuidador.route) {
+            HistorialCuidadorScreen(navController, historialCuidadorViewModel)
         }
 
     }

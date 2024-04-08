@@ -13,6 +13,7 @@ package com.example.pataventura.core.navigations
     object Contratacion : Destinations("contratacion")
     object PerfilTrabajador : Destinations("perfilTrabajador")
     object Calendario : Destinations("calendario")
-
+    object HistorialMascota : Destinations("historialMascota")
+    object HistorialCuidador : Destinations("historialCuidador")
 
 }

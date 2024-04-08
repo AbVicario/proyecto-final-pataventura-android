@@ -1,5 +1,6 @@
 package com.example.pataventura.ui.screens.calendario.composables
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.filled.StarRate
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pataventura.R
@@ -46,18 +49,20 @@ import java.time.LocalDate
 fun BodyCalendario(){
     Box(){
         Image(painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
-            contentDescription = "Foondo",
-            Modifier.fillMaxSize())
+            contentDescription = "Fondo",
+            Modifier
+                .align(Alignment.TopStart)
+                .fillMaxSize()
+                .padding(top = 300.dp))
 
         Column(
             Modifier
                 .fillMaxWidth()
-                .height(700.dp)
                 .padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
             verticalArrangement = Arrangement.SpaceBetween) {
             Box(
                 Modifier
-                    .fillMaxHeight(0.4f)
+                    .height(300.dp)
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)){
 
@@ -73,6 +78,7 @@ fun BodyCalendario(){
                     MyCardServicio()
                     MyCardServicio()
 
+
                 }
             }
 
@@ -82,7 +88,6 @@ fun BodyCalendario(){
 
 @Composable
 fun MyCardServicio() {
-
     var horaServicio= "16:00 - 17:00"
     var servcio = "Paseo"
     var nombreMascota = "Tyrion"
@@ -95,9 +100,10 @@ fun MyCardServicio() {
         .fillMaxWidth()
         .height(150.dp),
         shape = CardDefaults.elevatedShape,
-        colors = CardDefaults.elevatedCardColors(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White.copy(0.5f)),
         elevation = CardDefaults.cardElevation(),
-        border = CardDefaults.outlinedCardBorder()
+        border = BorderStroke(2.dp, Verde)
     ){
         Row(
             Modifier
@@ -136,7 +142,9 @@ fun MyColumnCuidador(nombreCuidador: String, precio: String) {
             }
 
         }
-        Box(modifier = Modifier.padding(10.dp)){
+        Spacer(modifier = Modifier.size(10.dp))
+
+        Box(modifier = Modifier.padding(5.dp)){
             MyCustomButton(texto = "Cancelar", color = Color.Red)
         }
 

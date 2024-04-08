@@ -1,6 +1,5 @@
-package com.example.pataventura.ui.screens.calendario.composables
+package com.example.pataventura.ui.screens.historia_cuidador.composables
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +24,7 @@ import com.example.pataventura.ui.composables.IconBack
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
-fun HeaderCalendario() {
+fun HeaderHistorialCuidador() {
     Box(
         Modifier
             .fillMaxWidth()
@@ -37,22 +36,28 @@ fun HeaderCalendario() {
         Image(
             painter = painterResource(id = R.drawable.nombre),
             contentDescription = "nombre aplicación",
-            Modifier.width(210.dp)
-                .height(60.dp)
-                .padding( top=10.dp)
+            Modifier.width(260.dp)
+                .height(75.dp)
+                .padding(start=60.dp)
         )
-
-        Image(
-            painter = painterResource(id = R.drawable.imagen_header_home),
-            contentDescription = "Dos perros y un gato",
+        Row(
             Modifier
-                .fillMaxSize(0.71f).align(Alignment.BottomEnd).padding()
-        )
-
+                .fillMaxSize()
+                .padding(start = 5.dp, top = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconBack()
+            Image(
+                painter = painterResource(id = R.drawable.imagen_header_home),
+                contentDescription = "Dos perros y un gato",
+                Modifier
+                    .fillMaxSize(0.71f).align(Alignment.Bottom).padding()
+            )
+        }
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
 @Composable
 fun HeaderBox(){
     Box(
@@ -69,4 +74,3 @@ fun HeaderBox(){
 
     }
 }
-
