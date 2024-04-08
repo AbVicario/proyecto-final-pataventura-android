@@ -42,30 +42,37 @@ import com.example.pataventura.ui.theme.Verde
 import java.time.LocalDate
 @Composable
 fun BodyContratacion(){
+    Box(){
+        Image(painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
+            contentDescription = "Foondo",
+            Modifier.fillMaxSize())
 
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .height(700.dp)
-            .padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
-        verticalArrangement = Arrangement.SpaceBetween) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .height(700.dp)
+                .padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
+            verticalArrangement = Arrangement.SpaceBetween) {
 
-        MyCardPerfil()
+            MyCardPerfil()
 
-        MyRowFechas("Fecha inicio:", "Fecha fin:")
+            MyRowFechas("Fecha inicio:", "Fecha fin:")
 
-        CustomOutlinedTextContrato(
-            singleLine = false,
-            placeholder = "Notas:",
-            keyboardType = KeyboardType.Text,
-            opcional = true,
-            onTextFieldChange = {}
-        )
+            CustomOutlinedTextContrato(
+                singleLine = false,
+                placeholder = "Notas:",
+                keyboardType = KeyboardType.Text,
+                opcional = true,
+                onTextFieldChange = {}
+            )
 
-        MyRowPrecio()
+            MyRowPrecio()
 
-        MyRowButtons()
+            MyRowButtons()
+        }
     }
+
+
 
 }
 
@@ -120,7 +127,9 @@ fun MyRowPrecio() {
 @Composable
 fun MyRowFechas(textoInicio: String, textoFin: String) {
     Row (Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
-        Box(modifier = Modifier.fillMaxWidth(0.5f). padding(horizontal = 8.dp)){
+        Box(modifier = Modifier
+            .fillMaxWidth(0.5f)
+            .padding(horizontal = 8.dp)){
             DatePickerWithDialog(
                 enabled = true,
                 dateFormatter = { it.toString() },
@@ -130,7 +139,9 @@ fun MyRowFechas(textoInicio: String, textoFin: String) {
                 }) {
             }
         }
-        Box(modifier = Modifier.fillMaxWidth(). padding(horizontal = 8.dp)){
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)){
             DatePickerWithDialog(
                 enabled = true,
                 dateFormatter = { it.toString() },
