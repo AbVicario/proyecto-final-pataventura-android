@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.pataventura.ui.screens.calendario.CalendarioScreen
+import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
 import com.example.pataventura.ui.screens.contratacion.ContratacionScreen
 import com.example.pataventura.ui.screens.contratacion.ContratacionViewModel
 import com.example.pataventura.ui.screens.home.HomeScreen
@@ -14,6 +16,8 @@ import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteScreen
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
+import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorScreen
+import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaScreen
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
 import com.example.pataventura.ui.screens.registro.RegistroDosScreen
@@ -30,13 +34,15 @@ fun NavigationHost(
     loginClienteViewModel: LoginClienteViewModel,
     homeViewModel: HomeViewModel,
     registroServicioViewModel: RegistroServicioViewModel,
-    contratacionViewModel: ContratacionViewModel
+    contratacionViewModel: ContratacionViewModel,
+    perfilTrabajadorViewModel: PerfilTrabajadorViewModel,
+    calendarioViewModel: CalendarioViewModel,
 
-) {
+    ) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Destinations.Home.route
+        startDestination = Destinations.Calendario.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -61,6 +67,12 @@ fun NavigationHost(
         }
         composable(Destinations.Contratacion.route) {
             ContratacionScreen(navController, contratacionViewModel)
+        }
+        composable(Destinations.PerfilTrabajador.route) {
+            PerfilTrabajadorScreen(navController, perfilTrabajadorViewModel)
+        }
+        composable(Destinations.Calendario.route) {
+            CalendarioScreen(navController, calendarioViewModel)
         }
 
     }

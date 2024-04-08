@@ -3,6 +3,7 @@ package com.example.pataventura.ui.composables
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EditCalendar
@@ -37,8 +38,6 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
-import androidx.compose.material3.*
-import com.example.pataventura.ui.theme.MyLightColorScheme
 
 
 
@@ -186,3 +185,41 @@ fun DatePickerWithDialog(
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyDatePicker(dateValidator: (Long) -> Boolean = { true }, value: LocalDate?,){
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = value?.atStartOfDay()?.toEpochSecond(ZoneOffset.UTC)
+            ?.times(1000)
+    )
+
+    val customDatePickerColors = DatePickerDefaults.colors(
+        containerColor = Color(0xFFebeaf3),
+        titleContentColor = Verde,
+        headlineContentColor = Verde,
+        weekdayContentColor = Verde,
+        subheadContentColor = Verde,
+        yearContentColor = Verde,
+        currentYearContentColor = Verde,
+        selectedYearContentColor = Verde,
+        selectedYearContainerColor = Verde.copy(0.2f),
+        dayContentColor = Verde,
+        disabledDayContentColor = Verde,
+        selectedDayContentColor = Verde,
+        disabledSelectedDayContentColor = Verde,
+        selectedDayContainerColor = Verde.copy(alpha = 0.2f),
+        disabledSelectedDayContainerColor = Verde,
+        todayContentColor = Verde,
+        todayDateBorderColor = Verde,
+        dayInSelectionRangeContainerColor = Verde,
+        dayInSelectionRangeContentColor = Verde,
+    )
+
+    DatePicker(
+        state = datePickerState,
+        dateValidator = dateValidator,
+        colors = customDatePickerColors
+    )
+}
+

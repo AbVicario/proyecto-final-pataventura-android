@@ -11,6 +11,8 @@ package com.example.pataventura.core.navigations
     object Home : Destinations("home")
     object RegistroServicio : Destinations("servicio")
     object Contratacion : Destinations("contratacion")
+    object PerfilTrabajador : Destinations("perfilTrabajador")
+    object Calendario : Destinations("calendario")
 
 
 }

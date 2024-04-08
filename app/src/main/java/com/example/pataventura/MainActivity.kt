@@ -13,11 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.core.navigations.NavigationHost
+import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
 import com.example.pataventura.ui.screens.contratacion.ContratacionViewModel
 import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteScreen
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
+import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaScreen
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
 import com.example.pataventura.ui.screens.registro.RegistroDosScreen
@@ -37,6 +39,8 @@ class MainActivity : ComponentActivity() {
     private val homeViewModel: HomeViewModel by viewModels()
     private val registroServicioViewModel: RegistroServicioViewModel by viewModels()
     private val contratacionViewModel: ContratacionViewModel by viewModels()
+    private val perfilTrabajadorViewModel: PerfilTrabajadorViewModel by viewModels()
+    private val calendarioViewModel: CalendarioViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -54,15 +58,10 @@ class MainActivity : ComponentActivity() {
                         homeViewModel = homeViewModel,
                         registroServicioViewModel = registroServicioViewModel,
                         contratacionViewModel = contratacionViewModel,
+                        perfilTrabajadorViewModel = perfilTrabajadorViewModel,
+                        calendarioViewModel = calendarioViewModel,
 
                     )
-                    //Greeting("Android")
-                    //LoginScreen( loginViewModel)
-                    //LoginClienteScreen( loginClienteViewModel)
-                    //RegistroUnoScreen(registroViewModel)
-                    //RegistroDosScreen(registroViewModel)
-                    //RegistroMascotaScreen(registroMascotaViewModel)
-
                 }
             }
         }
