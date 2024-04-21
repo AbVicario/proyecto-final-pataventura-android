@@ -1,12 +1,12 @@
 package com.example.pataventura.core.navigations
 
 import LoginScreen
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.pataventura.ui.screens.calendario.CalendarioScreen
 import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
 import com.example.pataventura.ui.screens.contratacion.ContratacionScreen
@@ -20,6 +20,12 @@ import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteScreen
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
+import com.example.pataventura.ui.screens.mascotas.MascotasScreen
+import com.example.pataventura.ui.screens.mascotas.MascotasViewModel
+import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorScreen
+import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
+import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaScreen
+import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorScreen
 import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaScreen
@@ -30,6 +36,8 @@ import com.example.pataventura.ui.screens.registro.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroUnoScreen
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 
+
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun NavigationHost(
     registerViewModel: RegistroViewModel,
@@ -43,12 +51,15 @@ fun NavigationHost(
     calendarioViewModel: CalendarioViewModel,
     historialMascotaViewModel: HistorialMascotaViewModel,
     historialCuidadorViewModel: HistorialCuidadorViewModel,
+    mascotasViewModel: MascotasViewModel,
+    perfilMascotaViewModel: PerfilMascotaViewModel,
+    perfilTutorViewModel: PerfilTutorViewModel,
 
     ) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Destinations.HistorialCuidador.route
+        startDestination = Destinations.RegistroServicio.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -85,6 +96,15 @@ fun NavigationHost(
         }
         composable(Destinations.HistorialCuidador.route) {
             HistorialCuidadorScreen(navController, historialCuidadorViewModel)
+        }
+        composable(Destinations.Mascotas.route) {
+            MascotasScreen(navController, mascotasViewModel, homeViewModel)
+        }
+        composable(Destinations.PerfilMascota.route) {
+            PerfilMascotaScreen(navController, perfilMascotaViewModel)
+        }
+        composable(Destinations.PerfilTutor.route) {
+            PerfilTutorScreen(navController, perfilTutorViewModel)
         }
 
     }

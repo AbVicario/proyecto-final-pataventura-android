@@ -4,6 +4,7 @@ plugins {
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
     id ("com.google.relay") version "0.3.00"
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -53,6 +54,8 @@ android {
 }
 
 dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation("com.google.firebase:firebase-analytics")
     implementation("io.coil-kt:coil-compose:2.0.0")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -84,11 +87,15 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.1")
 
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
     //maps
-    implementation ("com.google.maps.android:maps-compose:2.11.4")
+    implementation ("com.google.maps.android:maps-compose:2.9.0")
     implementation ("com.google.android.gms:play-services-maps:18.1.0")
-    implementation ("com.google.android.gms:play-services-location:7.+")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    //permission
+    implementation ("com.google.accompanist:accompanist-permissions:0.31.3-beta")
 }
 
 kapt {

@@ -64,6 +64,7 @@ fun BodyContratacion(){
                 placeholder = "Notas:",
                 keyboardType = KeyboardType.Text,
                 opcional = true,
+                altura = 260,
                 onTextFieldChange = {}
             )
 

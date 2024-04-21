@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1017543393311",
+    "project_id": "pataventura-63769",
+    "storage_bucket": "pataventura-63769.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017543393311:android:06bf91bf60c9d7564b952a",
+        "android_client_info": {
+          "package_name": "com.example.pataventura"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1017543393311-t0hee0898sgdk7rd3hgd11h54rg1mdpj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcgz1eJfEdsvP8l5nXL8TZHGUUBJcmT8U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1017543393311-t0hee0898sgdk7rd3hgd11h54rg1mdpj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

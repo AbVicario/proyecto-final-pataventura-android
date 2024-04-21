@@ -15,5 +15,8 @@ package com.example.pataventura.core.navigations
     object Calendario : Destinations("calendario")
     object HistorialMascota : Destinations("historialMascota")
     object HistorialCuidador : Destinations("historialCuidador")
+    object Mascotas : Destinations("mascotas")
+    object PerfilMascota : Destinations("perfilMascota")
+    object PerfilTutor : Destinations("perfilTutor")
 
 }

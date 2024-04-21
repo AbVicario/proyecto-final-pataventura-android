@@ -28,7 +28,7 @@ import com.example.pataventura.ui.theme.Verde
 
 @Composable
 fun HeaderHome(){
-    var nombre = "Juan"
+    var nombre = "Jose Ramón"
     Box(
         Modifier
             .fillMaxWidth()

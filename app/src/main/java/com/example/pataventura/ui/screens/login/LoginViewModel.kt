@@ -1,12 +1,9 @@
 package com.example.pataventura.ui.screens.login
 
-import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
@@ -17,10 +14,12 @@ class LoginViewModel @Inject constructor(
     val email: LiveData<String> = _email
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
-    private val _tieneError: ObservableBoolean =
-        ObservableBoolean(false)
-    val tieneError: ObservableBoolean
-        get() = _tieneError
+    private val _passEmpty = MutableLiveData<Boolean>()
+    val passEmpty : LiveData<Boolean> = _passEmpty
+    private val _emailEmpty = MutableLiveData<Boolean>()
+    val emailEmpty : LiveData<Boolean> = _emailEmpty
+    private val _emailNoValido = MutableLiveData<Boolean>()
+    val emailNoValido : LiveData<Boolean> = _emailNoValido
 
     fun onEmailChange(email: String) {
         _email.postValue(email)
@@ -31,26 +30,26 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onLoginPress(navController: NavController) {
-       /* viewModelScope.launch {
-            val email = _email.value
-            val password = _password.value
+        val regex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
+        val email = _email.value
+        val password = _password.value
+        _emailEmpty.postValue(false)
+        _passEmpty.postValue(false)
+        _emailNoValido.postValue(false)
 
-            if (email.isNullOrBlank() || password.isNullOrBlank()) {
-                _tieneError.set(true)
-                return@launch
-            } else {
-                navController.navigate(route = "home")// para que no rompa
-            }
-
-
-            //val isSuccessful = authenticateGuestUseCase.login(email, password)
-
-            //if (isSuccessful) {
-            //    navController.navigate(route = "home")
-            //}
-            //}
-        }*/
-        navController.navigate(route = "home")// para que no rompa
+        if(password.isNullOrBlank()){
+            _passEmpty.postValue(true)
+        }
+        if(email.isNullOrBlank()){
+            _emailEmpty.postValue(true)
+        }else if(!regex.matches(email)){
+            _emailNoValido.postValue(true)
+        }
+        if(_emailEmpty.value==false && _emailNoValido.value==false
+            && _passEmpty.value==false){
+            //Autenticar usuario
+            navController.navigate(route = "home")
+        }
     }
 
     fun onGooglePress(navController: NavController) {

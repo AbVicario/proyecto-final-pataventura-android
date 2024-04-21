@@ -12,7 +12,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Mail
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,25 +32,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pataventura.R
+import com.example.pataventura.ui.composables.CampoObligatorioText
 import com.example.pataventura.ui.composables.CustomOutlinedTextDescripcionServicio
-import com.example.pataventura.ui.composables.CustomOutlinedTextEmail
-import com.example.pataventura.ui.composables.CustomOutlinedTextHome
-import com.example.pataventura.ui.composables.CustomOutlinedTextPass
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfil
+import com.example.pataventura.ui.composables.CustomOutlinedTextField
+import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDes
+import com.example.pataventura.ui.composables.CustomOutlinedTextFieldPass
 import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascota
 import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascotaDesplegable
-import com.example.pataventura.ui.composables.CustomOutlinedTextPhone
 import com.example.pataventura.ui.composables.CustomText
+import com.example.pataventura.ui.composables.EmailNoValidoText
 import com.example.pataventura.ui.composables.IconButtonImage
 import com.example.pataventura.ui.composables.LoginButton
+import com.example.pataventura.ui.composables.PassConText
 import com.example.pataventura.ui.screens.registro.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
-import javax.net.ssl.HostnameVerifier
 
 @Composable
 fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavController) {
+    val nombreEmpty: Boolean by registroViewModel.nombreEmpty.observeAsState(false)
+    val apellidosEmpty: Boolean by registroViewModel.apellidosEmpty.observeAsState(false)
+    val direccionEmpty: Boolean by registroViewModel.direccionEmpty.observeAsState(false)
+    val telefonoEmpty: Boolean by registroViewModel.telefonoEmpty.observeAsState(false)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +63,7 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
     ) {
         Image(
             painter = painterResource(id = R.drawable.silueta_perro_registro),
-            contentDescription = "Silueta gato", Modifier.fillMaxSize()
+            contentDescription = "Silueta perro", Modifier.fillMaxSize()
         )
 
         Column(
@@ -56,63 +71,106 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .padding(top = 15.dp, bottom = 10.dp),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        CustomText(text = "Introduce tus datos",
-            color = Verde , fontSize = 20.sp ,
-            fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily )
+            CustomText(
+                text = "Introduce tus datos",
+                color = Verde, fontSize = 20.sp,
+                fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+            )
 
-        Row (
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically){
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-            IconButtonImage()
-            Spacer(modifier = Modifier.width(10.dp))
+                IconButtonImage()
+                Spacer(modifier = Modifier.width(10.dp))
 
-            CustomOutlinedTextPerfil(placeholder = "Nombre:", false){
-                registroViewModel.onNombreChange(
-                    it
+                CustomOutlinedTextField(
+                    onValueChange = { registroViewModel.onNombreChange(it) },
+                    Modifier
+                        .fillMaxWidth()
+                        .height(100.dp),
+                    enabled = true,
+                    readOnly = false,
+                    placeholder = "Nombre",
+                    leadingIcon = { Icon(Icons.Default.Person, null) },
+                    supportingText = {if(nombreEmpty) CampoObligatorioText() },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    singleLine = true
                 )
+
             }
 
-        }
-        CustomOutlinedTextPerfil(placeholder = "Apellidos:", false){
-            registroViewModel.onApellidosChange(
-                it
+            CustomOutlinedTextField(
+                onValueChange = { registroViewModel.onApellidosChange(it) },
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Apellidos",
+                leadingIcon = { Icon(Icons.Default.Person, null) },
+                supportingText = {if(apellidosEmpty) CampoObligatorioText()},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
             )
-        }
 
-        CustomOutlinedTextPhone(placeholder = "Teléfono" , false){
-            registroViewModel.onPhoneChange(
-                it
+            CustomOutlinedTextField(
+                onValueChange = { registroViewModel.onPhoneChange(it) },
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Teléfono",
+                leadingIcon = { Icon(Icons.Default.Phone, null) },
+                supportingText = {if(telefonoEmpty) CampoObligatorioText() },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                singleLine = true
             )
-        }
 
-        CustomOutlinedTextHome(placeholder = "Dirección", true ){
-            registroViewModel.onHomeChange(
-                it
+            CustomOutlinedTextField(
+                onValueChange = { registroViewModel.onDireccionChange(it) },
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Dirección",
+                leadingIcon = { Icon(Icons.Default.Home, null) },
+                supportingText = {if(direccionEmpty) CampoObligatorioText() },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
             )
-        }
 
-        Box(
-            Modifier
-                .fillMaxWidth(0.7f)
-                .height(50.dp)
-        ) {
-            LoginButton(text = "Suiguiente",
-                onClick = {registroViewModel.onPressRegistroDos(navController)})
+            Box(
+                Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(50.dp)
+            ) {
+                LoginButton(text = "Suiguiente",
+                    onClick = { registroViewModel.onPressRegistroDos(navController) })
+            }
         }
-    }
     }
 }
 
+
 @Composable
 fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavController ) {
+    val emailNoValido: Boolean by registroViewModel.emailNoValido.observeAsState(false)
+    val emailEmpty: Boolean by registroViewModel.emailEmpty.observeAsState(false)
+    val passConEmpty: Boolean by registroViewModel.passConEmpty.observeAsState(false)
+    val passEmpty: Boolean by registroViewModel.passEmpty.observeAsState(false)
+    val aliasEmpty: Boolean by registroViewModel.aliasEmpty.observeAsState(false)
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top=24.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
+            .padding(top = 24.dp, start = 20.dp, end = 20.dp, bottom = 20.dp)
     ) {
         Image(
             painter = painterResource(id = R.drawable.silueta_perro_registro),
@@ -127,33 +185,67 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally) {
 
-        CustomText(
-            text = "Introduce tus datos  ",
-            color = Verde, fontSize = 20.sp,
-            fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
-        )
-
-        CustomOutlinedTextPerfil(placeholder = "Alias:", opcional = false){
-            registroViewModel.onAliasChange(it)
-        }
-
-        CustomOutlinedTextEmail(placeholder = "Email:", false){
-            registroViewModel.onEmailChange(
-                it
+            CustomText(
+                text = "Introduce tus datos  ",
+                color = Verde, fontSize = 20.sp,
+                fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
             )
-        }
-
-        CustomOutlinedTextPass(placeholder = "Contraseña:" , false ){
-            registroViewModel.onPasswordChange(
-                it
+            CustomOutlinedTextField(
+                onValueChange = { registroViewModel.onAliasChange(it)},
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Alias",
+                leadingIcon = { Icon(Icons.Default.Person, null) },
+                trailingIcon = {},
+                supportingText = {if(aliasEmpty) CampoObligatorioText()},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
             )
-        }
 
-        CustomOutlinedTextPass(placeholder = "Repetir contraseña", false ){
-            registroViewModel.onRepetirChange(
-                it
+            CustomOutlinedTextField(
+                onValueChange = { registroViewModel.onEmailChange(it)},
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Email",
+                leadingIcon = { Icon(Icons.Default.Mail, null) },
+                trailingIcon = {},
+                supportingText = {if(emailEmpty) CampoObligatorioText()
+                                 else if(emailNoValido) EmailNoValidoText()},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                singleLine = true
             )
-        }
+            CustomOutlinedTextFieldPass(
+                onValueChange = { registroViewModel.onPasswordChange(it)},
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Password",
+                leadingIcon = { Icon(Icons.Default.Lock, null) },
+                supportingText = {if(passEmpty) CampoObligatorioText()},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
+            )
+            CustomOutlinedTextFieldPass(
+                onValueChange = {registroViewModel.onPasswordConChange(it)},
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Confirmar",
+                leadingIcon = { Icon(Icons.Default.Lock, null) },
+                supportingText = {if(passConEmpty) PassConText()},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
+            )
         Box(
             Modifier
                 .fillMaxWidth(0.7f)
@@ -162,14 +254,13 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
             LoginButton(text = "Siguiente",
                 onClick = {registroViewModel.onPressRegistroUno(navController)})
         }
-
     }
     }
 }
 
 @Composable
 fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel , navController: NavController) {
-    var listServicios = listOf("Paseo", "Guardería")
+    var listaServicios = listOf("Paseo", "Guardería")
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -192,29 +283,45 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel , 
                 color = Verde , fontSize = 20.sp ,
                 fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily )
 
-            CustomOutlinedTextPerfilMascotaDesplegable(
-                items = listServicios,
-                placeholder = "Tipo de servicio:",
-                keyboardType = KeyboardType.Text,
-                opcional = false,
-                onTextFieldChange = {},
-                onItemSelected = {}
+            CustomOutlinedTextFieldDes(
+                items = listaServicios,
+                onItemSelected = {},
+                onValueChange = {},
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Tipo de servicio",
+                supportingText = {},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
             )
 
-            CustomOutlinedTextPerfilMascota(
-                singleLine = true,
+            CustomOutlinedTextField(
+                onValueChange = {},
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
                 placeholder = "Precio",
-                keyboardType = KeyboardType.Number,
-                opcional = false,
-                onTextFieldChange = {}
+                supportingText = {},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true
             )
 
-            CustomOutlinedTextDescripcionServicio(
-                singleLine = false,
+            CustomOutlinedTextField(
+                onValueChange = {},
+                Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
+                enabled = true,
+                readOnly = false,
                 placeholder = "Descripción",
-                keyboardType = KeyboardType.Text,
-                opcional = false,
-                onTextFieldChange ={}
+                supportingText = {},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = false
             )
 
             Box(

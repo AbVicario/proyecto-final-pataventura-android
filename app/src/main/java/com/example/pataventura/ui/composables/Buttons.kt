@@ -181,8 +181,8 @@ fun IconButtonImageMascota(
     Box(
         modifier = Modifier
             .minimumInteractiveComponentSize()
-            .size(80.dp)
-            .clip(RoundedCornerShape(150f))
+            .size(85.dp)
+            .clip(RoundedCornerShape(100f))
             .background(Verde.copy(alpha = 0.2f))
             .clickable(
                 onClick = {  },

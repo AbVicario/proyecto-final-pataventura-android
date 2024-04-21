@@ -36,7 +36,7 @@ import com.example.pataventura.ui.theme.Verde
 fun BodyPerfil(){
     Box(){
         Image(painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
-            contentDescription = "Foondo",
+            contentDescription = "Fondo",
             Modifier.fillMaxSize())
 
         Column(
