@@ -47,3 +47,9 @@ fun PassConText(){
     CustomText(text = "Las contraseñas no coinciden", color = Color.Red, fontSize = 12.sp,
         fontWeight = FontWeight.Normal, fontFamily = FontFamily.Default)
 }
+
+@Composable
+fun PrecioValText(){
+    CustomText(text = "El precio no es valido", color = Color.Red, fontSize = 12.sp,
+        fontWeight = FontWeight.Normal, fontFamily = FontFamily.Default)
+}

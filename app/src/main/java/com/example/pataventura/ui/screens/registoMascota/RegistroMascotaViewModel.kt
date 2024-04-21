@@ -31,7 +31,7 @@ class RegistroMascotaViewModel @Inject constructor(
     val nombre: LiveData<String> = _nombre
     private val _tipo = MutableLiveData<String>()
     val tipo: LiveData<String> = _tipo
-    private val _raza = ObservableField<String>("")
+    private val _raza = ObservableField("")
     val raza: ObservableField<String>
         get() = _raza
     private val _edad = MutableLiveData<String>()

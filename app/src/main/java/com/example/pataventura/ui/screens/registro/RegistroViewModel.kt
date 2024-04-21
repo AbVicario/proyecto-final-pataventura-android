@@ -145,4 +145,5 @@ class RegistroViewModel @Inject constructor(
         }
     }
 
+
 }

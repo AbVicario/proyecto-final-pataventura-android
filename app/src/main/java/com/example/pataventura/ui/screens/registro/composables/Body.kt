@@ -21,8 +21,12 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,17 +37,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CampoObligatorioText
-import com.example.pataventura.ui.composables.CustomOutlinedTextDescripcionServicio
 import com.example.pataventura.ui.composables.CustomOutlinedTextField
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDes
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldPass
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascota
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascotaDesplegable
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.EmailNoValidoText
 import com.example.pataventura.ui.composables.IconButtonImage
 import com.example.pataventura.ui.composables.LoginButton
 import com.example.pataventura.ui.composables.PassConText
+import com.example.pataventura.ui.composables.PrecioValText
 import com.example.pataventura.ui.screens.registro.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
@@ -259,8 +261,17 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
 }
 
 @Composable
-fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel , navController: NavController) {
-    var listaServicios = listOf("Paseo", "Guardería")
+fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
+                         navController: NavController) {
+    val listaServicios = listOf("Paseo", "Guardería")
+    val isDescripcion: Boolean by registroServicioViewModel.isDescripcion.observeAsState(false)
+    val isRango: Boolean by registroServicioViewModel.isRango.observeAsState(false)
+    val isServicio: Boolean
+    by registroServicioViewModel.isServicioSeleccionado.observeAsState(false)
+    val isPrecio: Boolean by registroServicioViewModel.isPrecio.observeAsState(false)
+    val isPrecioValido: Boolean by registroServicioViewModel.isPrecioValido.observeAsState(false)
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -283,43 +294,63 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel , 
                 color = Verde , fontSize = 20.sp ,
                 fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily )
 
+            Row (Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween){
+
+                CustomOutlinedTextFieldDes(
+                    items = listaServicios,
+                    onItemSelected = {registroServicioViewModel.onChangeServicio(it)},
+                    onValueChange = {},
+                    Modifier
+                        .fillMaxWidth(0.5f)
+                        .height(100.dp),
+                    enabled = true,
+                    readOnly = true,
+                    placeholder = "Servicio",
+                    supportingText = {if(isServicio) CampoObligatorioText()},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                CustomOutlinedTextField(
+                    onValueChange = {registroServicioViewModel.onChangePrecio(it)},
+                    Modifier
+                        .fillMaxWidth()
+                        .height(100.dp),
+                    enabled = true,
+                    readOnly = false,
+                    placeholder = "Precio",
+                    supportingText = {if(isPrecio) CampoObligatorioText()
+                                     else if(isPrecioValido) PrecioValText()},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
+            }
+
             CustomOutlinedTextFieldDes(
-                items = listaServicios,
-                onItemSelected = {},
+                items = registroServicioViewModel.listaRango,
+                onItemSelected = {registroServicioViewModel.onChangeRango(it)},
                 onValueChange = {},
                 Modifier
                     .fillMaxWidth()
                     .height(100.dp),
                 enabled = true,
-                readOnly = false,
-                placeholder = "Tipo de servicio",
-                supportingText = {},
+                readOnly = true,
+                placeholder = "Radio de acción",
+                supportingText = {if(isRango) CampoObligatorioText()},
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
-
+            
             CustomOutlinedTextField(
-                onValueChange = {},
+                onValueChange = {registroServicioViewModel.onChangeDescripcion(it)},
                 Modifier
                     .fillMaxWidth()
-                    .height(100.dp),
-                enabled = true,
-                readOnly = false,
-                placeholder = "Precio",
-                supportingText = {},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                singleLine = true
-            )
-
-            CustomOutlinedTextField(
-                onValueChange = {},
-                Modifier
-                    .fillMaxWidth()
-                    .height(300.dp),
+                    .height(240.dp),
                 enabled = true,
                 readOnly = false,
                 placeholder = "Descripción",
-                supportingText = {},
+                supportingText = {if(isDescripcion) CampoObligatorioText()},
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = false
             )
