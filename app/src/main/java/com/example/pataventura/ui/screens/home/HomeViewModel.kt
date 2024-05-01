@@ -25,14 +25,20 @@ class HomeViewModel @Inject constructor(
     private val _viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState.Loading)
     val viewState = _viewState.asStateFlow()
 
+    private val _servicio = MutableLiveData<String>()
+    val servicio : LiveData<String> = _servicio
+
     private val _currentLoc = MutableLiveData<LatLng>()
     val currentLoc: LiveData<LatLng> = _currentLoc
 
     private val _cameraState = MutableLiveData<CameraPositionState>()
     val cameraState: LiveData<CameraPositionState> = _cameraState
 
-    /* This function is responsible for updating the ViewState based
-       on the event coming from the view */
+
+    fun onRolChange(rol: String){
+        _servicio.postValue(rol)
+    }
+
     fun handle(event: PermissionEvent) {
         when (event) {
             PermissionEvent.Granted -> {

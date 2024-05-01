@@ -25,15 +25,12 @@ class RegistroMascotaViewModel @Inject constructor(
     val numChipEmpty: LiveData<Boolean> = _numChipEmpty
     private val _colorEmpty = MutableLiveData<Boolean>()
     val colorEmpty: LiveData<Boolean> = _colorEmpty
-
-
     private val _nombre = MutableLiveData<String>()
     val nombre: LiveData<String> = _nombre
     private val _tipo = MutableLiveData<String>()
     val tipo: LiveData<String> = _tipo
-    private val _raza = ObservableField("")
-    val raza: ObservableField<String>
-        get() = _raza
+    private val _raza = MutableLiveData<String>()
+    val raza: LiveData<String> = _raza
     private val _edad = MutableLiveData<String>()
     val edad: LiveData<String> = _edad
     private val _peso = MutableLiveData<String>()
@@ -53,11 +50,13 @@ class RegistroMascotaViewModel @Inject constructor(
 
     var itemsRazaGato = listOf<String>(
         "Siames",
-        "Europeo"
+        "Europeo",
+        " "
     )
     var itemsRazaPerro = listOf<String>(
         "Bichón",
-        "Pekines"
+        "Pekines",
+        " "
     )
 
 
@@ -76,12 +75,11 @@ class RegistroMascotaViewModel @Inject constructor(
         _nombre.postValue(nombre)
     }
     fun onTipoChange(tipo: String) {
-        _raza.set("")
         _tipo.postValue(tipo)
         pintarItemsRaza(tipo)
     }
     fun onRazaChange(raza: String) {
-        _raza.set(raza)
+        _raza.postValue(raza)
     }
     fun onEdadChange(edad: String) {
         _edad.postValue(edad)
