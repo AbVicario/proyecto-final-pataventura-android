@@ -9,6 +9,14 @@ package com.example.pataventura.core.navigations
     object RegisterTwo : Destinations("registerTwo")
     object RegisterMascota : Destinations("registerMascota")
     object Home : Destinations("home")
-
+    object RegistroServicio : Destinations("servicio")
+    object Contratacion : Destinations("contratacion")
+    object PerfilTrabajador : Destinations("perfilTrabajador")
+    object Calendario : Destinations("calendario")
+    object HistorialMascota : Destinations("historialMascota")
+    object HistorialCuidador : Destinations("historialCuidador")
+    object Mascotas : Destinations("mascotas")
+    object PerfilMascota : Destinations("perfilMascota")
+    object PerfilTutor : Destinations("perfilTutor")
 
 }

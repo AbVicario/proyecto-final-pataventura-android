@@ -13,7 +13,16 @@ import javax.inject.Inject
 class LoginClienteViewModel @Inject constructor(
 ) : ViewModel() {
 
-    fun onPressLoginButton(navController: NavController) {
+    private val _tipo = MutableLiveData<String>()
+    val tipo : LiveData<String> = _tipo
+
+    fun onPressLoginTutorButton(navController: NavController) {
+        _tipo.postValue("tutor")
+        navController.navigate("login")
+    }
+
+    fun onPressLoginCuidadorButton(navController: NavController) {
+        _tipo.postValue("cuidador")
         navController.navigate("login")
     }
 

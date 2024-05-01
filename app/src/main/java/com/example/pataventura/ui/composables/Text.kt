@@ -9,6 +9,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun CustomText(
@@ -27,4 +28,28 @@ fun CustomText(
         fontSize = fontSize,
         modifier = modifier
     )
+}
+
+@Composable
+fun EmailNoValidoText(){
+    CustomText(text = "Email no valido", color = Color.Red, fontSize = 12.sp,
+        fontWeight = FontWeight.Normal, fontFamily = FontFamily.Default)
+}
+@Composable
+fun CampoObligatorioText(){
+    CustomText(text = "Campo obligatorio", color = Color.Red, fontSize = 12.sp,
+        fontWeight = FontWeight.Normal, fontFamily = FontFamily.Default)
+}
+
+
+@Composable
+fun PassConText(){
+    CustomText(text = "Las contraseñas no coinciden", color = Color.Red, fontSize = 12.sp,
+        fontWeight = FontWeight.Normal, fontFamily = FontFamily.Default)
+}
+
+@Composable
+fun PrecioValText(){
+    CustomText(text = "El precio no es valido", color = Color.Red, fontSize = 12.sp,
+        fontWeight = FontWeight.Normal, fontFamily = FontFamily.Default)
 }

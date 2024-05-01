@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.pataventura.core.navigations.Destinations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,14 +17,20 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistroMascotaViewModel @Inject constructor(
 ) : ViewModel() {
-
+    private val _nombreEmpty = MutableLiveData<Boolean>()
+    val nombreEmpty: LiveData<Boolean> = _nombreEmpty
+    private val _tipoEmpty = MutableLiveData<Boolean>()
+    val tipoEmpty: LiveData<Boolean> = _tipoEmpty
+    private val _numChipEmpty = MutableLiveData<Boolean>()
+    val numChipEmpty: LiveData<Boolean> = _numChipEmpty
+    private val _colorEmpty = MutableLiveData<Boolean>()
+    val colorEmpty: LiveData<Boolean> = _colorEmpty
     private val _nombre = MutableLiveData<String>()
     val nombre: LiveData<String> = _nombre
     private val _tipo = MutableLiveData<String>()
     val tipo: LiveData<String> = _tipo
-    private val _raza = ObservableField<String>("")
-    val raza: ObservableField<String>
-        get() = _raza
+    private val _raza = MutableLiveData<String>()
+    val raza: LiveData<String> = _raza
     private val _edad = MutableLiveData<String>()
     val edad: LiveData<String> = _edad
     private val _peso = MutableLiveData<String>()
@@ -43,11 +50,13 @@ class RegistroMascotaViewModel @Inject constructor(
 
     var itemsRazaGato = listOf<String>(
         "Siames",
-        "Europeo"
+        "Europeo",
+        " "
     )
     var itemsRazaPerro = listOf<String>(
         "Bichón",
-        "Pekines"
+        "Pekines",
+        " "
     )
 
 
@@ -66,12 +75,11 @@ class RegistroMascotaViewModel @Inject constructor(
         _nombre.postValue(nombre)
     }
     fun onTipoChange(tipo: String) {
-        _raza.set("")
         _tipo.postValue(tipo)
         pintarItemsRaza(tipo)
     }
     fun onRazaChange(raza: String) {
-        _raza.set(raza)
+        _raza.postValue(raza)
     }
     fun onEdadChange(edad: String) {
         _edad.postValue(edad)
@@ -90,21 +98,31 @@ class RegistroMascotaViewModel @Inject constructor(
     }
 
     fun onFinalizarPress(navController: NavController) {
-        /*viewModelScope.launch {
-            val nombre = _nombre.value
-            val tipo = _tipo.value
-            val numChip = _numChip.value
-            val colorAsig = _colorAsig.value
+        val nombre = _nombre.value
+        val numChip = _numChip.value
+        val tipo = _tipo.value
+        val colorAsig = _colorAsig.value
+        _nombreEmpty.postValue(false)
+        _numChipEmpty.postValue(false)
+        _tipoEmpty.postValue(false)
+        _colorEmpty.postValue(false)
 
-            if (nombre.isNullOrBlank() || tipo.isNullOrBlank() ||
-                numChip.isNullOrBlank() || colorAsig.isNullOrBlank()) {
-                return@launch
-            }else{
-                navController.navigate(route = "home")
-
-            }
-        }*/
-        navController.navigate(route = "home") //Para que no rompa
+        if(nombre.isNullOrBlank()){
+            _nombreEmpty.postValue(true)
+        }
+        if(numChip.isNullOrBlank()){
+            _numChipEmpty.postValue(true)
+        }
+        if(tipo.isNullOrBlank()){
+            _tipoEmpty.postValue(true)
+        }
+        if(colorAsig.isNullOrBlank()){
+            _colorEmpty.postValue(true)
+        }
+        if(_colorEmpty.value==false && _nombreEmpty.value==false && _numChipEmpty.value==false
+            && _tipoEmpty.value == false ){
+            navController.navigate(route = Destinations.Home.route)
+        }
     }
 
 }

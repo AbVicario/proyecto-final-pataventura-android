@@ -6,10 +6,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -125,7 +127,25 @@ fun InformationButton(
         )
     }
 }
+@Composable
+fun MyCustomButton(texto: String, color: Color) {
 
+    Column(
+        Modifier
+            .height(45.dp)
+            .width(120.dp)
+            .background(color, shape = RoundedCornerShape(10.dp))
+            .clickable { },
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+        ){
+        CustomText(text = texto, color = Color.White,
+            fontSize = 20.sp, fontWeight = FontWeight.Bold,
+            fontFamily = CustomFontFamily )
+    }
+
+}
 @Composable
 fun IconButtonImage(
 
@@ -161,8 +181,8 @@ fun IconButtonImageMascota(
     Box(
         modifier = Modifier
             .minimumInteractiveComponentSize()
-            .size(80.dp)
-            .clip(RoundedCornerShape(150f))
+            .size(85.dp)
+            .clip(RoundedCornerShape(100f))
             .background(Verde.copy(alpha = 0.2f))
             .clickable(
                 onClick = {  },

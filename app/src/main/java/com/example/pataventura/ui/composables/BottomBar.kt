@@ -1,0 +1,135 @@
+package com.example.pataventura.ui.composables
+
+import android.graphics.drawable.Icon
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Pets
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import com.example.pataventura.ui.theme.Verde
+import okhttp3.internal.wait
+import javax.annotation.meta.When
+
+@Composable
+fun BottomBar(selectedIcon: ImageVector, onIconSelected: (ImageVector) -> Unit) {
+    val listaIconos: List<Pair<ImageVector, Boolean>> = listOf(
+        Icons.Default.Home to (Icons.Default.Home == selectedIcon),
+        Icons.Default.CalendarMonth to (Icons.Default.CalendarMonth == selectedIcon),
+        Icons.Default.Pets to (Icons.Default.Pets == selectedIcon),
+        Icons.Default.NotificationsNone to (Icons.Default.NotificationsNone == selectedIcon),
+        Icons.Default.Person to (Icons.Default.Person == selectedIcon)
+    )
+
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .height(65.dp)
+            .background(Color.Transparent)
+    ) {
+        Box(
+            Modifier
+                .background(Verde)
+                .height(50.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomStart)
+        ) {
+
+        }
+        Row(
+            Modifier
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .padding(horizontal = 30.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            listaIconos.forEach { (icon, isSelected) ->
+                if (isSelected) {
+                    MyIconButtonSelected(icon = icon, onClick = { onIconSelected(icon) })
+                } else {
+                    MyIconButton(icon = icon, onClick = { onIconSelected(icon) })
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MyIconButton(icon: ImageVector, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .clickable { onClick() }
+            .background(Verde)
+    ) {
+        Icon(icon, contentDescription = null, tint = Color.White, modifier = Modifier.padding(top = 11.dp))
+    }
+}
+
+@Composable
+fun MyIconButtonSelected(icon: ImageVector, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier.clickable { onClick() }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(45.dp)
+        ) {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .background(Verde)
+                    .align(Alignment.BottomStart)
+            )
+            Box(
+                modifier = Modifier
+                    .size(45.dp)
+                    .border(1.dp, Color.Gray.copy(0.4f), RoundedCornerShape(100f))
+                    .shadow(6.dp, RoundedCornerShape(100f), clip = true) // Add shadow to circle container
+                    .align(Alignment.TopStart)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(45.dp)
+                        .background(Verde, RoundedCornerShape(100f))
+                        .align(Alignment.Center)
+                ) {
+                    Icon(
+                        icon,
+                        contentDescription = null,
+                        modifier = Modifier.align(Alignment.Center),
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+    }
+}

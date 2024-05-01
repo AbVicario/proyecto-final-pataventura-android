@@ -45,6 +45,9 @@ val MyDarkColorScheme = darkColorScheme(
 
 val MyLightColorScheme = lightColorScheme(
     primary = VerdeOliva,
+    onPrimary = Verde,
+    surface = Color.White,
+    onSurface = Verde,
     secondary = Verde,
     tertiary = Verde30
 

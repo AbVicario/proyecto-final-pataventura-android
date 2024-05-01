@@ -13,19 +13,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Mail
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pataventura.R
-import com.example.pataventura.ui.composables.CustomOutlinedTextEmail
-import com.example.pataventura.ui.composables.CustomOutlinedTextPass
+import com.example.pataventura.ui.composables.CampoObligatorioText
+import com.example.pataventura.ui.composables.CustomOutlinedTextField
+import com.example.pataventura.ui.composables.CustomOutlinedTextFieldPass
 import com.example.pataventura.ui.composables.CustomText
+import com.example.pataventura.ui.composables.EmailNoValidoText
 import com.example.pataventura.ui.composables.HeaderLogin
 import com.example.pataventura.ui.composables.LoginButton
 import com.example.pataventura.ui.screens.login.LoginViewModel
@@ -51,6 +60,10 @@ fun LoginScreen(
 }
 @Composable
 fun BodyLogin(loginViewModel:LoginViewModel, navController: NavController) {
+    val emailNoValido: Boolean by loginViewModel.emailNoValido.observeAsState(false)
+    val emailEmpty: Boolean by loginViewModel.emailEmpty.observeAsState(false)
+    val passEmpty: Boolean by loginViewModel.passEmpty.observeAsState(false)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -62,24 +75,40 @@ fun BodyLogin(loginViewModel:LoginViewModel, navController: NavController) {
         )
 
         Column(
-            Modifier.fillMaxSize().padding(15.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-
-            val textFieldEmail =
-            CustomOutlinedTextEmail(placeholder = "Email:",
-                loginViewModel.tieneError.get()) {
-                loginViewModel.onEmailChange(
-                    it
-                )
-            }
-            CustomOutlinedTextPass(placeholder = "Password:",
-                loginViewModel.tieneError.get()) {
-                loginViewModel.onPasswordChange(
-                    it
-                )
-            }
+            CustomOutlinedTextField(
+                onValueChange = { loginViewModel.onEmailChange(it)},
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Email",
+                leadingIcon = { Icon(Icons.Default.Mail, null) },
+                trailingIcon = {},
+                supportingText = {if(emailEmpty) CampoObligatorioText()
+                else if(emailNoValido) EmailNoValidoText()},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                singleLine = true
+            )
+            CustomOutlinedTextFieldPass(
+                onValueChange = { loginViewModel.onPasswordChange(it)},
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp),
+                enabled = true,
+                readOnly = false,
+                placeholder = "Password",
+                leadingIcon = { Icon(Icons.Default.Lock, null) },
+                supportingText = {if(passEmpty) CampoObligatorioText()},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
+            )
 
             Box(
                 Modifier
@@ -87,7 +116,7 @@ fun BodyLogin(loginViewModel:LoginViewModel, navController: NavController) {
                     .height(50.dp)
             ) {
                 LoginButton(text = "Acceder",
-                    onClick= { loginViewModel.onLoginPress(navController) }
+                    onClick= { loginViewModel.onLoginButtonClicked(navController) }
                 )
             }
 
