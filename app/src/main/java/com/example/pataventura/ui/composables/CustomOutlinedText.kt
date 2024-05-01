@@ -141,60 +141,7 @@ fun CustomOutlinedTextField(
         ),
     )
 }
-@Composable
-fun CustomOutlinedTextFieldBuscador(
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean,
-    readOnly: Boolean,
-    placeholder: String,
-    leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
-    supportingText: @Composable (() -> Unit)? = null,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    singleLine: Boolean
-) {
-    var text by remember {mutableStateOf("")}
-    OutlinedTextField(
-        value = text,
-        onValueChange = {
-            text = it
-            onValueChange(it)
-        },
-        textStyle = TextStyle(fontSize = 20.sp),
-        modifier = modifier,
-        enabled = enabled,
-        readOnly = readOnly,
-        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
-        supportingText = supportingText,
-        placeholder = { Text(text = "", fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        keyboardOptions = keyboardOptions,
-        singleLine = singleLine,
-        shape = RoundedCornerShape(16.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White,
-            focusedTrailingIconColor = Color.Transparent,
-            unfocusedTrailingIconColor = Tierra,
-            focusedLabelColor = Color.Transparent,
-            unfocusedLabelColor = Tierra,
-            focusedBorderColor = Color.Transparent,
-            unfocusedBorderColor = Color.Transparent,
-            focusedLeadingIconColor = Color.Transparent,
-            unfocusedLeadingIconColor = Tierra,
-            focusedPlaceholderColor = Color.Transparent,
-            unfocusedPlaceholderColor = Tierra,
-        ),
-    )
-}
+
 
 @Composable
 fun CustomOutlinedTextFieldPass(
@@ -264,7 +211,7 @@ fun CustomOutlinedTextFieldPass(
 @Composable
 fun CustomOutlinedTextFieldDes(
     items: List<String>,
-    onItemSelected: (String) -> Unit,
+    text: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean,
@@ -276,14 +223,11 @@ fun CustomOutlinedTextFieldDes(
 ) {
     var isDesplegado by remember { mutableStateOf(false) }
     var isItemSelected by remember { mutableStateOf(false) }
-    var text by remember {
-        mutableStateOf("")
-    }
+
     OutlinedTextField(
         value = text,
         onValueChange = {
-            text = it
-            onValueChange(it)
+          onValueChange(it)
         },
         textStyle = TextStyle(fontSize = 20.sp),
         modifier = modifier,
@@ -332,10 +276,9 @@ fun CustomOutlinedTextFieldDes(
                 isDesplegado = isDesplegado,
                 items = items,
                 onItemSelected = { item ->
-                    onItemSelected(item)
                     isItemSelected = true
                     isDesplegado = false
-                    text = item
+                    onValueChange(item)
                 }
             )
         }
@@ -419,180 +362,6 @@ fun CustomOutlinedTextFieldDesColor(
         )
     }
 }
-@Composable
-fun CustomOutlinedTextPerfilMascotaDesplegable(
-    items: List<String>,
-    placeholder: String,
-    keyboardType: KeyboardType,
-    opcional : Boolean,
-    onTextFieldChange: (String) -> Unit,
-    onItemSelected: (String) -> Unit
-) {
-    var isDesplegado by remember { mutableStateOf(false) }
-    var isItemSelected by remember { mutableStateOf(opcional) }
-    var text by remember {
-        mutableStateOf("")
-    }
-
-    OutlinedTextField(
-        value = text,
-        onValueChange = {
-            text = it
-            onTextFieldChange(it)
-        },
-        readOnly = true,
-        textStyle = TextStyle(fontSize = 20.sp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        singleLine = true,
-        maxLines = 1,
-        label = {
-            Text(
-                text = placeholder,
-                fontWeight = FontWeight.Bold,
-                fontSize = 22.sp,
-                modifier = Modifier
-                    .background(Color.White)
-                    .padding(horizontal = 2.dp)
-            )
-        },
-        trailingIcon = {
-            IconButton(onClick = { isDesplegado = !isDesplegado }) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    tint = Verde,
-                    contentDescription = "icono desplegable",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        },
-        shape = RoundedCornerShape(16.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White,
-            focusedLabelColor = Tierra,
-            unfocusedLabelColor = Tierra,
-            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
-            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
-            focusedLeadingIconColor = Tierra,
-            unfocusedLeadingIconColor = Tierra,
-            focusedPlaceholderColor = Tierra,
-            unfocusedPlaceholderColor = Tierra
-        )
-    )
-
-    if (isDesplegado) {
-        MenuDesplegable(
-            isDesplegado = isDesplegado,
-            items = items,
-            onItemSelected = { item ->
-                onItemSelected(item)
-                isItemSelected = true
-                isDesplegado = false
-                text = item
-            }
-        )
-    }
-}
-
-
-@Composable
-fun SupportingText(isRequerido:Boolean) {
-    if(isRequerido){
-        Text(text = "Campo requerido",
-            fontSize = 13.sp, color = Color.Red)
-    }
-}
-
-@Composable
-fun CustomOutlinedTextPerfil(placeholder: String, opcional: Boolean,
-                             onTextFieldChange: (String) -> Unit) {
-    var text by remember {
-        mutableStateOf("")
-    }
-
-    OutlinedTextField(
-        value = text,
-        onValueChange = {
-            text = it
-            onTextFieldChange(it)
-        },
-        textStyle = TextStyle(fontSize = 20.sp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        singleLine = true,
-        maxLines = 1,
-        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
-        leadingIcon = { Icon(Icons.Default.Person, null) },
-        supportingText = { SupportingText(opcional)},
-        shape = RoundedCornerShape(16.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White,
-            focusedLabelColor = Tierra,
-            unfocusedLabelColor = Tierra,
-            focusedBorderColor = Tierra,
-            unfocusedBorderColor = Tierra,
-            focusedLeadingIconColor = Tierra,
-            unfocusedLeadingIconColor = Tierra,
-            focusedPlaceholderColor = Tierra,
-            unfocusedPlaceholderColor = Tierra
-
-        ),
-    )
-}
-@Composable
-fun CustomOutlinedTextPerfilMascota(singleLine: Boolean ,placeholder: String,
-                                    keyboardType : KeyboardType,
-                                    opcional : Boolean,
-                                    onTextFieldChange: (String) -> Unit) {
-    var text by remember {
-        mutableStateOf("")
-    }
-    var isItemSelected by remember { mutableStateOf(opcional) }
-
-    OutlinedTextField(
-        value = text,
-        onValueChange = {
-            text = it
-            isItemSelected = true
-            onTextFieldChange(it)
-        },
-        textStyle = TextStyle(fontSize = 20.sp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        singleLine = singleLine,
-        maxLines = 1,
-        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
-        //leadingIcon = { Icon(Icons.Default.Pets, null) },
-        shape = RoundedCornerShape(16.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White,
-            focusedLabelColor = Tierra,
-            unfocusedLabelColor = Tierra,
-            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
-            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
-            focusedLeadingIconColor = Tierra,
-            unfocusedLeadingIconColor = Tierra,
-            focusedPlaceholderColor = Tierra,
-            unfocusedPlaceholderColor = Tierra
-
-        ),
-    )
-}
 
 @Composable
 fun CustomOutlinedTextContrato(singleLine: Boolean ,placeholder: String,
@@ -640,132 +409,6 @@ fun CustomOutlinedTextContrato(singleLine: Boolean ,placeholder: String,
     )
 }
 
-@Composable
-fun CustomOutlinedTextDescripcionServicio(singleLine: Boolean ,placeholder: String,
-                                    keyboardType : KeyboardType,
-                                    opcional : Boolean,
-                                    onTextFieldChange: (String) -> Unit) {
-    var text by remember {
-        mutableStateOf("")
-    }
-    var isItemSelected by remember { mutableStateOf(opcional) }
-
-    OutlinedTextField(
-        value = text,
-        onValueChange = {
-            text = it
-            isItemSelected = true
-            onTextFieldChange(it)
-        },
-        textStyle = TextStyle(fontSize = 20.sp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        singleLine = singleLine,
-        maxLines = 1,
-        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
-        //leadingIcon = { Icon(Icons.Default.Pets, null) },
-        shape = RoundedCornerShape(16.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White,
-            focusedLabelColor = Tierra,
-            unfocusedLabelColor = Tierra,
-            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
-            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
-            focusedLeadingIconColor = Tierra,
-            unfocusedLeadingIconColor = Tierra,
-            focusedPlaceholderColor = Tierra,
-            unfocusedPlaceholderColor = Tierra
-
-        ),
-    )
-}
-
-
-
-
-@Composable
-fun CustomOutlinedTextPerfilMascotaDesplegableColor(
-    items: List<String>,
-    placeholder: String,
-    opcional : Boolean,
-    onTextFieldChange: (String) -> Unit,
-    onItemSelected: (String) -> Unit
-) {
-    var isDesplegado by remember { mutableStateOf(false) }
-    var isItemSelected by remember { mutableStateOf( opcional) }
-    var text by remember {
-        mutableStateOf("")
-    }
-
-    OutlinedTextField(
-        value = text,
-        onValueChange = {
-            text = it
-            onTextFieldChange(it)
-
-        },
-        textStyle = TextStyle(fontSize = 20.sp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-        singleLine = true,
-        readOnly = true,
-        maxLines = 1,
-        label = {
-            Text(
-                text = placeholder,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier
-                    .background(Color.White)
-                    .padding(horizontal = 2.dp)
-            )
-        },
-        trailingIcon = {
-            IconButton(onClick = { isDesplegado = !isDesplegado }) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    tint = Verde,
-                    contentDescription = "icono desplegable",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        },
-        shape = RoundedCornerShape(16.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White,
-            focusedLabelColor = Tierra,
-            unfocusedLabelColor = Tierra,
-            focusedBorderColor = if (isItemSelected) Tierra else Color.Red,
-            unfocusedBorderColor = if (isItemSelected) Tierra else Color.Red,
-            focusedLeadingIconColor = Tierra,
-            unfocusedLeadingIconColor = Tierra,
-            focusedPlaceholderColor = Tierra,
-            unfocusedPlaceholderColor = Tierra
-        )
-    )
-
-    if (isDesplegado) {
-        MenuDesplegableColor(
-            isDesplegado = isDesplegado,
-            items = items,
-            onItemSelected = { item ->
-                onItemSelected(item)
-                isDesplegado = false
-                isItemSelected = true
-                text = item
-            }
-        )
-    }
-}
 
 @Composable
 fun MenuDesplegable(
