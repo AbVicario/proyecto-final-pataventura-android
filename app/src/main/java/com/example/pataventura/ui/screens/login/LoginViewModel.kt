@@ -3,11 +3,15 @@ package com.example.pataventura.ui.screens.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.pataventura.domain.useCase.AuthenticateUserUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@HiltViewModel
 class LoginViewModel @Inject constructor(
-    //private val authenticateGuestUseCase: AuthenticateGuestUseCase
+    private val authenticateUseCase: AuthenticateUserUseCase,
 ) : ViewModel() {
 
     private val _email = MutableLiveData<String>()
@@ -28,8 +32,12 @@ class LoginViewModel @Inject constructor(
     fun onPasswordChange(password: String) {
         _password.postValue(password)
     }
-
-    fun onLoginPress(navController: NavController) {
+    fun onLoginButtonClicked(navController: NavController) {
+        viewModelScope.launch {
+            onLoginPress(navController)
+        }
+    }
+    suspend fun onLoginPress(navController: NavController) {
         val regex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
         val email = _email.value
         val password = _password.value
@@ -47,19 +55,19 @@ class LoginViewModel @Inject constructor(
         }
         if(_emailEmpty.value==false && _emailNoValido.value==false
             && _passEmpty.value==false){
-            //Autenticar usuario
-            navController.navigate(route = "home")
+            val result = authenticateUseCase.login(_email.value!!,_password.value!!)
+            if(result){
+                navController.navigate(route = "home")
+            }
         }
     }
 
     fun onGooglePress(navController: NavController) {
 
-        navController.navigate(route = "home")// para que no rompa
+        navController.navigate(route = "home")
 
     }
     fun onRegistrarsePress(navController: NavController) {
-
-        navController.navigate(route = "registerOne")// para que no rompa
-
+        navController.navigate(route = "registerOne")
     }
 }
