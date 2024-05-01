@@ -59,7 +59,7 @@ fun NavigationHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Destinations.RegistroServicio.route
+        startDestination = Destinations.LoginCliente.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -71,7 +71,7 @@ fun NavigationHost(
             RegistroUnoScreen(navController, registerViewModel)
         }
         composable(Destinations.RegisterTwo.route) {
-            RegistroDosScreen(navController, registerViewModel)
+            RegistroDosScreen(navController, registerViewModel, loginClienteViewModel)
         }
         composable(Destinations.RegisterMascota.route) {
             RegistroMascotaScreen(navController, registerMascotaViewModel)
