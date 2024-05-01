@@ -36,15 +36,10 @@ import com.example.pataventura.ui.composables.CampoObligatorioText
 import com.example.pataventura.ui.composables.CustomOutlinedTextField
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDes
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDesColor
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascota
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascotaDesplegable
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascotaDesplegableColor
 import com.example.pataventura.ui.composables.CustomText
-import com.example.pataventura.ui.composables.IconButtonImage
 import com.example.pataventura.ui.composables.IconButtonImageMascota
 import com.example.pataventura.ui.composables.LoginButton
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
-import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 
@@ -55,6 +50,9 @@ fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel,
     val numChipEmpty: Boolean by registroMascotaViewModel.numChipEmpty.observeAsState(false)
     val tipoEmpty: Boolean by registroMascotaViewModel.tipoEmpty.observeAsState(false)
     val colorEmpty: Boolean by registroMascotaViewModel.colorEmpty.observeAsState(false)
+    val raza : String by registroMascotaViewModel.raza.observeAsState("")
+    val tipo : String by registroMascotaViewModel.tipo.observeAsState("")
+    val edad : String by registroMascotaViewModel.edad.observeAsState("")
     var itemsTipo = listOf<String>(
         "Perro",
         "Gato"
@@ -114,7 +112,6 @@ fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     singleLine = true
                 )
-
             }
             Row (
                 Modifier.fillMaxWidth(),
@@ -125,9 +122,10 @@ fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel,
                         .fillMaxWidth(0.5f)
                         .padding(horizontal = 5.dp)){
                     CustomOutlinedTextFieldDes(
+                        text = tipo,
                         items = itemsTipo,
-                        onItemSelected = {registroMascotaViewModel.onTipoChange(it)},
-                        onValueChange = {},
+                        onValueChange = {registroMascotaViewModel.onTipoChange(it)
+                            registroMascotaViewModel.onRazaChange(" ")},
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(90.dp),
@@ -145,9 +143,9 @@ fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel,
                         .padding(horizontal = 5.dp))
                 {
                     CustomOutlinedTextFieldDes(
+                        text = raza,
                         items = registroMascotaViewModel.listaRaza,
-                        onItemSelected = {registroMascotaViewModel.onRazaChange(it)},
-                        onValueChange = {},
+                        onValueChange = {registroMascotaViewModel.onRazaChange(it)},
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(90.dp),
@@ -172,9 +170,9 @@ fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel,
                         .padding(horizontal = 5.dp))
                 {
                     CustomOutlinedTextFieldDes(
+                        text = edad,
                         items = itemsEdad,
-                        onItemSelected = {registroMascotaViewModel.onEdadChange(it)},
-                        onValueChange = {},
+                        onValueChange = {registroMascotaViewModel.onEdadChange(it)},
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(90.dp),

@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomOutlinedTextContrato
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascota
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.DatePickerWithDialog
 import com.example.pataventura.ui.composables.MyCustomButton

@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material.icons.filled.Person
@@ -44,19 +46,22 @@ import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.EmailNoValidoText
 import com.example.pataventura.ui.composables.IconButtonImage
 import com.example.pataventura.ui.composables.LoginButton
+import com.example.pataventura.ui.composables.MyAlertDialog
 import com.example.pataventura.ui.composables.PassConText
 import com.example.pataventura.ui.composables.PrecioValText
+import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.registro.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
-fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavController) {
+fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavController, loginClienteViewModel: LoginClienteViewModel) {
     val nombreEmpty: Boolean by registroViewModel.nombreEmpty.observeAsState(false)
     val apellidosEmpty: Boolean by registroViewModel.apellidosEmpty.observeAsState(false)
     val direccionEmpty: Boolean by registroViewModel.direccionEmpty.observeAsState(false)
     val telefonoEmpty: Boolean by registroViewModel.telefonoEmpty.observeAsState(false)
+    val tipo: String by loginClienteViewModel.tipo.observeAsState("")
 
     Box(
         modifier = Modifier
@@ -154,8 +159,15 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
                     .fillMaxWidth(0.7f)
                     .height(50.dp)
             ) {
-                LoginButton(text = "Suiguiente",
-                    onClick = { registroViewModel.onPressRegistroDos(navController) })
+                MyAlertDialog(
+                    show = registroViewModel.showDialog,
+                    icon = Icons.Default.Error,
+                    onConfirm = { registroViewModel.onDialogConfirm(navController) },
+                    dialogTitle = "Error",
+                    dialogText ="Ha habido un error en el registro. Intentelo mas tarde"
+                )
+                LoginButton(text = "Siguiente",
+                    onClick = { registroViewModel.onRegistroDosButtonClicked(navController, tipo) })
             }
         }
     }
@@ -270,6 +282,8 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
     by registroServicioViewModel.isServicioSeleccionado.observeAsState(false)
     val isPrecio: Boolean by registroServicioViewModel.isPrecio.observeAsState(false)
     val isPrecioValido: Boolean by registroServicioViewModel.isPrecioValido.observeAsState(false)
+    val servicio: String by registroServicioViewModel.servicio.observeAsState("")
+    val rango: String by registroServicioViewModel.rango.observeAsState("")
 
 
     Box(
@@ -298,10 +312,10 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
                 horizontalArrangement = Arrangement.SpaceBetween){
 
                 CustomOutlinedTextFieldDes(
+                    text = servicio,
                     items = listaServicios,
-                    onItemSelected = {registroServicioViewModel.onChangeServicio(it)},
-                    onValueChange = {},
-                    Modifier
+                    onValueChange = {registroServicioViewModel.onChangeServicio(it)},
+                    modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(100.dp),
                     enabled = true,
@@ -328,10 +342,10 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
             }
 
             CustomOutlinedTextFieldDes(
+                text = rango,
                 items = registroServicioViewModel.listaRango,
-                onItemSelected = {registroServicioViewModel.onChangeRango(it)},
-                onValueChange = {},
-                Modifier
+                onValueChange = {registroServicioViewModel.onChangeRango(it)},
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp),
                 enabled = true,
@@ -344,7 +358,7 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
             
             CustomOutlinedTextField(
                 onValueChange = {registroServicioViewModel.onChangeDescripcion(it)},
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp),
                 enabled = true,
@@ -360,8 +374,16 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
                     .fillMaxWidth(0.7f)
                     .height(50.dp)
             ) {
+                MyAlertDialog(
+                    show = registroServicioViewModel.showDialog,
+                    icon = Icons.Default.Error,
+                    onConfirm = { registroServicioViewModel.onDialogConfirm(navController) },
+                    dialogTitle = "Error",
+                    dialogText ="Ha habido un error en el registro. Intentelo mas tarde"
+                )
+
                 LoginButton(text = "Finalizar",
-                    onClick = {registroServicioViewModel.onPressRegistroServicio(navController)})
+                    onClick = {registroServicioViewModel.onRegistroServicioButtonClicked(navController)})
             }
         }
     }

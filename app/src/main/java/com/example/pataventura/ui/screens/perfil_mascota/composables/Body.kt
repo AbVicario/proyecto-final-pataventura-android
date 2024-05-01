@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,8 +31,6 @@ import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomOutlinedTextContrato
 import com.example.pataventura.ui.composables.CustomOutlinedTextField
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDes
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascota
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfilMascotaDesplegable
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
@@ -39,6 +39,8 @@ import com.example.pataventura.ui.theme.Verde
 @Composable
 fun BodyPerfilMascotas(perfilMascotaViewModel: PerfilMascotaViewModel,
                        navController: NavController){
+    val raza : String by perfilMascotaViewModel.raza.observeAsState("")
+    val sexo : String by perfilMascotaViewModel.sexo.observeAsState("")
     var colorMascota = Color.Blue
     var nombreMascota = "Nombre"
     Box() {
@@ -56,21 +58,22 @@ fun BodyPerfilMascotas(perfilMascotaViewModel: PerfilMascotaViewModel,
         ) {
             RowNombre(colorMascota, nombreMascota)
             Spacer(modifier = Modifier.size(10.dp))
-            ColumnCaracteristicas()
+            ColumnCaracteristicas(perfilMascotaViewModel,raza, sexo)
         }
     }
 }
 
 @Composable
-fun ColumnCaracteristicas() {
+fun ColumnCaracteristicas(perfilMascotaViewModel: PerfilMascotaViewModel,
+                          raza:String, sexo: String) {
     var razas = listOf("pekines", "bichon")
-    var sexo = listOf("macho", "hembra")
+    var sexos = listOf("macho", "hembra")
     Column (verticalArrangement = Arrangement.SpaceBetween){
         CustomOutlinedTextFieldDes(
+            text = raza,
             items = razas,
-            onItemSelected ={} ,
-            onValueChange = {},
-            Modifier
+            onValueChange = {perfilMascotaViewModel.onRazaChange(it)},
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp),
             enabled = true,
@@ -83,10 +86,10 @@ fun ColumnCaracteristicas() {
         Row (){
             Box(modifier = Modifier.fillMaxWidth(0.5f)){
                 CustomOutlinedTextFieldDes(
-                    items = sexo,
-                    onItemSelected ={} ,
-                    onValueChange = {},
-                    Modifier
+                    text = sexo,
+                    items = sexos,
+                    onValueChange = {perfilMascotaViewModel.onSexoChange(it)},
+                    modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp),
                     enabled = true,

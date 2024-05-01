@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomOutlinedTextField
-import com.example.pataventura.ui.composables.CustomOutlinedTextPerfil
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily

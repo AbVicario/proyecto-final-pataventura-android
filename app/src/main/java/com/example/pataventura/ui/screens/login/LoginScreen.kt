@@ -116,7 +116,7 @@ fun BodyLogin(loginViewModel:LoginViewModel, navController: NavController) {
                     .height(50.dp)
             ) {
                 LoginButton(text = "Acceder",
-                    onClick= { loginViewModel.onLoginPress(navController) }
+                    onClick= { loginViewModel.onLoginButtonClicked(navController) }
                 )
             }
 

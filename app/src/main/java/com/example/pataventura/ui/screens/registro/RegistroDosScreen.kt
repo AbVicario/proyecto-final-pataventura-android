@@ -7,6 +7,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.registro.composables.BodyRegistroDos
 import com.example.pataventura.ui.screens.registro.composables.HeaderRegistro
 
@@ -14,7 +15,8 @@ import com.example.pataventura.ui.screens.registro.composables.HeaderRegistro
 @Composable
 fun RegistroDosScreen(
     navController: NavController,
-    registroViewModel: RegistroViewModel
+    registroViewModel: RegistroViewModel,
+    loginClienteViewModel: LoginClienteViewModel
 ) {
     Scaffold() {
         Column(
@@ -22,7 +24,8 @@ fun RegistroDosScreen(
                 .fillMaxSize(),
         ) {
             HeaderRegistro()
-            BodyRegistroDos(registroViewModel = registroViewModel, navController)
+            BodyRegistroDos(registroViewModel = registroViewModel,
+                navController, loginClienteViewModel)
 
         }
     }

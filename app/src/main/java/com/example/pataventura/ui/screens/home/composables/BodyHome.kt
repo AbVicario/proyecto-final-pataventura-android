@@ -26,6 +26,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,8 +56,10 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun BodyHome(currentPosition: LatLng?, homeViewModel: HomeViewModel/*, cameraState: CameraPositionState?*/){
+fun BodyHome(currentPosition: LatLng?, homeViewModel: HomeViewModel){
     var listaServicios = listOf("Guardería", "Paseo")
+
+    val servicio : String by homeViewModel.servicio.observeAsState("")
     Column (
         Modifier
             .fillMaxSize()
@@ -80,10 +84,10 @@ fun BodyHome(currentPosition: LatLng?, homeViewModel: HomeViewModel/*, cameraSta
             fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily )
 
         CustomOutlinedTextFieldDes(
+            text = servicio,
             items = listaServicios,
-            onItemSelected = {},
-            onValueChange = {},
-            Modifier.fillMaxWidth().height(80.dp),
+            onValueChange = {homeViewModel.onRolChange(it)},
+            modifier = Modifier.fillMaxWidth().height(80.dp),
             enabled = true,
             readOnly = false,
             placeholder = "Tipo de servicio",

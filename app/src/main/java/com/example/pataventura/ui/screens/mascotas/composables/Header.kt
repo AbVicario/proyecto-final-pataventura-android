@@ -42,7 +42,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomOutlinedTextField
-import com.example.pataventura.ui.composables.CustomOutlinedTextFieldBuscador
 import com.example.pataventura.ui.theme.Verde
 
 @OptIn(ExperimentalMaterial3Api::class)
