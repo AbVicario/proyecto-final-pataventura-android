@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.pataventura.data.database.entity.CuidadorEntity
+import com.example.pataventura.data.network.response.CustomResponse
 
 @Dao
 interface CuidadorDao {
@@ -15,5 +16,5 @@ interface CuidadorDao {
     fun insertCuidador(cuidador: CuidadorEntity)
 
     @Query("DELETE FROM cuidador_table")
-    fun deleteCuidador()
+    fun deleteCuidador():CustomResponse
 }

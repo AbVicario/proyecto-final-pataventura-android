@@ -1,4 +1,4 @@
-package com.example.pataventura.ui.screens.registro
+package com.example.pataventura.ui.screens.regisrtroServicio
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistroServicioViewModel @Inject constructor(
-    private val servicioRegisterUseCase: ServicioRegisterUseCase
+    private val servicioRegisterUseCase: ServicioRegisterUseCase,
 ) : ViewModel() {
 
     var showDialog by mutableStateOf(false)
@@ -98,7 +98,7 @@ class RegistroServicioViewModel @Inject constructor(
 
     fun onDialogConfirm(navController: NavController) {
         showDialog = false
-        navController.navigate(route = Destinations.LoginCliente.route)
+        navController.navigate(route = Destinations.Home.route)
 
     }
 
@@ -106,6 +106,11 @@ class RegistroServicioViewModel @Inject constructor(
         showDialog = true
     }
 
+    fun onPressRegistroServicioLaunch(navController: NavController){
+        viewModelScope.launch{
+            onPressRegistroServicio(navController)
+        }
+    }
 
 
     suspend fun onPressRegistroServicio(navController: NavController) {

@@ -43,3 +43,30 @@ fun MascotaEntity.toDomain() = Mascota(
     observacion,
     color
 )
+
+fun Mascota.toModel() = MascotaModel(
+    idMascota,
+    nombre,
+    numChip,
+    edad,
+    imagen,
+    tamanyo,
+    peso,
+    tipo,
+    raza,
+    observacion,
+    color
+)
+fun Mascota.toEntity() = MascotaEntity(
+    idMascota,
+    nombre,
+    numChip,
+    edad,
+    imagen,
+    tamanyo,
+    peso,
+    tipo,
+    raza,
+    observacion,
+    color
+)

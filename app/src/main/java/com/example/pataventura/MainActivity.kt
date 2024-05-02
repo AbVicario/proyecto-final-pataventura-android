@@ -21,7 +21,7 @@ import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
-import com.example.pataventura.ui.screens.registro.RegistroServicioViewModel
+import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.theme.PataVenturaTheme
 import dagger.hilt.android.AndroidEntryPoint

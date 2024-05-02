@@ -31,8 +31,8 @@ import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorView
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaScreen
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
 import com.example.pataventura.ui.screens.registro.RegistroDosScreen
-import com.example.pataventura.ui.screens.registro.RegistroServicioScreen
-import com.example.pataventura.ui.screens.registro.RegistroServicioViewModel
+import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioScreen
+import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroUnoScreen
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 

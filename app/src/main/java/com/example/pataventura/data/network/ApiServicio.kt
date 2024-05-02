@@ -29,15 +29,15 @@ interface ApiServicio {
         @Header("Authorization") token: String
     ): List<ServicioModel>
 
-    @PUT("/{tipo}")
+    @PUT("/{id}")
     suspend fun updateServicio(
         @Header("Authorization") token: String,
-        @Path("tipo") idServicio: String
+        @Path("id") idServicio: Int
     ): CustomResponse
 
-    @DELETE("/{tipo}")
+    @DELETE("/{id}")
     suspend fun deleteServicio(
         @Header("Authorization") token: String,
-        @Path("tipo") idServicio: String
+        @Path("id") idServicio: Int
     ): CustomResponse
 }
