@@ -13,10 +13,14 @@ import javax.inject.Inject
 class MascotaService @Inject constructor(
     private val mascotaApi: ApiMascota
 ) {
-    suspend fun registerMascotaFromApi(token: String, mascotaModel: MascotaModel): CustomResponse {
+    suspend fun registerMascotaFromApi(
+        token: String,
+        mascotaModel: MascotaModel,
+        idTutor: Int
+    ): CustomResponse {
         return try {
             withContext(Dispatchers.IO) {
-                mascotaApi.registerMascota(token, mascotaModel)
+                mascotaApi.registerMascota(token, mascotaModel, idTutor)
             }
         } catch (e: Exception) {
             Log.e("LOOK AT ME", "${e.message}")

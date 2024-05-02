@@ -15,8 +15,8 @@ class MascotaRepository @Inject constructor(
     private val mascotaService: MascotaService,
     private val mascotaDao: MascotaDao
 ) {
-    suspend fun registerMascotaFromApi(token : String, mascotaModel: MascotaModel): CustomResponse {
-        return mascotaService.registerMascotaFromApi(token, mascotaModel)
+    suspend fun registerMascotaFromApi(token : String, mascotaModel: MascotaModel, idTutor:Int): CustomResponse {
+        return mascotaService.registerMascotaFromApi(token, mascotaModel, idTutor)
     }
     suspend fun updateMascotaFromApi(token: String, mascotaModel: MascotaModel) {
         return withContext(Dispatchers.IO) {

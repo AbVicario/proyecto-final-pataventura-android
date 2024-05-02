@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Pets
@@ -39,6 +40,7 @@ import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDesColor
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.IconButtonImageMascota
 import com.example.pataventura.ui.composables.LoginButton
+import com.example.pataventura.ui.composables.MyAlertDialog
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
@@ -267,8 +269,17 @@ fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel,
                     .height(40.dp)
                 )
             {
+                MyAlertDialog(
+                    show = registroMascotaViewModel.showDialog,
+                    icon = Icons.Default.Error,
+                    onConfirm = { registroMascotaViewModel.onDialogConfirm(navController) },
+                    dialogTitle = "Error",
+                    dialogText ="Ha habido un error al completar el registro. Recuerde registrar una mascota" +
+                            "para poder solicitar demandar servicios." +
+                            " Intentelo mas tarde"
+                )
                 LoginButton(text = "Finalizar",
-                    onClick = {registroMascotaViewModel.onFinalizarPress(navController)} )
+                    onClick = {registroMascotaViewModel.onFinalizarPressLaunch(navController)} )
             }
         }
     }

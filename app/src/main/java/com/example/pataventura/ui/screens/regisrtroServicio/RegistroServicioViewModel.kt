@@ -1,4 +1,4 @@
-package com.example.pataventura.ui.screens.registro
+package com.example.pataventura.ui.screens.regisrtroServicio
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,8 +12,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.domain.model.Servicio
-import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorDeleteUseCase
-import com.example.pataventura.domain.useCase.servicioUseCase.ServicioGetUseCase
 import com.example.pataventura.domain.useCase.servicioUseCase.ServicioRegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -108,6 +106,11 @@ class RegistroServicioViewModel @Inject constructor(
         showDialog = true
     }
 
+    fun onPressRegistroServicioLaunch(navController: NavController){
+        viewModelScope.launch{
+            onPressRegistroServicio(navController)
+        }
+    }
 
 
     suspend fun onPressRegistroServicio(navController: NavController) {

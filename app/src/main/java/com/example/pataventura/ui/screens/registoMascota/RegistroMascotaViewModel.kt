@@ -1,6 +1,9 @@
 package com.example.pataventura.ui.screens.registoMascota
 
 import android.database.Observable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableList
@@ -10,13 +13,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
+import com.example.pataventura.domain.model.Mascota
+import com.example.pataventura.domain.useCase.mascotaUseCase.MascotaRegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegistroMascotaViewModel @Inject constructor(
+    private val mascotaRegisterUseCase: MascotaRegisterUseCase
 ) : ViewModel() {
+    var showDialog by mutableStateOf(false)
+        private set
+
     private val _nombreEmpty = MutableLiveData<Boolean>()
     val nombreEmpty: LiveData<Boolean> = _nombreEmpty
     private val _tipoEmpty = MutableLiveData<Boolean>()
@@ -38,7 +47,8 @@ class RegistroMascotaViewModel @Inject constructor(
     private val _descripcion = MutableLiveData<String>()
     val descripcion: LiveData<String> = _descripcion
     private val _listaRaza: ObservableList<String> = ObservableArrayList<String>().apply {
-        add("Campo Vacio")}
+        add("Campo Vacio")
+    }
     val listaRaza: ObservableList<String> = _listaRaza
     private val _numChip = MutableLiveData<String>()
     val numChip: LiveData<String> = _numChip
@@ -60,7 +70,6 @@ class RegistroMascotaViewModel @Inject constructor(
     )
 
 
-
     fun pintarItemsRaza(tipo: String) {
         val itemsToAdd: MutableList<String> = when (tipo) {
             "Perro" -> itemsRazaPerro.toMutableList()
@@ -74,30 +83,53 @@ class RegistroMascotaViewModel @Inject constructor(
     fun onNombreChange(nombre: String) {
         _nombre.postValue(nombre)
     }
+
     fun onTipoChange(tipo: String) {
         _tipo.postValue(tipo)
         pintarItemsRaza(tipo)
     }
+
     fun onRazaChange(raza: String) {
         _raza.postValue(raza)
     }
+
     fun onEdadChange(edad: String) {
         _edad.postValue(edad)
     }
+
     fun onPesoChange(peso: String) {
         _peso.postValue(peso)
     }
+
     fun onDescripcionChange(descripcion: String) {
         _descripcion.postValue(descripcion)
     }
+
     fun onNumChipChange(numChip: String) {
         _numChip.postValue(numChip)
     }
+
     fun oncolorAsigChange(colorAsig: String) {
         _colorAsig.postValue(colorAsig)
     }
 
-    fun onFinalizarPress(navController: NavController) {
+    fun onDialogConfirm(navController: NavController) {
+        showDialog = false
+        navController.navigate(route = Destinations.Home.route)
+
+    }
+
+    fun onOpenDialog() {
+        showDialog = true
+    }
+
+    fun onFinalizarPressLaunch(navController: NavController) {
+        viewModelScope.launch {
+            onFinalizarPress(navController)
+        }
+    }
+
+    suspend fun onFinalizarPress(navController: NavController) {
         val nombre = _nombre.value
         val numChip = _numChip.value
         val tipo = _tipo.value
@@ -107,21 +139,33 @@ class RegistroMascotaViewModel @Inject constructor(
         _tipoEmpty.postValue(false)
         _colorEmpty.postValue(false)
 
-        if(nombre.isNullOrBlank()){
+        if (nombre.isNullOrBlank()) {
             _nombreEmpty.postValue(true)
         }
-        if(numChip.isNullOrBlank()){
+        if (numChip.isNullOrBlank()) {
             _numChipEmpty.postValue(true)
         }
-        if(tipo.isNullOrBlank()){
+        if (tipo.isNullOrBlank()) {
             _tipoEmpty.postValue(true)
         }
-        if(colorAsig.isNullOrBlank()){
+        if (colorAsig.isNullOrBlank()) {
             _colorEmpty.postValue(true)
         }
-        if(_colorEmpty.value==false && _nombreEmpty.value==false && _numChipEmpty.value==false
-            && _tipoEmpty.value == false ){
-            navController.navigate(route = Destinations.Home.route)
+        if (_colorEmpty.value == false && _nombreEmpty.value == false && _numChipEmpty.value == false
+            && _tipoEmpty.value == false
+        ) {
+
+            val mascota = Mascota(
+                0, _nombre.value!!, _numChip.value!!,
+                _edad.value!!, "", tamanyo = 0f, peso = 0f, _tipo.value!!,
+                _raza.value!!, observacion = "", _colorAsig.value!!
+            )
+            val response = mascotaRegisterUseCase.registroMascota(mascota)
+            if (response.ok) {
+                navController.navigate(route = Destinations.Home.route)
+            } else {
+                onOpenDialog()
+            }
         }
     }
 
