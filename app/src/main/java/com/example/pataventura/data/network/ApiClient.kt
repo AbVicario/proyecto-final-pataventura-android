@@ -8,6 +8,7 @@ import com.example.pataventura.data.network.response.CuidadorResponse
 import com.example.pataventura.data.network.response.CustomResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -43,4 +44,10 @@ interface ApiClient {
         @Header("Authorization") token: String,
         @Path("tipo") tipo: String
     ): List<CuidadorModel>
+
+    @DELETE("/{id_cuidador}")
+    suspend fun deleteCuidador(
+        @Header("Authorization") token: String,
+        @Path("id_cuidador") idCuidador: Int
+    ): CustomResponse
 }

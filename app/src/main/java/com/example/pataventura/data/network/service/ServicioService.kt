@@ -27,7 +27,7 @@ class ServicioService @Inject constructor(
     suspend fun updateServicioFromApi(token: String, servicioModel: ServicioModel): CustomResponse {
         return try {
             withContext(Dispatchers.IO) {
-                servicioApi.updateServicio(token, servicioModel.tipo)
+                servicioApi.updateServicio(token, servicioModel.idOferta)
             }
         } catch (e: Exception) {
             Log.e("LOOK AT ME", "${e.message}")
@@ -38,7 +38,7 @@ class ServicioService @Inject constructor(
     suspend fun deleteServicioFromApi(token: String, servicioModel: ServicioModel): CustomResponse {
         return try {
             withContext(Dispatchers.IO) {
-                servicioApi.deleteServicio(token, servicioModel.tipo)
+                servicioApi.deleteServicio(token, servicioModel.idOferta)
             }
         } catch (e: Exception) {
             Log.e("LOOK AT ME", "${e.message}")

@@ -24,6 +24,16 @@ class CuidadorRepository @Inject constructor(
         val response: TokenModel = cuidadorService.getTokenFromApi(loginModel)
         return response.toDomain()
     }
+
+    suspend fun deleteCuidadorFromApi(token : String, cuidador: CuidadorModel): CustomResponse {
+        val response = cuidadorService.deleteCuidadorFromApi(token, cuidador)
+        return response
+    }
+
+    suspend fun deleteCuidadorFromDataBase(): CustomResponse {
+        val response = cuidadorDao.deleteCuidador()
+        return response
+    }
     suspend fun registerCuidadorFromApi(cuidador: CuidadorModel): CustomResponse {
         return cuidadorService.registerCuidadorFromApi(cuidador)
     }

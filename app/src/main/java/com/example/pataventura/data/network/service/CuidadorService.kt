@@ -20,10 +20,21 @@ class CuidadorService @Inject constructor(
             tokenResponse.body()?: throw IllegalStateException("Token response body is null")
         }
     }
-    suspend fun registerCuidadorFromApi(cuidadorModel: CuidadorModel): CustomResponse {
+    suspend fun deleteCuidadorFromApi(token: String, cuidadorModel: CuidadorModel): CustomResponse {
         return try {
             withContext(Dispatchers.IO) {
                 Log.d("Prueba", cuidadorModel.toString())
+                cuidadorApi.deleteCuidador(token,cuidadorModel.idUsuario)
+            }
+        } catch (e: Exception) {
+            Log.e("Prueba", "${e.message}")
+            CustomResponse(data = "Error", status = 500, false)
+        }
+    }
+
+    suspend fun registerCuidadorFromApi(cuidadorModel: CuidadorModel): CustomResponse {
+        return try {
+            withContext(Dispatchers.IO) {
                 cuidadorApi.registerCuidador(cuidadorModel)
             }
         } catch (e: Exception) {
@@ -42,5 +53,6 @@ class CuidadorService @Inject constructor(
             CustomResponse(data = "Error", status = 500, false)
         }
     }
+
 
 }

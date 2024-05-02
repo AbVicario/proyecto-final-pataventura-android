@@ -12,6 +12,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.domain.model.Servicio
+import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorDeleteUseCase
+import com.example.pataventura.domain.useCase.servicioUseCase.ServicioGetUseCase
 import com.example.pataventura.domain.useCase.servicioUseCase.ServicioRegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistroServicioViewModel @Inject constructor(
-    private val servicioRegisterUseCase: ServicioRegisterUseCase
+    private val servicioRegisterUseCase: ServicioRegisterUseCase,
 ) : ViewModel() {
 
     var showDialog by mutableStateOf(false)
@@ -98,7 +100,7 @@ class RegistroServicioViewModel @Inject constructor(
 
     fun onDialogConfirm(navController: NavController) {
         showDialog = false
-        navController.navigate(route = Destinations.LoginCliente.route)
+        navController.navigate(route = Destinations.Home.route)
 
     }
 

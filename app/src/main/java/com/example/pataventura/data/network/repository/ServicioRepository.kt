@@ -4,12 +4,9 @@ import android.util.Log
 import com.example.pataventura.data.database.dao.ServicioDao
 import com.example.pataventura.data.database.entity.ServicioEntity
 import com.example.pataventura.data.model.ServicioModel
-import com.example.pataventura.data.model.LoginModel
-import com.example.pataventura.data.model.TokenModel
 import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.data.network.service.ServicioService
 import com.example.pataventura.domain.model.Servicio
-import com.example.pataventura.domain.model.Token
 import com.example.pataventura.domain.model.toDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -72,12 +69,14 @@ class ServicioRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteServicioFromApi(token: String, servicioModel: ServicioModel) {
+    suspend fun deleteServicioFromApi(token: String, servicioModel: ServicioModel): CustomResponse {
         return withContext(Dispatchers.IO) {
             try {
-                servicioService.deleteServicioFromApi(token, servicioModel)
+               var response = servicioService.deleteServicioFromApi(token, servicioModel)
+                response
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
+                CustomResponse(e.message!!, 500, false)
             }
         }
     }

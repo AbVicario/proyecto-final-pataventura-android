@@ -379,7 +379,9 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
                     icon = Icons.Default.Error,
                     onConfirm = { registroServicioViewModel.onDialogConfirm(navController) },
                     dialogTitle = "Error",
-                    dialogText ="Ha habido un error en el registro. Intentelo mas tarde"
+                    dialogText ="Ha habido un error al completar el registro. Recuerde registrar un servicio" +
+                            "para que su usuario sea visible para otros usuarios de la aplicación." +
+                            " Intentelo mas tarde"
                 )
 
                 LoginButton(text = "Finalizar",
