@@ -12,10 +12,12 @@ import javax.inject.Inject
 class TokenService @Inject constructor(
     private val tokenApi: ApiClient
 ) {
-    suspend fun getTokenFromApi(loginModel: LoginModel): TokenModel {
+    suspend fun getTokenFromApi(loginModel: LoginModel): LoginResponse {
         return withContext(Dispatchers.IO) {
-            val tokenResponse = tokenApi.doLogin(loginModel)
-            tokenResponse.body() ?: throw IllegalStateException("Token response body is null")
+            Log.e("LOGINMODEL", loginModel.toString())
+            val response = tokenApi.doLogin(loginModel)
+            Log.e("LOGINMODEL", response.toString())
+            response
         }
     }
 }

@@ -20,20 +20,18 @@ class CuidadorRepository @Inject constructor(
     private val cuidadorService: CuidadorService,
     private val cuidadorDao: CuidadorDao
 ) {
-    suspend fun getTokenFromApi(loginModel: LoginModel): Token {
-        val response: TokenModel = cuidadorService.getTokenFromApi(loginModel)
-        return response.toDomain()
-    }
 
-    suspend fun deleteCuidadorFromApi(token : String, cuidador: CuidadorModel): CustomResponse {
+
+    suspend fun deleteCuidadorFromApi(token: String, cuidador: CuidadorModel): CustomResponse {
         val response = cuidadorService.deleteCuidadorFromApi(token, cuidador)
         return response
     }
 
-    suspend fun deleteCuidadorFromDataBase(): CustomResponse {
-        val response = cuidadorDao.deleteCuidador()
-        return response
+    suspend fun deleteCuidadorFromDataBase(): Int {
+        val numDelete = cuidadorDao.deleteCuidador()
+        return numDelete
     }
+
     suspend fun registerCuidadorFromApi(cuidador: CuidadorModel): CustomResponse {
         return cuidadorService.registerCuidadorFromApi(cuidador)
     }
@@ -48,12 +46,16 @@ class CuidadorRepository @Inject constructor(
             }
         }
     }
-    suspend fun updateCuidadorFromApi(token: String, cuidadorModel: CuidadorModel) {
+
+    suspend fun updateCuidadorFromApi(token: String, cuidadorModel: CuidadorModel): CustomResponse {
         return withContext(Dispatchers.IO) {
             try {
-                cuidadorService.updateCuidadorFromApi(token, cuidadorModel)
+                val response = cuidadorService.updateCuidadorFromApi(token, cuidadorModel)
+                response
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
+                CustomResponse(data = "Error actualizando cuidador: ${e.message}",
+                    500, false)
             }
         }
     }

@@ -18,12 +18,6 @@ class TutorService @Inject constructor(
     private val tutorApi: ApiClient
 ) {
 
-    suspend fun getTokenFromApi(loginModel: LoginModel): TokenModel {
-        return withContext(Dispatchers.IO) {
-            val tokenResponse = tutorApi.doLogin(loginModel)
-            tokenResponse.body()?: throw IllegalStateException("Token response body is null")
-        }
-    }
     suspend fun registerTutorFromApi(tutorModel: TutorModel): CustomResponse {
         return try {
             withContext(Dispatchers.IO) {

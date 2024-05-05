@@ -24,10 +24,6 @@ class TutorRepository @Inject constructor(
     private val tutorService: TutorService,
     private val tutorDao: TutorDao
 ) {
-    suspend fun getTokenFromApi(loginModel: LoginModel): Token {
-        val response: TokenModel = tutorService.getTokenFromApi(loginModel)
-        return response.toDomain()
-    }
     suspend fun registerTutorFromApi(tutorModel: TutorModel): CustomResponse{
         return tutorService.registerTutorFromApi(tutorModel)
     }

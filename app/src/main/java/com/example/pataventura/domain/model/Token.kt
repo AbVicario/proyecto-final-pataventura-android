@@ -7,3 +7,6 @@ data class Token(val token: String)
 
 fun TokenModel.toDomain() = Token(token)
 fun TokenEntity.toDomain() = Token(token)
+
+fun Token.toModel() = TokenModel(token)
+fun Token.toEntity() = TokenEntity(token)

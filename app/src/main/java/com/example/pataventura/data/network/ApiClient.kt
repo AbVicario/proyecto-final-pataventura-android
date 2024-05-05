@@ -6,6 +6,7 @@ import com.example.pataventura.data.model.TokenModel
 import com.example.pataventura.data.model.TutorModel
 import com.example.pataventura.data.network.response.CuidadorResponse
 import com.example.pataventura.data.network.response.CustomResponse
+import com.example.pataventura.data.network.response.LoginResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -17,7 +18,7 @@ import retrofit2.http.Path
 
 interface ApiClient {
     @POST("/loginTutor")
-    suspend fun doLogin(@Body login: LoginModel): Response<TokenModel>
+    suspend fun doLogin(@Body login: LoginModel): LoginResponse
 
     @POST("/registroTutor")
     suspend fun registerTutor(@Body tutorModel: TutorModel): CustomResponse
