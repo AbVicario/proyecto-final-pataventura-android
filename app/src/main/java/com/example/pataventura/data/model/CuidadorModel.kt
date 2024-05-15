@@ -11,4 +11,5 @@ class CuidadorModel(
     @SerializedName("apellido") var apellido: String,
     @SerializedName("imagen") var imagen: String = "",
     @SerializedName("alias") var alias: String,
+    @SerializedName("direccion") var direccion: String
 )

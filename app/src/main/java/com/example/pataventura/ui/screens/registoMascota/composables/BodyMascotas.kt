@@ -26,6 +26,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -55,6 +57,7 @@ fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel,
     val raza : String by registroMascotaViewModel.raza.observeAsState("")
     val tipo : String by registroMascotaViewModel.tipo.observeAsState("")
     val edad : String by registroMascotaViewModel.edad.observeAsState("")
+    val context = LocalContext.current
     var itemsTipo = listOf<String>(
         "Perro",
         "Gato"
@@ -279,7 +282,7 @@ fun BodyRegistroMascota(registroMascotaViewModel: RegistroMascotaViewModel,
                             " Intentelo mas tarde"
                 )
                 LoginButton(text = "Finalizar",
-                    onClick = {registroMascotaViewModel.onFinalizarPressLaunch(navController)} )
+                    onClick = { registroMascotaViewModel.onFinalizarPress(navController, context )} )
             }
         }
     }

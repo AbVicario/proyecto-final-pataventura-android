@@ -3,9 +3,11 @@ package com.example.pataventura.data.network.repository
 import android.util.Log
 import com.example.pataventura.data.database.dao.CuidadorDao
 import com.example.pataventura.data.database.entity.CuidadorEntity
+import com.example.pataventura.data.database.entity.TutorEntity
 import com.example.pataventura.data.model.CuidadorModel
 import com.example.pataventura.data.model.LoginModel
 import com.example.pataventura.data.model.TokenModel
+import com.example.pataventura.data.network.response.CuidadorResponse
 
 import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.data.network.service.CuidadorService
@@ -47,15 +49,14 @@ class CuidadorRepository @Inject constructor(
         }
     }
 
-    suspend fun updateCuidadorFromApi(token: String, cuidadorModel: CuidadorModel): CustomResponse {
+    suspend fun updateCuidadorFromApi(token: String, cuidadorModel: CuidadorModel): CuidadorResponse {
         return withContext(Dispatchers.IO) {
             try {
                 val response = cuidadorService.updateCuidadorFromApi(token, cuidadorModel)
                 response
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
-                CustomResponse(data = "Error actualizando cuidador: ${e.message}",
-                    500, false)
+               throw e
             }
         }
     }
@@ -70,6 +71,25 @@ class CuidadorRepository @Inject constructor(
                 null
             }
         }
+    }
+    suspend fun updateCuidadorFromDatabase(cuidador: CuidadorEntity) {
+        return withContext(Dispatchers.IO) {
+            try {
+                cuidadorDao.updateCuidador(cuidador)
+            } catch (e: Exception) {
+                throw e
+            }
+        }
+    }
+
+    suspend fun getCuidadorFromApi(token: String): Cuidador? {
+            return try {
+                val cuidador = cuidadorService.getCuidadorFromApi(token)
+                cuidador.toDomain()
+            } catch (e: Exception) {
+                Log.e("LOOK AT ME", "${e.message}")
+                null
+            }
     }
 
 

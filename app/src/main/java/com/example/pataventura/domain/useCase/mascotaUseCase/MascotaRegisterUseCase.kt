@@ -1,5 +1,6 @@
 package com.example.pataventura.domain.useCase.mascotaUseCase
 
+import android.util.Log
 import com.example.pataventura.data.network.repository.MascotaRepository
 import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.domain.model.Mascota
@@ -17,9 +18,8 @@ class MascotaRegisterUseCase@Inject constructor(
     suspend fun registroMascota(mascota: Mascota
     ): CustomResponse {
         val token = tokenGetUseCase.getToken().token
-        val idTutor = tutorGetUseCase.getTutor()!!.idUsuario
         val response = mascotaRepository.registerMascotaFromApi(
-            token, mascota.toModel(), idTutor)
+            token, mascota.toModel())
         if(response.status == 200){
             mascotaRepository.insertMascotaToDatabase(mascota.toEntity())
         }

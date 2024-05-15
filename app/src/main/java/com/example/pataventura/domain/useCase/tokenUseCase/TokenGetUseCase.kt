@@ -8,6 +8,11 @@ class TokenGetUseCase@Inject constructor(
     private val tokenRepository: TokenRepository
 ) {
     suspend fun getToken(): Token {
-        return tokenRepository.getTokenFromDatabase()
+       return try {
+            val token = tokenRepository.getTokenFromDatabase()
+           token
+        }catch (e: Exception){
+            throw e
+        }
     }
 }

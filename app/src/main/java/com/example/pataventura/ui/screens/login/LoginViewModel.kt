@@ -5,10 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.domain.useCase.AuthenticateUserUseCase
+import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authenticateUseCase: AuthenticateUserUseCase,
@@ -19,11 +22,11 @@ class LoginViewModel @Inject constructor(
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
     private val _passEmpty = MutableLiveData<Boolean>()
-    val passEmpty : LiveData<Boolean> = _passEmpty
+    val passEmpty: LiveData<Boolean> = _passEmpty
     private val _emailEmpty = MutableLiveData<Boolean>()
-    val emailEmpty : LiveData<Boolean> = _emailEmpty
+    val emailEmpty: LiveData<Boolean> = _emailEmpty
     private val _emailNoValido = MutableLiveData<Boolean>()
-    val emailNoValido : LiveData<Boolean> = _emailNoValido
+    val emailNoValido: LiveData<Boolean> = _emailNoValido
 
     fun onEmailChange(email: String) {
         _email.postValue(email)
@@ -32,11 +35,13 @@ class LoginViewModel @Inject constructor(
     fun onPasswordChange(password: String) {
         _password.postValue(password)
     }
+
     fun onLoginButtonClicked(navController: NavController) {
         viewModelScope.launch {
             onLoginPress(navController)
         }
     }
+
     suspend fun onLoginPress(navController: NavController) {
         val regex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
         val email = _email.value
@@ -45,23 +50,28 @@ class LoginViewModel @Inject constructor(
         _passEmpty.postValue(false)
         _emailNoValido.postValue(false)
 
-        if(password.isNullOrBlank()){
+        if (password.isNullOrBlank()) {
             _passEmpty.postValue(true)
         }
-        if(email.isNullOrBlank()){
+        if (email.isNullOrBlank()) {
             _emailEmpty.postValue(true)
-        }else if(!regex.matches(email)){
+        } else if (!regex.matches(email)) {
             _emailNoValido.postValue(true)
         }
-        if(_emailEmpty.value==false && _emailNoValido.value==false
-            && _passEmpty.value==false){
-            val result = authenticateUseCase.login(_email.value!!,_password.value!!)
-            if(result){
+        if (_emailEmpty.value == false && _emailNoValido.value == false
+            && _passEmpty.value == false
+        ) {
+            val result = authenticateUseCase.login(
+                _email.value!!,
+                _password.value!!,
+                RoleHolder.rol.value.toString()
+            )
+            if (result) {
                 navController.navigate(route = "home")
             }
-        }else{
-            val result = authenticateUseCase.login("tutorprueba@gmail.com","prueba")
-            if(result){
+        } else {
+            val result = authenticateUseCase.login("bb@gmail.com", "bb", RoleHolder.rol.value.toString())
+            if (result) {
                 navController.navigate(route = "home")
             }
         }
@@ -72,6 +82,7 @@ class LoginViewModel @Inject constructor(
         navController.navigate(route = "home")
 
     }
+
     fun onRegistrarsePress(navController: NavController) {
         navController.navigate(route = "registerOne")
     }

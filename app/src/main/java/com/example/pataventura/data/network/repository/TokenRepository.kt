@@ -17,8 +17,13 @@ class TokenRepository @Inject constructor(
     private val tokenService: TokenService,
     private val tokenDao: TokenDao
 ) {
-    suspend fun getTokenFromApi(loginModel: LoginModel): Token {
-        val response = tokenService.getTokenFromApi(loginModel)
+    suspend fun getTokenFromApiTutor(loginModel: LoginModel): Token {
+        val response = tokenService.getTokenFromApiTutor(loginModel)
+        val token = response.data.token
+        return Token(token)
+    }
+    suspend fun getTokenFromApiCuidador(loginModel: LoginModel): Token {
+        val response = tokenService.getTokenFromApiCuidador(loginModel)
         val token = response.data.token
         return Token(token)
     }
@@ -31,12 +36,11 @@ class TokenRepository @Inject constructor(
     suspend fun getTokenFromDatabase(): Token {
         return withContext(Dispatchers.IO){
             val tokenEntity = tokenDao.getToken()
-            try{
-                tokenEntity.toDomain()
-            }catch (e:Exception){
+            if(tokenEntity == null){
                 Token("")
+            }else{
+                tokenEntity.toDomain()
             }
-
         }
     }
 }

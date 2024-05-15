@@ -1,9 +1,13 @@
 package com.example.pataventura.ui.screens.registoMascota
 
+import android.content.Context
 import android.database.Observable
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableList
@@ -123,48 +127,46 @@ class RegistroMascotaViewModel @Inject constructor(
         showDialog = true
     }
 
-    fun onFinalizarPressLaunch(navController: NavController) {
+    fun onFinalizarPress(navController: NavController, context: Context) {
         viewModelScope.launch {
-            onFinalizarPress(navController)
-        }
-    }
+            val nombre = _nombre.value
+            val numChip = _numChip.value
+            val tipo = _tipo.value
+            val colorAsig = _colorAsig.value
+            _nombreEmpty.postValue(false)
+            _numChipEmpty.postValue(false)
+            _tipoEmpty.postValue(false)
+            _colorEmpty.postValue(false)
 
-    suspend fun onFinalizarPress(navController: NavController) {
-        val nombre = _nombre.value
-        val numChip = _numChip.value
-        val tipo = _tipo.value
-        val colorAsig = _colorAsig.value
-        _nombreEmpty.postValue(false)
-        _numChipEmpty.postValue(false)
-        _tipoEmpty.postValue(false)
-        _colorEmpty.postValue(false)
+            if (nombre.isNullOrBlank()) {
+                _nombreEmpty.postValue(true)
+            }
+            if (numChip.isNullOrBlank()) {
+                _numChipEmpty.postValue(true)
+            }
+            if (tipo.isNullOrBlank()) {
+                _tipoEmpty.postValue(true)
+            }
+            if (colorAsig.isNullOrBlank()) {
+                _colorEmpty.postValue(true)
+            }
+            if (_colorEmpty.value == false && _nombreEmpty.value == false && _numChipEmpty.value == false
+                && _tipoEmpty.value == false
+            ) {
 
-        if (nombre.isNullOrBlank()) {
-            _nombreEmpty.postValue(true)
-        }
-        if (numChip.isNullOrBlank()) {
-            _numChipEmpty.postValue(true)
-        }
-        if (tipo.isNullOrBlank()) {
-            _tipoEmpty.postValue(true)
-        }
-        if (colorAsig.isNullOrBlank()) {
-            _colorEmpty.postValue(true)
-        }
-        if (_colorEmpty.value == false && _nombreEmpty.value == false && _numChipEmpty.value == false
-            && _tipoEmpty.value == false
-        ) {
-
-            val mascota = Mascota(
-                0, _nombre.value!!, _numChip.value!!,
-                _edad.value!!, "", tamanyo = 0f, peso = 0f, _tipo.value!!,
-                _raza.value!!, observacion = "", _colorAsig.value!!
-            )
-            val response = mascotaRegisterUseCase.registroMascota(mascota)
-            if (response.ok) {
-                navController.navigate(route = Destinations.Home.route)
-            } else {
-                onOpenDialog()
+                val mascota = Mascota(
+                    0, _nombre.value!!, _numChip.value!!,
+                    _edad.value!!, "", tamanyo = 0.0, peso = 0.0, _tipo.value!!,
+                    _raza.value!!, observacion = "", _colorAsig.value!!
+                )
+                val response = mascotaRegisterUseCase.registroMascota(mascota)
+                if (response.ok) {
+                    Log.d("RegistroMascotaViewModel", "respuesta: $response")
+                    Toast.makeText(context, "Mascota registrada", Toast.LENGTH_SHORT).show()
+                    navController.navigate(route = Destinations.Home.route)
+                } else {
+                    onOpenDialog()
+                }
             }
         }
     }

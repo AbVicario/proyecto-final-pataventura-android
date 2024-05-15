@@ -2,11 +2,12 @@ package com.example.pataventura.data.network
 
 import com.example.pataventura.data.model.CuidadorModel
 import com.example.pataventura.data.model.LoginModel
-import com.example.pataventura.data.model.TokenModel
 import com.example.pataventura.data.model.TutorModel
 import com.example.pataventura.data.network.response.CuidadorResponse
 import com.example.pataventura.data.network.response.CustomResponse
-import com.example.pataventura.data.network.response.LoginResponse
+import com.example.pataventura.data.network.response.LoginResponseCuidador
+import com.example.pataventura.data.network.response.LoginResponseTutor
+import com.example.pataventura.data.network.response.TutorResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -18,7 +19,9 @@ import retrofit2.http.Path
 
 interface ApiClient {
     @POST("/loginTutor")
-    suspend fun doLogin(@Body login: LoginModel): LoginResponse
+    suspend fun doLoginTutor(@Body login: LoginModel): LoginResponseTutor
+    @POST("/loginCuidador")
+    suspend fun doLoginCuidador(@Body login: LoginModel): LoginResponseCuidador
 
     @POST("/registroTutor")
     suspend fun registerTutor(@Body tutorModel: TutorModel): CustomResponse
@@ -31,21 +34,31 @@ interface ApiClient {
         @Header("Authorization") token: String,
         @Path("id_cuidador") idCuidador: Int,
         @Body cuidadorModel: CuidadorModel
-    ): CustomResponse
+    ): CuidadorResponse
 
     @PUT("/updateTutor/{id_tutor}")
     suspend fun updateTutor(
         @Header("Authorization") token: String,
         @Path("id_tutor") idTutor: Int,
         @Body tutorModel: TutorModel
-    ): CustomResponse
+    ): TutorResponse
+
+
 
     @GET("/mostrarCuidadores/{tipo}")
     suspend fun getCuidadores(
         @Header("Authorization") token: String,
         @Path("tipo") tipo: String
     ): List<CuidadorModel>
+    @GET("/api/cliente/cuidador")
+    suspend fun getCuidador(
+        @Header("Authorization") token: String,
+    ): CuidadorResponse
 
+    @GET("/api/cliente/tutor")
+    suspend fun getTutor(
+        @Header("Authorization") token: String,
+    ): TutorResponse
     @DELETE("/{id_cuidador}")
     suspend fun deleteCuidador(
         @Header("Authorization") token: String,

@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +19,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Pets
+import androidx.compose.material.icons.materialIcon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,20 +37,36 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pataventura.R
+import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.screens.home.composables.MyBoxMap
+import com.example.pataventura.ui.screens.mascotas.MascotasViewModel
+import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
+import com.example.pataventura.ui.theme.Tierra
 import com.example.pataventura.ui.theme.Verde
 import com.google.android.gms.maps.model.LatLng
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun BodyMascotas(currentPosition: LatLng?){
-    Box(modifier = Modifier.fillMaxWidth()){
-        Image(painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
+fun BodyMascotas(
+    currentPosition: LatLng?,
+    mascotasViewModel: MascotasViewModel,
+    navController: NavController
+) {
+    LaunchedEffect(key1 = true) {
+        mascotasViewModel.getMascotas()
+    }
+
+    val listaMascotas by mascotasViewModel.mascotas.observeAsState(emptyList())
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Image(
+            painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
             contentDescription = "Fondo",
-            Modifier.fillMaxSize())
+            Modifier.fillMaxSize()
+        )
         Column(
             Modifier
                 .fillMaxSize()
@@ -49,25 +74,34 @@ fun BodyMascotas(currentPosition: LatLng?){
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(450.dp)
-            ){
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(450.dp)
+            ) {
                 MyBoxMap(currentPosition)
 
             }
 
-            LazyRow(Modifier.height(120.dp)) {
-                item{
-                    MyBoxMascota(imagen = R.drawable.imagen_tyrion, nombre = "Lola", Color.Red)
-                    Spacer(modifier = Modifier.size(20.dp))
-                    MyBoxMascota(imagen = R.drawable.imagen_tyrion, nombre = "Lola", Color.Red)
-                    Spacer(modifier = Modifier.size(20.dp))
-                    MyBoxMascota(imagen = R.drawable.imagen_tyrion, nombre = "Lola", Color.Red)
-                    Spacer(modifier = Modifier.size(20.dp))
-                    MyBoxMascota(imagen = R.drawable.imagen_tyrion, nombre = "Lola", Color.Red)
-                    Spacer(modifier = Modifier.size(20.dp))
-                    MyBoxMascota(imagen = R.drawable.imagen_tyrion, nombre = "Lola", Color.Red)
+            LazyRow(
+                Modifier.height(120.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                items(listaMascotas.size) { index ->
+                    listaMascotas.getOrNull(index).let { mascota ->
+                        if (mascota != null) {
+                            MyBoxMascota(
+                                imagen = mascota.imagen,
+                                nombre = mascota.nombre,
+                                color = mascota.color
+                            )
+                            Spacer(modifier = Modifier.size(20.dp))
+                        }
+                    }
+                    if (listaMascotas.size - 1 == index) {
+                        MyBoxAnyadirMascota(navController)
+                    }
 
                 }
 
@@ -78,14 +112,43 @@ fun BodyMascotas(currentPosition: LatLng?){
 }
 
 @Composable
-fun MyBoxMascota(imagen: Int, nombre: String, color: Color) {
+fun MyBoxAnyadirMascota(navController: NavController) {
     Box(modifier = Modifier
-        .size(180.dp)
-        .clip(RoundedCornerShape(20.dp))){
-        Image(painter = painterResource(id = imagen), contentDescription = "Imagen mascota",
-            Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillBounds,
+        .size(70.dp)
+        .clip(RoundedCornerShape(20.dp))
+        .background(Tierra)
+        .padding(5.dp)
+        .clickable { navController.navigate("registerMascota") }
+    ) {
+        Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = "Añadir mascota",
+            modifier = Modifier.fillMaxSize(),
+            tint = Color.White
         )
+    }
+}
+
+@Composable
+fun MyBoxMascota(imagen: String, nombre: String, color: String) {
+    Box(
+        modifier = Modifier
+            .size(180.dp)
+            .clip(RoundedCornerShape(20.dp))
+    ) {
+        if (imagen.isEmpty()) {
+            Icon(
+                imageVector = Icons.Default.Pets,
+                contentDescription = "Icono mascota",
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            /*Image(painter = painterResource(id = imagen), contentDescription = "Imagen mascota",
+                Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
+            )*/
+        }
+
         Row(
             Modifier
                 .fillMaxWidth()
@@ -93,18 +156,32 @@ fun MyBoxMascota(imagen: Int, nombre: String, color: Color) {
                 .background(Verde, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                 .padding(horizontal = 15.dp)
                 .align(Alignment.BottomCenter),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
-            ){
-                Box(modifier = Modifier
+        ) {
+            Box(
+                modifier = Modifier
                     .size(25.dp)
-                    .background(color, RoundedCornerShape(100f))
-                )
-                CustomText(text = nombre, color = Color.White,
-                    fontSize = 24.sp, fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily)
-            }
+                    .background(obtenerColor(color), RoundedCornerShape(100f))
+            )
+            CustomText(
+                text = nombre, color = Color.White,
+                fontSize = 24.sp, fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+            )
+        }
     }
 
+}
+
+fun obtenerColor(color: String): Color {
+    when (color.lowercase()) {
+        "amarillo" -> return Color.Yellow
+        "rojo" -> return Color.Red
+        "azul" -> return Color.Blue
+        "verde" -> return Color.Green
+        "negro" -> return Color.Black
+        else -> return Color.White
+    }
 }
 
 

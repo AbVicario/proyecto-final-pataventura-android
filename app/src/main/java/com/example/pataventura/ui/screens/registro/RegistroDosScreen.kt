@@ -16,7 +16,6 @@ import com.example.pataventura.ui.screens.registro.composables.HeaderRegistro
 fun RegistroDosScreen(
     navController: NavController,
     registroViewModel: RegistroViewModel,
-    loginClienteViewModel: LoginClienteViewModel
 ) {
     Scaffold() {
         Column(
@@ -25,7 +24,7 @@ fun RegistroDosScreen(
         ) {
             HeaderRegistro()
             BodyRegistroDos(registroViewModel = registroViewModel,
-                navController, loginClienteViewModel)
+                navController)
 
         }
     }

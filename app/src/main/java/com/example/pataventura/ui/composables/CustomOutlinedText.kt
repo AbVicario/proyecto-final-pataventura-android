@@ -1,10 +1,12 @@
 package com.example.pataventura.ui.composables
+
 import android.app.DatePickerDialog
 import android.graphics.drawable.Icon
 import android.icu.text.ListFormatter
 import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,13 +34,6 @@ import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerColors
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.DatePickerFormatter
-import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -58,7 +53,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
@@ -72,20 +66,148 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.ConfigurationCompat
-import coil.size.Size
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Tierra
 import com.example.pataventura.ui.theme.Verde
-import org.w3c.dom.Text
 
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
+/*@Composable
+fun CustomOutlinedTextField(
+    value: String?,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean,
+    readOnly: Boolean,
+    placeholder: String,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    singleLine: Boolean
+) {
+    var text by remember { mutableStateOf(value ?: "") }
+
+
+    OutlinedTextField(
+        value = text ,
+        onValueChange = {
+            text = it
+            onValueChange(it)
+        },
+        textStyle = TextStyle(fontSize = 20.sp),
+        modifier = modifier,
+        enabled = enabled,
+        readOnly = readOnly,
+        label = {
+            Text(
+                text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
+        supportingText = supportingText,
+        placeholder = {
+            Text(
+                text = value!!, fontWeight = FontWeight.Bold, fontSize = 22.sp, color = Color.Black,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        keyboardOptions = keyboardOptions,
+        singleLine = singleLine,
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            focusedTrailingIconColor = Tierra,
+            unfocusedTrailingIconColor = Tierra,
+            focusedLabelColor = Tierra,
+            unfocusedLabelColor = Tierra,
+            focusedBorderColor = Tierra,
+            unfocusedBorderColor = Tierra,
+            focusedLeadingIconColor = Tierra,
+            unfocusedLeadingIconColor = Tierra,
+            focusedPlaceholderColor = Color.Black,
+            unfocusedPlaceholderColor = Tierra,
+        ),
+    )
+}*/
+
+@Composable
+fun CustomOutlinedTextFieldUpdate(
+    valueAux: String?,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean,
+    readOnly: Boolean,
+    placeholder: String,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    singleLine: Boolean
+) {
+    // var text by remember { mutableStateOf(value ?: "") }
+
+
+    OutlinedTextField(
+        value = valueAux!! ,
+        onValueChange = {
+            //valueAux!! = it
+            onValueChange(it)
+        },
+        textStyle = TextStyle(fontSize = 20.sp),
+        modifier = modifier,
+        enabled = enabled,
+        readOnly = readOnly,
+        label = {
+            Text(
+                text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
+        supportingText = supportingText,
+        placeholder = {
+            Text(
+                text = valueAux, fontWeight = FontWeight.Bold, fontSize = 22.sp, color = Color.Black,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        keyboardOptions = keyboardOptions,
+        singleLine = singleLine,
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            focusedTrailingIconColor = Tierra,
+            unfocusedTrailingIconColor = Tierra,
+            disabledTrailingIconColor = Tierra,
+            focusedLabelColor = Tierra,
+            unfocusedLabelColor = Tierra,
+            disabledLabelColor = Tierra,
+            focusedBorderColor = Tierra,
+            unfocusedBorderColor = Tierra,
+            disabledBorderColor = Tierra,
+            focusedLeadingIconColor = Tierra,
+            unfocusedLeadingIconColor = Tierra,
+            disabledLeadingIconColor = Tierra,
+            focusedPlaceholderColor = Color.Black,
+            unfocusedPlaceholderColor = Tierra,
+            disabledTextColor = Color.Black.copy(0.6f),
+            disabledPlaceholderColor = Tierra
+        ),
+    )
+}
 
 @Composable
 fun CustomOutlinedTextField(
@@ -155,7 +277,7 @@ fun CustomOutlinedTextFieldPass(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     singleLine: Boolean
 ) {
-    var text by remember {mutableStateOf("")}
+    var text by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     OutlinedTextField(
         value = text,
@@ -167,15 +289,23 @@ fun CustomOutlinedTextFieldPass(
         modifier = modifier,
         enabled = enabled,
         readOnly = readOnly,
-        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
+        label = {
+            Text(
+                text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
         supportingText = supportingText,
-        placeholder = { Text(text = "", fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
+        placeholder = {
+            Text(
+                text = "", fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
         leadingIcon = leadingIcon,
         trailingIcon = {
             IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
@@ -227,21 +357,29 @@ fun CustomOutlinedTextFieldDes(
     OutlinedTextField(
         value = text,
         onValueChange = {
-          onValueChange(it)
+            onValueChange(it)
         },
         textStyle = TextStyle(fontSize = 20.sp),
         modifier = modifier,
         enabled = enabled,
         readOnly = readOnly,
-        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
+        label = {
+            Text(
+                text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
         supportingText = supportingText,
-        placeholder = { Text(text = "", fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
+        placeholder = {
+            Text(
+                text = "", fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
         trailingIcon = {
             IconButton(onClick = { isDesplegado = !isDesplegado }) {
                 Icon(
@@ -271,18 +409,19 @@ fun CustomOutlinedTextFieldDes(
         ),
     )
 
-        if (isDesplegado) {
-            MenuDesplegable(
-                isDesplegado = isDesplegado,
-                items = items,
-                onItemSelected = { item ->
-                    isItemSelected = true
-                    isDesplegado = false
-                    onValueChange(item)
-                }
-            )
-        }
+    if (isDesplegado) {
+        MenuDesplegable(
+            isDesplegado = isDesplegado,
+            items = items,
+            onItemSelected = { item ->
+                isItemSelected = true
+                isDesplegado = false
+                onValueChange(item)
+            }
+        )
+    }
 }
+
 @Composable
 fun CustomOutlinedTextFieldDesColor(
     items: List<String>,
@@ -311,15 +450,23 @@ fun CustomOutlinedTextFieldDesColor(
         modifier = modifier,
         enabled = enabled,
         readOnly = readOnly,
-        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 18.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
+        label = {
+            Text(
+                text = placeholder, fontWeight = FontWeight.Bold, fontSize = 18.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
         supportingText = supportingText,
-        placeholder = { Text(text = "", fontWeight = FontWeight.Bold, fontSize = 18.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
+        placeholder = {
+            Text(
+                text = "", fontWeight = FontWeight.Bold, fontSize = 18.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
         trailingIcon = {
             IconButton(onClick = { isDesplegado = !isDesplegado }) {
                 Icon(
@@ -364,10 +511,12 @@ fun CustomOutlinedTextFieldDesColor(
 }
 
 @Composable
-fun CustomOutlinedTextContrato(singleLine: Boolean ,placeholder: String,
-                                    keyboardType : KeyboardType,
-                                    opcional : Boolean, altura: Int,
-                                    onTextFieldChange: (String) -> Unit) {
+fun CustomOutlinedTextContrato(
+    singleLine: Boolean, placeholder: String,
+    keyboardType: KeyboardType,
+    opcional: Boolean, altura: Int,
+    onTextFieldChange: (String) -> Unit
+) {
     var text by remember {
         mutableStateOf("")
     }
@@ -387,10 +536,14 @@ fun CustomOutlinedTextContrato(singleLine: Boolean ,placeholder: String,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         singleLine = singleLine,
         maxLines = 1,
-        label = { Text(text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 2.dp))},
+        label = {
+            Text(
+                text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
         //leadingIcon = { Icon(Icons.Default.Pets, null) },
         shape = RoundedCornerShape(16.dp),
         colors = OutlinedTextFieldDefaults.colors(
@@ -398,8 +551,8 @@ fun CustomOutlinedTextContrato(singleLine: Boolean ,placeholder: String,
             focusedContainerColor = Color.White,
             focusedLabelColor = Tierra,
             unfocusedLabelColor = Tierra,
-            focusedBorderColor = if(isItemSelected) Tierra else Color.Red,
-            unfocusedBorderColor = if(isItemSelected) Tierra else Color.Red,
+            focusedBorderColor = if (isItemSelected) Tierra else Color.Red,
+            unfocusedBorderColor = if (isItemSelected) Tierra else Color.Red,
             focusedLeadingIconColor = Tierra,
             unfocusedLeadingIconColor = Tierra,
             focusedPlaceholderColor = Tierra,
@@ -418,7 +571,7 @@ fun MenuDesplegable(
 ) {
     DropdownMenu(
         expanded = isDesplegado,
-        onDismissRequest = {  },
+        onDismissRequest = { },
         modifier = Modifier
             .fillMaxWidth(0.5f)
             .background(Color.White)
@@ -426,13 +579,15 @@ fun MenuDesplegable(
     ) {
         items.forEach { item ->
             DropdownMenuItem(
-                text= { CustomText(
-                    text = item,
-                    color = Verde,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Normal,
-                    fontFamily = CustomFontFamily
-                )},
+                text = {
+                    CustomText(
+                        text = item,
+                        color = Verde,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = CustomFontFamily
+                    )
+                },
                 onClick = { onItemSelected(item) })
         }
     }
@@ -446,7 +601,7 @@ fun MenuDesplegableColor(
 ) {
     DropdownMenu(
         expanded = isDesplegado,
-        onDismissRequest = {  },
+        onDismissRequest = { },
         modifier = Modifier
             .fillMaxWidth(0.5f)
             .background(Color.White)
@@ -454,13 +609,13 @@ fun MenuDesplegableColor(
     ) {
         items.forEach { item ->
             DropdownMenuItem(
-                text= {
-                    Row(verticalAlignment = Alignment.CenterVertically){
+                text = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             Modifier
                                 .size(15.dp)
                                 .background(color = ObtenerColor(item))
-                            )
+                        )
                         Spacer(modifier = Modifier.width(5.dp))
                         CustomText(
                             text = item,
@@ -470,14 +625,14 @@ fun MenuDesplegableColor(
                             fontFamily = CustomFontFamily
                         )
                     }
-                    },
+                },
                 onClick = { onItemSelected(item) })
         }
     }
 }
 
-fun ObtenerColor(item:String): Color {
-    return when (item){
+fun ObtenerColor(item: String): Color {
+    return when (item) {
         "Azul" -> Color.Blue
         "Rojo" -> Color.Red
         "Verde" -> Color.Green

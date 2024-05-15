@@ -1,5 +1,6 @@
 package com.example.pataventura.ui.screens.registro
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +13,7 @@ import androidx.navigation.NavController
 import androidx.savedstate.SavedStateRegistryOwner
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.data.network.response.CustomResponse
+import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Tutor
 import com.example.pataventura.domain.useCase.AuthenticateUserUseCase
@@ -26,8 +28,8 @@ import javax.inject.Inject
 class RegistroViewModel @Inject constructor(
     private val resgisterTutor: TutorRegisterUseCase,
     private val resgisterCuidador: CuidadorRegisterUseCase,
-    private val authenticateUserUseCase: AuthenticateUserUseCase
-)  : ViewModel() {
+    private val authenticateUserUseCase: AuthenticateUserUseCase,
+) : ViewModel() {
     var showDialog by mutableStateOf(false)
         private set
 
@@ -144,12 +146,12 @@ class RegistroViewModel @Inject constructor(
             navController.navigate(route = Destinations.RegisterTwo.route)
         }
     }
+
     fun onRegistroDosButtonClicked(navController: NavController, tipo: String) {
         viewModelScope.launch {
             onPressRegistroDos(navController, tipo)
         }
     }
-
 
 
     suspend fun onPressRegistroDos(navController: NavController, tipo: String) {
@@ -185,33 +187,45 @@ class RegistroViewModel @Inject constructor(
                 val tutor = Tutor(
                     0, _email.value!!, _password.value!!,
                     _telefono.value!!, _nombre.value!!, _apellidos.value!!, "",
-                    _alias.value!!
+                    _alias.value!!, _direccion.value!!
                 )
                 response = resgisterTutor.registroTutor(tutor)
+
+                Log.e("HOLIII", response.data)
             } else {
                 val cuidador = Cuidador(
                     0, _email.value!!, _password.value!!,
                     _telefono.value!!, _nombre.value!!, _apellidos.value!!, "",
-                    _alias.value!!
+                    _alias.value!!, _direccion.value!!
                 )
                 response = resgisterCuidador.registroCuidador(cuidador)
 
+
             }
 
-            navegar(response, navController,tipo)
+            navegar(response, navController, tipo)
 
         }
     }
 
-    private suspend fun navegar(response: CustomResponse, navController: NavController, tipo: String) {
-        if(response.ok){
-            authenticateUserUseCase.login(_email.value!!,_password.value!!)
-            if(tipo== "tutor"){
+    private suspend fun navegar(
+        response: CustomResponse,
+        navController: NavController,
+        tipo: String
+    ) {
+        if (response.ok) {
+            authenticateUserUseCase.login(
+                _email.value!!,
+                _password.value!!,
+                RoleHolder.rol.toString()
+
+            )
+            if (tipo == "tutor") {
                 navController.navigate(route = Destinations.RegisterMascota.route)
-            }else{
+            } else {
                 navController.navigate(route = Destinations.RegistroServicio.route)
             }
-        }else{
+        } else {
             onOpenDialog()
         }
 

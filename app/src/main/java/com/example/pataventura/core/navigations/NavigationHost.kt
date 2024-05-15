@@ -71,7 +71,7 @@ fun NavigationHost(
             RegistroUnoScreen(navController, registerViewModel)
         }
         composable(Destinations.RegisterTwo.route) {
-            RegistroDosScreen(navController, registerViewModel, loginClienteViewModel)
+            RegistroDosScreen(navController, registerViewModel)
         }
         composable(Destinations.RegisterMascota.route) {
             RegistroMascotaScreen(navController, registerMascotaViewModel)

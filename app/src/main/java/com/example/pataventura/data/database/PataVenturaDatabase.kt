@@ -15,7 +15,7 @@ import com.example.pataventura.data.database.entity.TutorEntity
 
 @Database(
     entities = [TokenEntity::class, CuidadorEntity::class, MascotaEntity::class,
-        TutorEntity::class, ServicioEntity::class], version = 1, exportSchema = false
+        TutorEntity::class, ServicioEntity::class], version = 2, exportSchema = false
 )
 abstract class PataVenturaDatabase : RoomDatabase() {
     abstract fun tokenDao(): TokenDao
