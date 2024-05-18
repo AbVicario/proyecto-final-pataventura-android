@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.pataventura.ui.composables.ColumnBotonesUsuario
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
@@ -36,8 +37,10 @@ import com.example.pataventura.ui.theme.Verde
 @SuppressLint("Range")
 @Composable
 fun HeaderPerfilTutor(
-    editMode: Boolean, image: ImageBitmap?,
-    perfilTutorViewModel: PerfilTutorViewModel
+    editMode: Boolean,
+    image: ImageBitmap?,
+    perfilTutorViewModel: PerfilTutorViewModel,
+    navController: NavController
 ) {
     Box(
         Modifier
@@ -78,7 +81,8 @@ fun HeaderPerfilTutor(
             ColumnBotonesUsuario(
                 if (image != null) false else true,
                 perfilTutorViewModel,
-                editMode
+                editMode,
+                navController
             )
         }
     }

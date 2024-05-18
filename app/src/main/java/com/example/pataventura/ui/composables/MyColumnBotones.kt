@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.motion.widget.MotionScene.Transition.TransitionOnClick
+import androidx.navigation.NavController
 import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
@@ -64,7 +66,8 @@ fun ColumnBotonesMascota(isIcon: Boolean) {
 fun ColumnBotonesUsuario(
     isIcon: Boolean,
     perfilTutorViewModel: PerfilTutorViewModel,
-    editMode: Boolean
+    editMode: Boolean,
+    navController: NavController
 ) {
     Column {
         Column(
@@ -74,6 +77,10 @@ fun ColumnBotonesUsuario(
                 .padding(top = 14.dp),
             verticalArrangement = Arrangement.Top
         ) {
+            MyboxButton(Icons.Default.PowerSettingsNew, isIcon) {
+                perfilTutorViewModel.deleteToken(navController)
+
+            }
             if (editMode) {
                 MyboxButton(Icons.Default.Add, isIcon) {
 
@@ -81,11 +88,6 @@ fun ColumnBotonesUsuario(
             }
             MyboxButton(Icons.Default.Edit, isIcon) {
                 perfilTutorViewModel.onValueChangeEditMode(true)
-            }
-            if (RoleHolder.rol.value.toString().lowercase(Locale.ROOT) == "cuidador") {
-                MyboxButton(Icons.AutoMirrored.Filled.MenuBook, isIcon) {
-
-                }
             }
         }
     }

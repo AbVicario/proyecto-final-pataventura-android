@@ -1,5 +1,6 @@
 package com.example.pataventura.ui.screens.perfilTutor
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +20,7 @@ import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Tutor
 import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorGetUseCase
 import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorUpdateUseCase
+import com.example.pataventura.domain.useCase.tokenUseCase.DeleteTokenUseCase
 import com.example.pataventura.domain.useCase.tutorUseCase.TutorGetUseCase
 import com.example.pataventura.domain.useCase.tutorUseCase.TutorUpdateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +33,8 @@ class PerfilTutorViewModel @Inject constructor(
     private val tutorGetUseCase: TutorGetUseCase,
     private val cuidadorGetUseCase: CuidadorGetUseCase,
     private val tutorUpdateUseCase: TutorUpdateUseCase,
-    private val cuidadorUpdateUseCase: CuidadorUpdateUseCase
+    private val cuidadorUpdateUseCase: CuidadorUpdateUseCase,
+    private val deleteTokenUseCase: DeleteTokenUseCase,
 ) : ViewModel() {
 
     private val rolObserver = Observer<String> { newValue -> newValue.lowercase() }
@@ -91,7 +94,12 @@ class PerfilTutorViewModel @Inject constructor(
     fun getCuidador(): Cuidador? {
         return cuidador
     }
-
+    fun deleteToken(navController: NavController) {
+        viewModelScope.launch {
+            deleteTokenUseCase.deleteToken()
+            navController.navigate(Destinations.LoginCliente.route)
+        }
+    }
 
     fun printUserLaunch() {
         viewModelScope.launch {
@@ -107,6 +115,7 @@ class PerfilTutorViewModel @Inject constructor(
 
     private suspend fun printTutor() {
         val user = tutorGetUseCase.getTutor()
+        Log.d("user", user.toString())
 
         if (user != null) {
             setTutor(user)
@@ -116,6 +125,12 @@ class PerfilTutorViewModel @Inject constructor(
             onValueChangeAddress(user.direccion)
             //_image.postValue(user.imagen)
             _name.postValue(user.nombre)
+
+            _isAlias.postValue(true)
+            _isEmail.postValue(true)
+            _isNotEmail.postValue(true)
+            _isPhone.postValue(true)
+            _isAddress.postValue(true)
 
         }
     }

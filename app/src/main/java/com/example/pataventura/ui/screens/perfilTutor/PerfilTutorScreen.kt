@@ -52,7 +52,8 @@ fun PerfilTutorScreen(
             HeaderPerfilTutor(
                 editMode,
                 image,
-                perfilTutorViewModel
+                perfilTutorViewModel,
+                navController
             )
             Spacer(modifier = Modifier.size(20.dp))
             BodyPerfilTutor(
