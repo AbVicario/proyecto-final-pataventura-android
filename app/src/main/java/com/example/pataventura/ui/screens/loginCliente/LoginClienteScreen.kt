@@ -82,7 +82,8 @@ fun BodyLoginCliente(navController: NavController, loginClienteViewModel:LoginCl
                 onClick ={ loginClienteViewModel.onPressLoginTutorButton(navController)}
             )
             LoginButton(text = "Cuidador",
-                onClick = {loginClienteViewModel.onPressLoginCuidadorButton(navController)}
+                onClick = {
+                    loginClienteViewModel.onPressLoginCuidadorButton(navController)}
             )
         }
 

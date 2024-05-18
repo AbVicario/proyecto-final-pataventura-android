@@ -107,7 +107,7 @@ fun BodyLogin(loginViewModel:LoginViewModel, navController: NavController) {
                 placeholder = "Password",
                 leadingIcon = { Icon(Icons.Default.Lock, null) },
                 supportingText = {if(passEmpty) CampoObligatorioText()},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true
             )
 
