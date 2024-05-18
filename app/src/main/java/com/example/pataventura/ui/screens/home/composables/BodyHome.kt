@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.pataventura.R
+import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDes
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.screens.home.HomeViewModel
@@ -56,38 +58,51 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun BodyHome(currentPosition: LatLng?, homeViewModel: HomeViewModel){
-    var listaServicios = listOf("Guardería", "Paseo")
-
-    val servicio : String by homeViewModel.servicio.observeAsState("")
-    Column (
+fun BodyHome(
+    currentPosition: LatLng?,
+    homeViewModel: HomeViewModel,
+    listaMascotas: List<Mascota>
+) {
+    val listaServicios = listOf("Guardería", "Paseo")
+    val servicio: String by homeViewModel.servicio.observeAsState("")
+    Column(
         Modifier
             .fillMaxSize()
             .padding(bottom = 20.dp, start = 20.dp, end = 20.dp),
-        verticalArrangement = Arrangement.SpaceBetween) {
-        
-        CustomText(text = "Selecciona tu mascota",
-            color = Verde, fontSize = 20.sp,
-            fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily )
-        LazyRow (){
-            item {
-                Spacer(modifier = Modifier.size(15.dp))
-                ImageButton(painter = R.drawable.imagen_boton_gato)
-                Spacer(modifier = Modifier.size(20.dp))
-                ImageButton(painter = R.drawable.imagen_boton_perro)
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
 
+        CustomText(
+            text = "Selecciona tu mascota",
+            color = Verde, fontSize = 20.sp,
+            fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+        )
+        LazyRow() {
+            items(listaMascotas.size) { index ->
+                listaMascotas.getOrNull(index).let { mascota ->
+                    if (mascota != null) {
+                        MyBoxMascotaHome(
+                            imagen = mascota.imagen,
+                            nombre = mascota.nombre
+                        )
+                    }
+                }
             }
 
         }
-        CustomText(text = "Selecciona un servicio",
+        CustomText(
+            text = "Selecciona un servicio",
             color = Verde, fontSize = 20.sp,
-            fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily )
+            fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+        )
 
         CustomOutlinedTextFieldDes(
             text = servicio,
             items = listaServicios,
-            onValueChange = {homeViewModel.onRolChange(it)},
-            modifier = Modifier.fillMaxWidth().height(80.dp),
+            onValueChange = { homeViewModel.onRolChange(it) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp),
             enabled = true,
             readOnly = false,
             placeholder = "Tipo de servicio",
@@ -98,16 +113,17 @@ fun BodyHome(currentPosition: LatLng?, homeViewModel: HomeViewModel){
 
         MyBoxMap(currentPosition)
         HandleLocationPermissionAndState(homeViewModel)
-        
+
     }
 }
 
 @Composable
-fun ImageButton(painter: Int){
+fun ImageButton(painter: Int) {
     Box(
         Modifier
             .background(Color.Transparent, RoundedCornerShape(100f))
-            .size(80.dp)){
+            .size(80.dp)
+    ) {
         Image(painter = painterResource(painter),
             contentDescription = "Imagen mascota",
             Modifier
@@ -124,14 +140,14 @@ fun MyBoxMap(currentPosition: LatLng?/*, cameraState: CameraPositionState?*/) {
         position = CameraPosition.fromLatLngZoom(marker, 10f)
     }
 
-    if(currentPosition!= null ){
+    if (currentPosition != null) {
         marker = LatLng(currentPosition.latitude, currentPosition.longitude)
-        cameraStateAux=rememberCameraPositionState {
+        cameraStateAux = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(currentPosition, 12f)
         }
     }
 
-  GoogleMap(
+    GoogleMap(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 40.dp)
@@ -143,13 +159,13 @@ fun MyBoxMap(currentPosition: LatLng?/*, cameraState: CameraPositionState?*/) {
             mapType = MapType.NORMAL,
             isTrafficEnabled = false
         )
-    ){
-      Marker(
-          state = MarkerState(position = marker),
-          title = "My Position Yuju!",
-          snippet = "Lo he logrado. Chachi piruli",
-          draggable = true
-      )
+    ) {
+        Marker(
+            state = MarkerState(position = marker),
+            title = "My Position Yuju!",
+            snippet = "Lo he logrado. Chachi piruli",
+            draggable = true
+        )
     }
 
 }
@@ -186,6 +202,39 @@ fun RationaleAlert(onDismiss: () -> Unit, onConfirm: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+fun MyBoxMascotaHome(imagen: String, nombre: String) {
+    Box(
+        Modifier
+            .background(Verde, RoundedCornerShape(100f))
+            .size(80.dp)
+            .clickable { },
+        contentAlignment = Alignment.Center
+    ) {
+
+        if (imagen.isBlank()) {
+            CustomText(
+                text = nombre,
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = CustomFontFamily
+            )
+        } else {
+            /*Image(painter = painterResource(id = R.drawable.ic_launcher_background),
+                contentDescription = "Imagen mascota",
+                Modifier
+                    .fillMaxSize()
+                    .clickable { }
+                    )
+             */
+        }
+    }
+
+    Spacer(modifier = Modifier.width(15.dp))
+
 }
 
 

@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import com.example.pataventura.di.RoleHolder
+import com.example.pataventura.domain.model.Mascota
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.example.pataventura.ui.composables.BottomBar
 import com.example.pataventura.ui.screens.home.composables.BodyHome
@@ -39,11 +40,13 @@ fun HomeScreen(
     homeViewModel: HomeViewModel,
 ) {
     val currentLoc by homeViewModel.currentLoc.observeAsState()
+    val listaMascotas: List<Mascota> by homeViewModel.mascotas.observeAsState(emptyList())
     //val cameraState by homeViewModel.cameraState.observeAsState()
     /*val cameraState : rememberCameraPositionState()*/
 
     LaunchedEffect(key1 = Any()) {
         homeViewModel.setNombre()
+        homeViewModel.getMascotas()
     }
 
     var selectedIcon by remember { mutableStateOf(Icons.Default.Home) }
@@ -59,7 +62,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             HeaderHome(homeViewModel)
-            BodyHome(currentLoc, homeViewModel/*, cameraState*/)
+            BodyHome(currentLoc, homeViewModel, listaMascotas/*, cameraState*/)
         }
     }
 

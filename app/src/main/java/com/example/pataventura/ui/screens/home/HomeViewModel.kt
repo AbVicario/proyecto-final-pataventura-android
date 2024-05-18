@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pataventura.domain.model.Mascota
+import com.example.pataventura.domain.useCase.mascotaUseCase.GetMascotasUseCase
 import com.example.pataventura.domain.useCase.tutorUseCase.TutorGetUseCase
 import com.example.pataventura.ui.screens.home.location.GetLocationUseCase
 import com.example.pataventura.ui.screens.home.location.PermissionEvent
@@ -23,11 +25,15 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getLocationUseCase: GetLocationUseCase,
-    private val getTutorUseCase: TutorGetUseCase
+    private val getTutorUseCase: TutorGetUseCase,
+    private val getMascotasUseCase: GetMascotasUseCase
 ) : ViewModel() {
 
     private val _nombre = MutableLiveData<String>()
     val nombre: LiveData<String> = _nombre
+
+    private val _mascotas = MutableLiveData<List<Mascota>>()
+    val mascotas: MutableLiveData<List<Mascota>> = _mascotas
 
     private val _viewState: MutableStateFlow<ViewState> = MutableStateFlow(ViewState.Loading)
     val viewState = _viewState.asStateFlow()
@@ -61,6 +67,12 @@ class HomeViewModel @Inject constructor(
 
         }
 
+    }
+    suspend fun getMascotas(){
+        viewModelScope.launch {
+            val result = getMascotasUseCase.getMascotas()
+            _mascotas.postValue(result)
+        }
     }
 
     fun handle(event: PermissionEvent) {
