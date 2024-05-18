@@ -90,11 +90,6 @@ class RegistroServicioViewModel @Inject constructor(
         _precio.postValue(precio)
     }
 
-    fun onRegistroServicioButtonClicked(navController: NavController) {
-        viewModelScope.launch {
-            onPressRegistroServicio(navController)
-        }
-    }
 
     fun onDialogConfirm(navController: NavController) {
         showDialog = false
@@ -106,57 +101,63 @@ class RegistroServicioViewModel @Inject constructor(
         showDialog = true
     }
 
-    fun onPressRegistroServicioLaunch(navController: NavController){
-        viewModelScope.launch{
-            onPressRegistroServicio(navController)
-        }
-    }
 
+    fun onPressRegistroServicio(navController: NavController) {
+        viewModelScope.launch {
+            val regex = Regex("^\\d*([,.]\\d+)?\$")
+            var descripcion = _descripcion.value
+            var precio = _precio.value
+            var rango = _rango.value
+            var servicio = _servicio.value
+            _isDescripcion.postValue(false)
+            _isPrecio.postValue(false)
+            _isRango.postValue(false)
+            _isServicioSeleccionado.postValue(false)
+            _isPrecioValido.postValue(false)
 
-    suspend fun onPressRegistroServicio(navController: NavController) {
-        val regex = Regex("^\\d*([,.]\\d+)?\$")
-        var descripcion = _descripcion.value
-        var precio = _precio.value
-        var rango = _rango.value
-        var servicio = _servicio.value
-        _isDescripcion.postValue(false)
-        _isPrecio.postValue(false)
-        _isRango.postValue(false)
-        _isServicioSeleccionado.postValue(false)
-        _isPrecioValido.postValue(false)
-
-        if (descripcion.isNullOrBlank()) {
-            _isDescripcion.postValue(true)
-        }
-        if (rango.isNullOrBlank()) {
-            _isRango.postValue(true)
-        }
-        if (servicio.isNullOrBlank()) {
-            _isServicioSeleccionado.postValue(true)
-        }
-        if (precio.isNullOrBlank()) {
-            _isPrecio.postValue(true)
-        } else if (!regex.matches(precio)) {
-            _isPrecioValido.postValue(true)
-        }
-        if (_isDescripcion.value == false && _isPrecio.value == false && _isPrecioValido.value == false
-            && _isRango.value == false && _isServicioSeleccionado.value == false
-        ) {
-
-            val servicio = Servicio(
-                0, _servicio.value!!, _descripcion.value!!,
-                _precio.value!!.toFloat(), _rango.value!!.toInt()
-            )
-
-            val response = servicioRegisterUseCase.registroServicio(servicio)
-
-            if (response.ok){
-                navController.navigate(route = Destinations.Home.route)
-            }else{
-                onOpenDialog()
+            if (descripcion.isNullOrBlank()) {
+                _isDescripcion.postValue(true)
             }
+            if (rango.isNullOrBlank()) {
+                _isRango.postValue(true)
+            }
+            if (servicio.isNullOrBlank()) {
+                _isServicioSeleccionado.postValue(true)
+            }
+            if (precio.isNullOrBlank()) {
+                _isPrecio.postValue(true)
+            } else if (!regex.matches(precio)) {
+                _isPrecioValido.postValue(true)
+            }
+            if (_isDescripcion.value == false && _isPrecio.value == false && _isPrecioValido.value == false
+                && _isRango.value == false && _isServicioSeleccionado.value == false
+            ) {
 
+                val servicio = Servicio(
+                    0, _servicio.value!!, _descripcion.value!!,
+                    _precio.value!!.toFloat(), castRango(_rango.value!!,_servicio.value!!)
+                )
+
+                val response = servicioRegisterUseCase.registroServicio(servicio)
+
+                if (response.ok) {
+                    navController.navigate(route = Destinations.Home.route)
+                } else {
+                    onOpenDialog()
+                }
+
+            }
         }
     }
 
+    private fun castRango(rango: String, servicio: String): Int {
+        var distancia: Int
+        if(servicio == "Paseo"){
+            distancia = rango.substring(0,rango.length-1).toInt()
+        }else{
+            val distanciaAux = rango.substring(0,rango.length-2).toFloat() * 1000
+            distancia = distanciaAux.toInt()
+        }
+        return distancia
+    }
 }

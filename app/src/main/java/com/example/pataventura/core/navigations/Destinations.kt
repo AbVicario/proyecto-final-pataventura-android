@@ -1,6 +1,6 @@
 package com.example.pataventura.core.navigations
 
- sealed class Destinations (
+sealed class Destinations(
     val route: String
 ) {
     object Login : Destinations("login")
@@ -9,7 +9,7 @@ package com.example.pataventura.core.navigations
     object RegisterTwo : Destinations("registerTwo")
     object RegisterMascota : Destinations("registerMascota")
     object Home : Destinations("home")
-    object RegistroServicio : Destinations("servicio")
+    object RegistroServicio : Destinations("registroServicio")
     object Contratacion : Destinations("contratacion")
     object PerfilTrabajador : Destinations("perfilTrabajador")
     object Calendario : Destinations("calendario")
@@ -18,5 +18,6 @@ package com.example.pataventura.core.navigations
     object Mascotas : Destinations("mascotas")
     object PerfilMascota : Destinations("perfilMascota")
     object PerfilTutor : Destinations("perfilTutor")
+    object Servicio : Destinations("servicio")
 
 }

@@ -13,27 +13,27 @@ import retrofit2.http.Path
 
 interface ApiServicio {
 
-    @POST("/{id_cuidador}")
+    @POST("/api/cliente/oferta")
     suspend fun guardarServicio(
         @Header("Authorization") token: String,
-        @Body servicioModel: ServicioModel,
-        @Path("id_cuidador") id: Int
+        @Body servicioModel: ServicioModel
     ): CustomResponse
     @GET("/byTipo/{tipo}")
     suspend fun getServiciosByTipo(
         @Header("Authorization") token: String,
         @Path("tipo") tipo: String
     ): List<ServicioModel>
-    @GET("/all")
+    @GET("api/cliente/oferta/all")
     suspend fun getServicios(
         @Header("Authorization") token: String
-    ): List<ServicioModel>
+    ): ServicioResponse
 
-    @PUT("/{id}")
+    @PUT("updateServicio/{id_servicio}")
     suspend fun updateServicio(
         @Header("Authorization") token: String,
-        @Path("id") idServicio: Int
-    ): CustomResponse
+        @Path("id") idServicio: Int,
+        @Body servicioModel: ServicioModel
+    ): ServicioResponse
 
     @DELETE("/{id}")
     suspend fun deleteServicio(

@@ -339,6 +339,98 @@ fun CustomOutlinedTextFieldPass(
 }
 
 @Composable
+fun CustomOutlinedTextFieldUpdateDes(
+    valueAux: String?,
+    items: List<String>,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean,
+    readOnly: Boolean,
+    placeholder: String,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    singleLine: Boolean
+) {
+    var isDesplegado by remember { mutableStateOf(false) }
+    var isItemSelected by remember { mutableStateOf(false) }
+
+    OutlinedTextField(
+        value = valueAux!!,
+        onValueChange = {
+            onValueChange(it)
+        },
+        textStyle = TextStyle(fontSize = 20.sp),
+        modifier = modifier,
+        enabled = enabled,
+        readOnly = readOnly,
+        label = {
+            Text(
+                text = placeholder, fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
+        supportingText = supportingText,
+        placeholder = {
+            Text(
+                text = "", fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                modifier = Modifier
+                    .background(Color.White)
+                    .padding(horizontal = 2.dp)
+            )
+        },
+        leadingIcon = leadingIcon,
+        trailingIcon = {
+            IconButton(onClick = { isDesplegado = !isDesplegado }) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    tint = Verde,
+                    contentDescription = "icono desplegable",
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        },
+        keyboardOptions = keyboardOptions,
+        singleLine = singleLine,
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.White,
+            focusedTrailingIconColor = Tierra,
+            unfocusedTrailingIconColor = Tierra,
+            disabledTrailingIconColor = Tierra,
+            focusedLabelColor = Tierra,
+            unfocusedLabelColor = Tierra,
+            disabledLabelColor = Tierra,
+            focusedBorderColor = Tierra,
+            unfocusedBorderColor = Tierra,
+            disabledBorderColor = Tierra,
+            focusedLeadingIconColor = Tierra,
+            unfocusedLeadingIconColor = Tierra,
+            disabledLeadingIconColor = Tierra,
+            focusedPlaceholderColor = Color.Black,
+            unfocusedPlaceholderColor = Tierra,
+            disabledTextColor = Color.Black.copy(0.6f),
+            disabledPlaceholderColor = Tierra
+        ),
+    )
+
+    if (isDesplegado) {
+        MenuDesplegable(
+            isDesplegado = isDesplegado,
+            items = items,
+            onItemSelected = { item ->
+                isItemSelected = true
+                isDesplegado = false
+                onValueChange(item)
+            }
+        )
+    }
+}
+
+@Composable
 fun CustomOutlinedTextFieldDes(
     items: List<String>,
     text: String,
