@@ -1,6 +1,8 @@
 package com.example.pataventura.ui.screens.home.composables
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,12 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomText
+import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun HeaderHome(){
-    var nombre = "Jose Ramón"
+fun HeaderHome(homeViewModel: HomeViewModel){
+    val nombre: String by homeViewModel.nombre.observeAsState("")
     Box(
         Modifier
             .fillMaxWidth()

@@ -2,6 +2,7 @@ package com.example.pataventura.ui.screens.home
 
 import android.annotation.SuppressLint
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,14 +40,15 @@ fun HomeScreen(
 ) {
     val currentLoc by homeViewModel.currentLoc.observeAsState()
     //val cameraState by homeViewModel.cameraState.observeAsState()
-    /*val cameraState : rememberCameraPositionState()
+    /*val cameraState : rememberCameraPositionState()*/
 
-    LaunchedEffect(key1 = currentLoc) {
-        cameraState.centerOnLocation(currentLoc)
-    }*/
+    LaunchedEffect(key1 = Any()) {
+        homeViewModel.setNombre()
+    }
 
     var selectedIcon by remember { mutableStateOf(Icons.Default.Home) }
     Scaffold(bottomBar = {
+        BackHandler {}
         BottomBar(selectedIcon, navController) {
             selectedIcon = it
         }
@@ -56,7 +58,7 @@ fun HomeScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            HeaderHome()
+            HeaderHome(homeViewModel)
             BodyHome(currentLoc, homeViewModel/*, cameraState*/)
         }
     }
