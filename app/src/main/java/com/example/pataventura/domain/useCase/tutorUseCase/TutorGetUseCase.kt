@@ -15,14 +15,14 @@ class TutorGetUseCase @Inject constructor(
         Log.e("Tutor", token.token)
 
         try {
-            if (tutorRepository.getTutorFromDatabase() == null) {
-
-                val tutor = tutorRepository.getTutorFromApi(token.token)
+            var tutor = tutorRepository.getTutorFromDatabase()
+            if (tutor == null) {
+                tutor = tutorRepository.getTutorFromApi(token.token)
                 Log.e("Tutor", "api")
                 return tutor
 
             } else {
-                return null
+                return tutor
             }
 
         } catch (e: Exception) {
