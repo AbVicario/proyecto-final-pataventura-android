@@ -46,7 +46,6 @@ class MascotaRepository @Inject constructor(
         return withContext(Dispatchers.IO) {
             try {
                 val mascotas = mascotaService.getMascotas(token)
-                Log.e("LOOK AT ME", mascotas.toString())
                 mascotas.map{it.toDomain()
                 }
             } catch (e: Exception) {
