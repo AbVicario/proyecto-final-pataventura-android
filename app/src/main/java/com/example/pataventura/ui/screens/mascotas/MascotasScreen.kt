@@ -20,8 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.ui.composables.BottomBar
 import com.example.pataventura.ui.screens.home.HomeViewModel
+import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.mascotas.composables.BodyMascotas
 import com.example.pataventura.ui.screens.mascotas.composables.HeaderMascotas
 
@@ -36,7 +38,7 @@ fun MascotasScreen(
     var selectedIcon by remember { mutableStateOf(Icons.Default.Pets) }
     val currentLoc by homeViewModel.currentLoc.observeAsState()
     Scaffold( bottomBar = {
-    BottomBar(selectedIcon){
+    BottomBar(selectedIcon, navController){
         selectedIcon = it
     }
 }) {
@@ -46,7 +48,7 @@ fun MascotasScreen(
         ) {
             HeaderMascotas()
             Spacer(modifier = Modifier.size(10.dp))
-            BodyMascotas(currentLoc)
+            BodyMascotas(currentLoc, mascotasViewModel, navController)
             HandleLocationPermissionAndState(homeViewModel)
         }
     }

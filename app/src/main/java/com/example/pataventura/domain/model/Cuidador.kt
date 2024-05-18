@@ -12,6 +12,7 @@ data class Cuidador(
     var apellido: String,
     var imagen: String = "",
     var alias: String,
+    var direccion: String
 )
 
 fun CuidadorModel.toDomain() = Cuidador(
@@ -22,7 +23,8 @@ fun CuidadorModel.toDomain() = Cuidador(
     nombre,
     apellido,
     imagen,
-    alias
+    alias,
+    direccion
 )
 
 fun CuidadorEntity.toDomain() = Cuidador(
@@ -33,7 +35,8 @@ fun CuidadorEntity.toDomain() = Cuidador(
     nombre,
     apellido,
     imagen,
-    alias
+    alias,
+    direccion
 )
 
 fun Cuidador.toModel() = CuidadorModel(
@@ -44,7 +47,8 @@ fun Cuidador.toModel() = CuidadorModel(
     nombre,
     apellido,
     imagen,
-    alias
+    alias,
+    direccion
 )
 
 fun Cuidador.toEntity() = CuidadorEntity(
@@ -55,5 +59,6 @@ fun Cuidador.toEntity() = CuidadorEntity(
     nombre,
     apellido,
     imagen,
-    alias
+    alias,
+    direccion
 )

@@ -15,4 +15,5 @@ data class CuidadorEntity(
     @ColumnInfo(name = "apellido") var apellido: String,
     @ColumnInfo(name = "imagen") var imagen: String = "",
     @ColumnInfo(name = "alias") var alias: String,
+    @ColumnInfo(name = "direccion") var direccion: String,
     )

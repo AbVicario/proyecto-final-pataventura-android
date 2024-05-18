@@ -1,6 +1,5 @@
 package com.example.pataventura.data.model
 
-import androidx.compose.ui.graphics.Color
 import com.google.gson.annotations.SerializedName
 
 data class MascotaModel(
@@ -9,8 +8,8 @@ data class MascotaModel(
     @SerializedName("num_chip") var numChip: String,
     @SerializedName("edad") var edad: String = "",
     @SerializedName("imagen") var imagen: String = "",
-    @SerializedName("tamanyo") var tamanyo: Float,
-    @SerializedName("peso") var peso: Float,
+    @SerializedName("tamanyo") var tamanyo: Double,
+    @SerializedName("peso") var peso: Double,
     @SerializedName("tipo") var tipo: String,
     @SerializedName("raza") var raza: String = "",
     @SerializedName("observacion") var observacion: String = "",

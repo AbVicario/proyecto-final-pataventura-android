@@ -1,6 +1,5 @@
 package com.example.pataventura.domain.model
 
-import androidx.compose.ui.graphics.Color
 import com.example.pataventura.data.database.entity.MascotaEntity
 import com.example.pataventura.data.model.MascotaModel
 
@@ -10,8 +9,8 @@ data class Mascota(
     var numChip: String,
     var edad: String = "",
     var imagen: String = "",
-    var tamanyo: Float,
-    var peso: Float,
+    var tamanyo: Double,
+    var peso: Double,
     var tipo: String,
     var raza: String = "",
     var observacion: String = "",

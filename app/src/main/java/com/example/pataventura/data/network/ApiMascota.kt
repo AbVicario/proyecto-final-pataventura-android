@@ -16,22 +16,21 @@ import retrofit2.http.Path
 
 interface ApiMascota {
 
-    @POST("/{id_tutor}")
+    @POST("/api/cliente/mascota")
     suspend fun registerMascota(
         @Header("Authorization") token: String,
         @Body mascota: MascotaModel,
-        @Path("id_tutor") idTutor: Int
     ): CustomResponse
     @GET("/one/{id_mascota}")
     suspend fun getOneMascota(
         @Header("Authorization") token: String,
         @Path("id_mascota") idMascota: Int
-    ): MascotaResponse
+    ): MascotaModel
 
-    @GET("/all")
+    @GET("api/cliente/mascota/all")
     suspend fun getMascotas(
         @Header("Authorization") token: String
-    ): List<MascotaResponse>
+    ): MascotaResponse
 
     @PUT("/{id_mascota}")
     suspend fun updateMascota(

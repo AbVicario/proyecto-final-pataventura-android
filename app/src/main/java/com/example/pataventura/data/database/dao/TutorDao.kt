@@ -17,6 +17,9 @@ interface TutorDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTutor(tutor: TutorEntity)
 
+    @Update
+    fun updateTutor(tutor: TutorEntity)
+
     @Query("DELETE FROM tutor_table")
     fun deleteTutor()
 

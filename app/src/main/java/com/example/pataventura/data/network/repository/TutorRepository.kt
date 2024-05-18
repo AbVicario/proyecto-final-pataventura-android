@@ -10,6 +10,7 @@ import com.example.pataventura.data.model.TokenModel
 import com.example.pataventura.data.model.TutorModel
 import com.example.pataventura.data.network.response.CuidadorResponse
 import com.example.pataventura.data.network.response.CustomResponse
+import com.example.pataventura.data.network.response.TutorResponse
 import com.example.pataventura.data.network.service.TokenService
 import com.example.pataventura.data.network.service.TutorService
 import com.example.pataventura.domain.model.Cuidador
@@ -24,11 +25,7 @@ class TutorRepository @Inject constructor(
     private val tutorService: TutorService,
     private val tutorDao: TutorDao
 ) {
-    suspend fun getTokenFromApi(loginModel: LoginModel): Token {
-        val response: TokenModel = tutorService.getTokenFromApi(loginModel)
-        return response.toDomain()
-    }
-    suspend fun registerTutorFromApi(tutorModel: TutorModel): CustomResponse{
+    suspend fun registerTutorFromApi(tutorModel: TutorModel): CustomResponse {
         return tutorService.registerTutorFromApi(tutorModel)
     }
 
@@ -43,6 +40,7 @@ class TutorRepository @Inject constructor(
             }
         }
     }
+
     suspend fun getTutorFromDatabase(): Tutor? {
         return withContext(Dispatchers.IO) {
             try {
@@ -56,21 +54,24 @@ class TutorRepository @Inject constructor(
         }
     }
 
-    suspend fun updateTutorFromApi(token :String, tutorModel: TutorModel){
+    suspend fun updateTutorFromApi(token: String, tutorModel: TutorModel): TutorResponse {
         return withContext(Dispatchers.IO) {
             try {
-                tutorService.updateTutorFromApi(token,  tutorModel)
+                val response = tutorService.updateTutorFromApi(token, tutorModel)
+                response
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
+                throw e
             }
         }
     }
-    suspend fun updateTutorFromDatabase( tutor: TutorEntity){
+
+    suspend fun updateTutorFromDatabase(tutor: TutorEntity) {
         return withContext(Dispatchers.IO) {
             try {
-                tutorDao.insertTutor(tutor)
+                tutorDao.updateTutor(tutor)
             } catch (e: Exception) {
-                Log.e("LOOK AT ME", "${e.message}")
+               throw e
             }
         }
     }
@@ -78,11 +79,21 @@ class TutorRepository @Inject constructor(
     suspend fun getCuidadoresFromApi(token: String, tipo: String): List<Cuidador> {
         return withContext(Dispatchers.IO) {
             try {
-               tutorService.getCuidadoresFromApi(token, tipo)
+                tutorService.getCuidadoresFromApi(token, tipo)
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
                 emptyList()
             }
+        }
+    }
+
+    suspend fun getTutorFromApi(token: String): Tutor? {
+        return try {
+            val tutor = tutorService.getTutorFromApi(token)
+            tutor.toDomain()
+        } catch (e: Exception) {
+            Log.e("LOOK AT ME", "${e.message}")
+            null
         }
     }
 }

@@ -28,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.example.pataventura.ui.screens.mascotas.MascotasViewModel
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
+import com.example.pataventura.ui.screens.servicio.ServicioViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -45,13 +46,15 @@ class MainActivity : ComponentActivity() {
     private val mascotasViewModel: MascotasViewModel by viewModels()
     private val perfilMascotaViewModel: PerfilMascotaViewModel by viewModels()
     private val perfilTutorViewModel: PerfilTutorViewModel by viewModels()
+    private val servicioViewModel: ServicioViewModel by viewModels()
+
     @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            
+
             /*val permissionState = rememberMultiplePermissionsState(
                 permissions = listOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -82,6 +85,7 @@ class MainActivity : ComponentActivity() {
                         mascotasViewModel = mascotasViewModel,
                         perfilMascotaViewModel = perfilMascotaViewModel,
                         perfilTutorViewModel = perfilTutorViewModel,
+                        servicioViewModel = servicioViewModel
                     )
 
                     /*LaunchedEffect(!hasLocationPermission()) {

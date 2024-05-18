@@ -15,23 +15,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.ui.composables.BottomBar
 import com.example.pataventura.ui.screens.calendario.composables.BodyCalendario
 import com.example.pataventura.ui.screens.calendario.composables.HeaderCalendario
 import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.home.composables.BodyHome
 import com.example.pataventura.ui.screens.home.composables.HeaderHome
+import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import kotlinx.coroutines.selects.select
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CalendarioScreen(
     navController: NavController,
-    calendarioModel: CalendarioViewModel
+    calendarioModel: CalendarioViewModel,
 ) {
     var selectedIcon by remember { mutableStateOf(Icons.Default.CalendarMonth) }
     Scaffold( bottomBar = {
-        BottomBar(selectedIcon){
+        BottomBar(selectedIcon, navController){
             selectedIcon = it
         }
     }) {

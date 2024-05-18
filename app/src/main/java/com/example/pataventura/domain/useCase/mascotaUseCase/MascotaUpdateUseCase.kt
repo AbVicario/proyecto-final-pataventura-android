@@ -6,4 +6,5 @@ import javax.inject.Inject
 class MascotaUpdateUseCase@Inject constructor(
     private val mascotaRepository: MascotaRepository
 ) {
+
 }

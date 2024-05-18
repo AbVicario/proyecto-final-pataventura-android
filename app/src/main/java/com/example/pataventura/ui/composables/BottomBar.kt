@@ -1,6 +1,7 @@
 package com.example.pataventura.ui.composables
 
 import android.graphics.drawable.Icon
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.NotificationsNone
@@ -33,19 +35,35 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.ui.theme.Verde
 import okhttp3.internal.wait
 import javax.annotation.meta.When
 
 @Composable
-fun BottomBar(selectedIcon: ImageVector, onIconSelected: (ImageVector) -> Unit) {
-    val listaIconos: List<Pair<ImageVector, Boolean>> = listOf(
-        Icons.Default.Home to (Icons.Default.Home == selectedIcon),
-        Icons.Default.CalendarMonth to (Icons.Default.CalendarMonth == selectedIcon),
-        Icons.Default.Pets to (Icons.Default.Pets == selectedIcon),
-        Icons.Default.NotificationsNone to (Icons.Default.NotificationsNone == selectedIcon),
-        Icons.Default.Person to (Icons.Default.Person == selectedIcon)
-    )
+fun BottomBar(
+    selectedIcon: ImageVector, navController: NavController,
+    onIconSelected: (ImageVector) -> Unit
+) {
+    val rol = RoleHolder.rol.value.toString().lowercase()
+    val listaIconos: List<Pair<ImageVector, Boolean>> = if (rol == "cuidador") {
+        listOf(
+            Icons.Default.Home to (Icons.Default.Home == selectedIcon),
+            Icons.Default.CalendarMonth to (Icons.Default.CalendarMonth == selectedIcon),
+            Icons.Default.Badge to (Icons.Default.Badge == selectedIcon),
+            Icons.Default.NotificationsNone to (Icons.Default.NotificationsNone == selectedIcon),
+            Icons.Default.Person to (Icons.Default.Person == selectedIcon)
+        )
+    } else {
+        listOf(
+            Icons.Default.Home to (Icons.Default.Home == selectedIcon),
+            Icons.Default.CalendarMonth to (Icons.Default.CalendarMonth == selectedIcon),
+            Icons.Default.Pets to (Icons.Default.Pets == selectedIcon),
+            Icons.Default.NotificationsNone to (Icons.Default.NotificationsNone == selectedIcon),
+            Icons.Default.Person to (Icons.Default.Person == selectedIcon)
+        )
+    }
 
     Box(
         Modifier
@@ -72,7 +90,9 @@ fun BottomBar(selectedIcon: ImageVector, onIconSelected: (ImageVector) -> Unit) 
         ) {
             listaIconos.forEach { (icon, isSelected) ->
                 if (isSelected) {
-                    MyIconButtonSelected(icon = icon, onClick = { onIconSelected(icon) })
+                    MyIconButtonSelected(
+                        icon, navController, rol
+                    )
                 } else {
                     MyIconButton(icon = icon, onClick = { onIconSelected(icon) })
                 }
@@ -81,6 +101,7 @@ fun BottomBar(selectedIcon: ImageVector, onIconSelected: (ImageVector) -> Unit) 
     }
 }
 
+
 @Composable
 fun MyIconButton(icon: ImageVector, onClick: () -> Unit) {
     Box(
@@ -88,14 +109,19 @@ fun MyIconButton(icon: ImageVector, onClick: () -> Unit) {
             .clickable { onClick() }
             .background(Verde)
     ) {
-        Icon(icon, contentDescription = null, tint = Color.White, modifier = Modifier.padding(top = 11.dp))
+        Icon(
+            icon,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.padding(top = 11.dp)
+        )
     }
 }
 
 @Composable
-fun MyIconButtonSelected(icon: ImageVector, onClick: () -> Unit) {
+fun MyIconButtonSelected(icon: ImageVector, navController: NavController, rol: String) {
     Column(
-        modifier = Modifier.clickable { onClick() }
+
     ) {
         Box(
             modifier = Modifier
@@ -113,7 +139,7 @@ fun MyIconButtonSelected(icon: ImageVector, onClick: () -> Unit) {
                 modifier = Modifier
                     .size(45.dp)
                     .border(1.dp, Color.Gray.copy(0.4f), RoundedCornerShape(100f))
-                    .shadow(6.dp, RoundedCornerShape(100f), clip = true) // Add shadow to circle container
+                    .shadow(6.dp, RoundedCornerShape(100f), clip = true)
                     .align(Alignment.TopStart)
             ) {
                 Box(
@@ -121,6 +147,7 @@ fun MyIconButtonSelected(icon: ImageVector, onClick: () -> Unit) {
                         .size(45.dp)
                         .background(Verde, RoundedCornerShape(100f))
                         .align(Alignment.Center)
+                        .clickable { navegacionButtonBar(icon, navController, rol) }
                 ) {
                     Icon(
                         icon,
@@ -131,5 +158,16 @@ fun MyIconButtonSelected(icon: ImageVector, onClick: () -> Unit) {
                 }
             }
         }
+    }
+}
+
+fun navegacionButtonBar(icon: ImageVector, navController: NavController, rol: String) {
+    when (icon.name) {
+        Icons.Default.Home.name -> navController.navigate("home")
+        Icons.Default.CalendarMonth.name -> navController.navigate("calendario")
+        Icons.Default.Pets.name -> navController.navigate("mascotas")
+        Icons.Default.NotificationsNone.name -> navController.navigate("home")
+        Icons.Default.Person.name -> navController.navigate("perfilTutor")
+        Icons.Default.Badge.name -> navController.navigate("servicio")
     }
 }

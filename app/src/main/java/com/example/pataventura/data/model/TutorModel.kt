@@ -1,6 +1,7 @@
 package com.example.pataventura.data.model
 
 import com.google.gson.annotations.SerializedName
+import org.json.JSONObject
 
 data class TutorModel(
     @SerializedName("id_usuario") var idUsuario: Int,
@@ -11,4 +12,7 @@ data class TutorModel(
     @SerializedName("apellido") var apellido: String,
     @SerializedName("imagen") var imagen: String = "",
     @SerializedName("alias") var alias: String,
+    @SerializedName("direccion") var direccion: String
 )
+
+

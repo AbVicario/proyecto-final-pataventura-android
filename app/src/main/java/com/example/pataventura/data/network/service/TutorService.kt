@@ -1,29 +1,21 @@
 package com.example.pataventura.data.network.service
 
 import android.util.Log
-import com.example.pataventura.data.database.entity.TutorEntity
-import com.example.pataventura.data.model.LoginModel
-import com.example.pataventura.data.model.TokenModel
 import com.example.pataventura.data.model.TutorModel
 import com.example.pataventura.data.network.ApiClient
-import com.example.pataventura.data.network.response.CuidadorResponse
 import com.example.pataventura.data.network.response.CustomResponse
+import com.example.pataventura.data.network.response.TutorResponse
 import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.toDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import javax.inject.Inject
 
 class TutorService @Inject constructor(
     private val tutorApi: ApiClient
 ) {
 
-    suspend fun getTokenFromApi(loginModel: LoginModel): TokenModel {
-        return withContext(Dispatchers.IO) {
-            val tokenResponse = tutorApi.doLogin(loginModel)
-            tokenResponse.body()?: throw IllegalStateException("Token response body is null")
-        }
-    }
     suspend fun registerTutorFromApi(tutorModel: TutorModel): CustomResponse {
         return try {
             withContext(Dispatchers.IO) {
@@ -35,14 +27,13 @@ class TutorService @Inject constructor(
         }
     }
 
-    suspend fun updateTutorFromApi(token: String, tutorModel: TutorModel): CustomResponse {
+    suspend fun updateTutorFromApi(token: String, tutorModel: TutorModel): TutorResponse {
         return try {
             withContext(Dispatchers.IO) {
                 tutorApi.updateTutor(token, tutorModel.idUsuario, tutorModel)
             }
         } catch (e: Exception) {
-            Log.e("LOOK AT ME", "${e.message}")
-            CustomResponse(data = "Error", status = 500, false)
+            throw e
         }
     }
 
@@ -58,4 +49,31 @@ class TutorService @Inject constructor(
             emptyList()
         }
     }
+
+    suspend fun getTutorFromApi(token: String): TutorModel {
+        return try {
+            withContext(Dispatchers.IO) {
+                Log.e("LOOK AT ME", "Entra")
+                val response = tutorApi.getTutor(token)
+                Log.e("LOOK AT ME", response.data.toString())
+                TutorModel(
+                    response.data.idUsuario,
+                    response.data.email,
+                    response.data.password,
+                    response.data.telefono,
+                    response.data.nombre,
+                    response.data.apellido,
+                    response.data.imagen,
+                    response.data.alias,
+                    response.data.direccion
+                )
+
+            }
+        } catch (e: Exception) {
+            Log.e("LOOK AT ME", "${e.message}")
+            throw e
+        }
+    }
+
+
 }

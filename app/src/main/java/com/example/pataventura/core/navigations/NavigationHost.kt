@@ -35,6 +35,8 @@ import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioScre
 import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroUnoScreen
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
+import com.example.pataventura.ui.screens.servicio.ServicioScreen
+import com.example.pataventura.ui.screens.servicio.ServicioViewModel
 
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -54,12 +56,14 @@ fun NavigationHost(
     mascotasViewModel: MascotasViewModel,
     perfilMascotaViewModel: PerfilMascotaViewModel,
     perfilTutorViewModel: PerfilTutorViewModel,
+    servicioViewModel: ServicioViewModel
 
     ) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = Destinations.LoginCliente.route
+        //startDestination = Destinations.Servicio.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -71,7 +75,7 @@ fun NavigationHost(
             RegistroUnoScreen(navController, registerViewModel)
         }
         composable(Destinations.RegisterTwo.route) {
-            RegistroDosScreen(navController, registerViewModel, loginClienteViewModel)
+            RegistroDosScreen(navController, registerViewModel)
         }
         composable(Destinations.RegisterMascota.route) {
             RegistroMascotaScreen(navController, registerMascotaViewModel)
@@ -105,6 +109,10 @@ fun NavigationHost(
         }
         composable(Destinations.PerfilTutor.route) {
             PerfilTutorScreen(navController, perfilTutorViewModel)
+        }
+
+        composable(Destinations.Servicio.route) {
+            ServicioScreen(navController, servicioViewModel)
         }
 
     }

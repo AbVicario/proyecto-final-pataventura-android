@@ -5,25 +5,37 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.pataventura.di.RoleHolder
+import com.example.pataventura.domain.useCase.tokenUseCase.DeleteTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginClienteViewModel @Inject constructor(
+    private val deleteTokenUseCase: DeleteTokenUseCase,
 ) : ViewModel() {
-
-    private val _tipo = MutableLiveData<String>()
-    val tipo : LiveData<String> = _tipo
+    init {
+        viewModelScope.launch {
+            deleteToken()
+        }
+    }
+    private suspend fun deleteToken() {
+        deleteTokenUseCase.deleteToken()
+    }
 
     fun onPressLoginTutorButton(navController: NavController) {
-        _tipo.postValue("tutor")
+        RoleHolder.setRol("tutor")
         navController.navigate("login")
     }
 
     fun onPressLoginCuidadorButton(navController: NavController) {
-        _tipo.postValue("cuidador")
-        navController.navigate("login")
+        RoleHolder.setRol("cuidador")
+        navController.navigate("login"){
+            popUpTo("loginCliente") {
+                inclusive = true
+            }
+        }
     }
 
 }

@@ -27,7 +27,7 @@ fun PerfilMascotaScreen(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            HeaderPerfilMascota()
+            HeaderPerfilMascota(perfilMascotaViewModel)
             Spacer(modifier = Modifier.size(20.dp))
             BodyPerfilMascotas(perfilMascotaViewModel = perfilMascotaViewModel,
                 navController = navController

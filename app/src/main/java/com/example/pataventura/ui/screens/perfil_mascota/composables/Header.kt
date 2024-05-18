@@ -24,6 +24,8 @@ import androidx.compose.material.icons.filled.MarkunreadMailbox
 import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,63 +40,44 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pataventura.R
+import com.example.pataventura.ui.composables.ColumnBotonesMascota
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.IconBack
+import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 
 @SuppressLint("Range")
 @Composable
-fun HeaderPerfilMascota(){
+fun HeaderPerfilMascota(perfilMascotaViewModel: PerfilMascotaViewModel) {
+    val image by perfilMascotaViewModel.image.observeAsState()
     Box(
         Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.3f)
             .background(Verde, RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
-    ){
+    ) {
 
-        Image(painter = painterResource(id = R.drawable.imagen_tyrion),
+        Image(
+            painter = painterResource(id = R.drawable.imagen_tyrion),
             contentDescription = "Imagen Mascota",
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize()
-                .clip(shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)))
-        Column(modifier = Modifier.align(Alignment.TopStart)){
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
+        )
+        Column(modifier = Modifier.align(Alignment.TopStart)) {
             IconBack()
         }
-        Box(Modifier.align(Alignment.TopEnd).width(55.dp)){
-            ColumnBotones()
+        Box(
+            Modifier
+                .align(Alignment.TopEnd)
+                .width(55.dp)) {
+            ColumnBotonesMascota(if (image != null) false else true)
         }
     }
 
 }
 
-@Composable
-fun ColumnBotones() {
-    Column {
-        Column (Modifier.width(80.dp)
-            .fillMaxHeight(0.9f)
-            .padding(top=14.dp),
-            verticalArrangement = Arrangement.SpaceBetween){
-                MyboxButton(Icons.Default.Edit)
-                MyboxButton(Icons.Default.CalendarMonth)
-                MyboxButton(Icons.AutoMirrored.Filled.MenuBook)
-                MyboxButton(Icons.Default.DeleteOutline)
-        }
-    }
-}
 
-@Composable
-fun MyboxButton(icon: ImageVector) {
-    Box(modifier = Modifier
-        .size(40.dp)
-        .shadow(3.dp, RoundedCornerShape(100f))
-        .background(Verde, RoundedCornerShape(100f))
-        //.border(2.dp, Color.White, RoundedCornerShape(100f))
-        .clickable {  }){
-            Icon(icon, null,
-                Modifier.align(Alignment.Center),
-                tint = Color.White)
-
-    }
-}
 

@@ -12,6 +12,7 @@ class Tutor (
     var apellido: String,
     var imagen: String = "",
     var alias: String,
+    var direccion: String
 )
 
 fun TutorModel.toDomain() = Tutor(
@@ -22,7 +23,8 @@ fun TutorModel.toDomain() = Tutor(
     nombre,
     apellido,
     imagen,
-    alias
+    alias,
+    direccion
 )
 
 fun TutorEntity.toDomain() = Tutor(
@@ -33,7 +35,8 @@ fun TutorEntity.toDomain() = Tutor(
     nombre,
     apellido,
     imagen,
-    alias
+    alias,
+    direccion
 )
 
 fun Tutor.toModel() = TutorModel(
@@ -44,7 +47,8 @@ fun Tutor.toModel() = TutorModel(
     nombre,
     apellido,
     imagen,
-    alias
+    alias,
+    direccion
 )
 
 fun Tutor.toEntity() = TutorEntity(
@@ -55,5 +59,6 @@ fun Tutor.toEntity() = TutorEntity(
     nombre,
     apellido,
     imagen,
-    alias
+    alias,
+    direccion
 )

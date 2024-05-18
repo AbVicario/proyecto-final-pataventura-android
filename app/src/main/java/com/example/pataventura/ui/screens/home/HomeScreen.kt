@@ -2,6 +2,7 @@ package com.example.pataventura.ui.screens.home
 
 import android.annotation.SuppressLint
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,10 +20,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
+import com.example.pataventura.di.RoleHolder
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.example.pataventura.ui.composables.BottomBar
 import com.example.pataventura.ui.screens.home.composables.BodyHome
 import com.example.pataventura.ui.screens.home.composables.HeaderHome
+import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
@@ -31,29 +34,31 @@ import com.google.maps.android.compose.CameraPositionState
 @RequiresApi(Build.VERSION_CODES.S)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen (
+fun HomeScreen(
     navController: NavController,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
 ) {
     val currentLoc by homeViewModel.currentLoc.observeAsState()
     //val cameraState by homeViewModel.cameraState.observeAsState()
-    /*val cameraState : rememberCameraPositionState()
+    /*val cameraState : rememberCameraPositionState()*/
 
-    LaunchedEffect(key1 = currentLoc) {
-        cameraState.centerOnLocation(currentLoc)
-    }*/
+    LaunchedEffect(key1 = Any()) {
+        homeViewModel.setNombre()
+    }
 
     var selectedIcon by remember { mutableStateOf(Icons.Default.Home) }
-    Scaffold( bottomBar = {
-        BottomBar(selectedIcon){
+    Scaffold(bottomBar = {
+        BackHandler {}
+        BottomBar(selectedIcon, navController) {
             selectedIcon = it
         }
     }) {
         Column(
             modifier = Modifier
-                .fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween,
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            HeaderHome()
+            HeaderHome(homeViewModel)
             BodyHome(currentLoc, homeViewModel/*, cameraState*/)
         }
     }

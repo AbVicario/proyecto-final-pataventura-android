@@ -8,6 +8,8 @@ import com.example.pataventura.data.model.TokenModel
 import com.example.pataventura.data.network.service.TokenService
 import com.example.pataventura.domain.model.Token
 import com.example.pataventura.domain.model.toDomain
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 import javax.inject.Inject
 
@@ -15,17 +17,30 @@ class TokenRepository @Inject constructor(
     private val tokenService: TokenService,
     private val tokenDao: TokenDao
 ) {
-    suspend fun getTokenFromApi(loginModel: LoginModel): Token {
-        val response :TokenModel= tokenService.getTokenFromApi(loginModel)
-        return response.toDomain()
+    suspend fun getTokenFromApiTutor(loginModel: LoginModel): Token {
+        val response = tokenService.getTokenFromApiTutor(loginModel)
+        val token = response.data.token
+        return Token(token)
     }
-
+    suspend fun getTokenFromApiCuidador(loginModel: LoginModel): Token {
+        val response = tokenService.getTokenFromApiCuidador(loginModel)
+        val token = response.data.token
+        return Token(token)
+    }
     suspend fun insertOneTokenToDatabase(tokenEntity: TokenEntity) {
         tokenDao.insertToken(tokenEntity)
     }
+    suspend fun delteTokenToDatabase():Int {
+        return tokenDao.clearAll()
+    }
     suspend fun getTokenFromDatabase(): Token {
-        val response: TokenEntity = tokenDao.getToken()
-        return response.toDomain()
-
+        return withContext(Dispatchers.IO){
+            val tokenEntity = tokenDao.getToken()
+            if(tokenEntity == null){
+                Token("")
+            }else{
+                tokenEntity.toDomain()
+            }
+        }
     }
 }

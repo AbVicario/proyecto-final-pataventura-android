@@ -41,27 +41,27 @@ fun RowHistorial(text:String, image: Int){
 }
 
 @Composable
-fun RowValoracion() {
+fun RowValoracion(size:Int) {
     Row (Modifier.padding()){
         Icon(
             Icons.Default.StarRate, contentDescription = null,
-            Modifier.size(15.dp),tint = Verde
+            Modifier.size(size.dp),tint = Verde
         )
         Icon(
             Icons.Default.StarRate, contentDescription = null,
-            Modifier.size(15.dp), tint = Verde
+            Modifier.size(size.dp), tint = Verde
         )
         Icon(
             Icons.Default.StarRate, contentDescription = null,
-            Modifier.size(15.dp),tint = Verde
+            Modifier.size(size.dp),tint = Verde
         )
         Icon(
             Icons.Default.StarHalf, contentDescription = null,
-            Modifier.size(15.dp), tint = Verde
+            Modifier.size(size.dp), tint = Verde
         )
         Icon(
             Icons.Default.StarOutline, contentDescription = null,
-            Modifier.size(15.dp), tint = Verde
+            Modifier.size(size.dp), tint = Verde
         )
     }
 }

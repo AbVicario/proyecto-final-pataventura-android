@@ -12,6 +12,9 @@ import com.example.pataventura.data.model.MascotaModel
 interface MascotaDao {
     @Query("SELECT * from mascota_table")
     fun getMascotas(): List<MascotaEntity>
+
+    @Query("SELECT * from mascota_table WHERE id_mascota = :idMascota")
+    fun getMascota(idMascota: Int): MascotaEntity
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMascota(mascota: MascotaEntity)
     @Update

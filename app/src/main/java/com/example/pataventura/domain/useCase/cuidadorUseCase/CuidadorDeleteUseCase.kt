@@ -11,13 +11,14 @@ class CuidadorDeleteUseCase @Inject constructor(
     private val cuidadorRepository: CuidadorRepository,
     private val tokenGetUseCase: TokenGetUseCase
 ) {
-    suspend fun deleteCuidador(): CustomResponse {
+    suspend fun deleteCuidador(): Boolean {
         val cuidador = cuidadorRepository.getCuidadorFromDatabase()
         val token = tokenGetUseCase.getToken().token
         val response = cuidadorRepository.deleteCuidadorFromApi(token, cuidador!!.toModel())
         if (response.status == 200) {
-            cuidadorRepository.deleteCuidadorFromDataBase()
+            val num = cuidadorRepository.deleteCuidadorFromDataBase()
+            if (num > 0) return true
         }
-        return response
+        return false
     }
 }

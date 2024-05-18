@@ -62,7 +62,7 @@ fun CardHistorial(nombreMascota : String, nombreCuidador  : String,
                             .clip(RoundedCornerShape(100f)))
                     Spacer(modifier = Modifier.size(5.dp))
 
-                    RowValoracion()
+                    RowValoracion(25)
 
                 }else{
                     Image(painter = painterResource(id = imageMascota),

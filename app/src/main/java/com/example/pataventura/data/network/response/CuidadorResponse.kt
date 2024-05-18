@@ -1,8 +1,12 @@
 package com.example.pataventura.data.network.response
 
 import com.google.gson.annotations.SerializedName
-
 data class CuidadorResponse(
+    @SerializedName("data") val data: DataCuidador,
+    @SerializedName("status") val status: Int,
+    @SerializedName("ok") val ok: Boolean
+)
+data class DataCuidador(
     @SerializedName("id_usuario") var idUsuario: Int,
     @SerializedName("email") var email: String,
     @SerializedName("password") var password: String,
@@ -11,4 +15,5 @@ data class CuidadorResponse(
     @SerializedName("apellido") var apellido: String,
     @SerializedName("imagen") var imagen: String = "",
     @SerializedName("alias") var alias: String,
+    @SerializedName("direccion") var direccion: String,
 )

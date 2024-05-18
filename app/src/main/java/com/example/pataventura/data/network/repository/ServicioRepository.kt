@@ -2,9 +2,11 @@ package com.example.pataventura.data.network.repository
 
 import android.util.Log
 import com.example.pataventura.data.database.dao.ServicioDao
+import com.example.pataventura.data.database.entity.CuidadorEntity
 import com.example.pataventura.data.database.entity.ServicioEntity
 import com.example.pataventura.data.model.ServicioModel
 import com.example.pataventura.data.network.response.CustomResponse
+import com.example.pataventura.data.network.response.ServicioResponse
 import com.example.pataventura.data.network.service.ServicioService
 import com.example.pataventura.domain.model.Servicio
 import com.example.pataventura.domain.model.toDomain
@@ -17,10 +19,9 @@ class ServicioRepository @Inject constructor(
     private val servicioDao: ServicioDao
 ) {
     suspend fun registerServicioFromApi(
-        token: String, servicio: ServicioModel,
-        idCuidador: Int
+        token: String, servicio: ServicioModel
     ): CustomResponse {
-        return servicioService.registerServicioFromApi(token, servicio, idCuidador)
+        return servicioService.registerServicioFromApi(token, servicio)
     }
 
     suspend fun insertServicioToDatabase(servicio: ServicioEntity) {
@@ -48,23 +49,27 @@ class ServicioRepository @Inject constructor(
         }
     }
 
-    suspend fun getServiciosFromApi(token: String): List<ServicioModel> {
+    suspend fun getServiciosFromApi(token: String): List<Servicio> {
         return withContext(Dispatchers.IO) {
             try {
-                servicioService.getServicios(token)
+                val servicios = servicioService.getServicios(token)
+                Log.e("LOOK AT ME", servicios.toString())
+                servicios.map{it.toDomain()
+                }
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
-                emptyList()
+                throw e
             }
         }
     }
 
-    suspend fun updateServicioFromApi(token: String, servicioModel: ServicioModel) {
+    suspend fun updateServicioFromApi(token: String, servicioModel: ServicioModel): ServicioResponse {
         return withContext(Dispatchers.IO) {
             try {
-                servicioService.updateServicioFromApi(token, servicioModel)
+                val response = servicioService.updateServicioFromApi(token, servicioModel)
+                response
             } catch (e: Exception) {
-                Log.e("LOOK AT ME", "${e.message}")
+                throw e
             }
         }
     }
@@ -89,6 +94,16 @@ class ServicioRepository @Inject constructor(
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
                emptyList()
+            }
+        }
+    }
+
+    suspend fun updateServicioFromDatabase(servicio: ServicioEntity) {
+        return withContext(Dispatchers.IO) {
+            try {
+                servicioDao.updateServicio(servicio)
+            } catch (e: Exception) {
+                throw e
             }
         }
     }
