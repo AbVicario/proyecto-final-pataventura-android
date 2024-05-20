@@ -21,6 +21,7 @@ class ServicioRegisterUseCase @Inject constructor(
             token, servicio.toModel()
         )
         if (response.status == 200) {
+            servicio.idOferta = response.data.toInt()
             servicioRepository.insertServicioToDatabase(servicio.toEntity())
         }
         return response

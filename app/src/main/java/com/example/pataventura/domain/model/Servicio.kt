@@ -4,11 +4,11 @@ import com.example.pataventura.data.database.entity.ServicioEntity
 import com.example.pataventura.data.model.ServicioModel
 
 data class Servicio(
-    var idOferta: Int,
-    var tipo: String,
+    var idOferta: Int = 0,
+    var tipo: String = "",
     var descripcion: String = "",
-    var precio: Float,
-    var radio: Int
+    var precio: Float = 0.0f,
+    var radio: Int = 0
 )
 
 fun ServicioModel.toDomain() = Servicio(

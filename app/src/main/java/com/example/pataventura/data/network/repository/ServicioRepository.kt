@@ -52,6 +52,7 @@ class ServicioRepository @Inject constructor(
     suspend fun getServiciosFromApi(token: String): List<Servicio> {
         return withContext(Dispatchers.IO) {
             try {
+                Log.e("LOOK AT ME", "LLEGOOO")
                 val servicios = servicioService.getServicios(token)
                 Log.e("LOOK AT ME", servicios.toString())
                 servicios.map{it.toDomain()
@@ -63,7 +64,7 @@ class ServicioRepository @Inject constructor(
         }
     }
 
-    suspend fun updateServicioFromApi(token: String, servicioModel: ServicioModel): ServicioResponse {
+    suspend fun updateServicioFromApi(token: String, servicioModel: ServicioModel): CustomResponse {
         return withContext(Dispatchers.IO) {
             try {
                 val response = servicioService.updateServicioFromApi(token, servicioModel)
@@ -77,7 +78,7 @@ class ServicioRepository @Inject constructor(
     suspend fun deleteServicioFromApi(token: String, servicioModel: ServicioModel): CustomResponse {
         return withContext(Dispatchers.IO) {
             try {
-               var response = servicioService.deleteServicioFromApi(token, servicioModel)
+               val response = servicioService.deleteServicioFromApi(token, servicioModel)
                 response
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")

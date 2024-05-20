@@ -70,9 +70,13 @@ class LoginViewModel @Inject constructor(
                 navController.navigate(route = "home")
             }
         } else {
-            val result = authenticateUseCase.login("bb@gmail.com", "bb", RoleHolder.rol.value.toString())
+            val result = authenticateUseCase.login(/*"bb@gmail.com", "bb"*/"aa@gmail.com", "AA", RoleHolder.rol.value.toString())
             if (result) {
-                navController.navigate(route = "home")
+                if (RoleHolder.rol.value.toString() == "tutor") {
+                    navController.navigate(route = "home")
+                }else{
+                    navController.navigate(route = "perfilTrabajador")
+                }
             }
         }
     }

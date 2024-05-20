@@ -25,7 +25,7 @@ class ServicioService @Inject constructor(
         }
     }
 
-    suspend fun updateServicioFromApi(token: String, servicioModel: ServicioModel): ServicioResponse {
+    suspend fun updateServicioFromApi(token: String, servicioModel: ServicioModel): CustomResponse {
         return try {
             withContext(Dispatchers.IO) {
                 servicioApi.updateServicio(token, servicioModel.idOferta, servicioModel)
@@ -38,7 +38,10 @@ class ServicioService @Inject constructor(
     suspend fun deleteServicioFromApi(token: String, servicioModel: ServicioModel): CustomResponse {
         return try {
             withContext(Dispatchers.IO) {
-                servicioApi.deleteServicio(token, servicioModel.idOferta)
+                Log.e("LOOK AT ME id_oferta", servicioModel.idOferta.toString())
+                val response = servicioApi.deleteServicio(token, servicioModel.idOferta)
+                Log.e("LOOK AT ME", "${response}")
+                response
             }
         } catch (e: Exception) {
             Log.e("LOOK AT ME", "${e.message}")
@@ -61,6 +64,7 @@ class ServicioService @Inject constructor(
         return try {
             withContext(Dispatchers.IO) {
                 val servicios = mutableListOf<ServicioModel>()
+                Log.e("LOOK AT ME", "ENTROOOOOOOO")
                 val response = servicioApi.getServicios(token)
                 Log.e("LOOK AT ME", "${response}")
                 for (servicioResponse in response.data) {

@@ -39,6 +39,7 @@ import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioView
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 
+
 @Composable
 fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
                          navController: NavController
@@ -52,6 +53,7 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
     val isPrecioValido: Boolean by registroServicioViewModel.isPrecioValido.observeAsState(false)
     val servicio: String by registroServicioViewModel.servicio.observeAsState("")
     val rango: String by registroServicioViewModel.rango.observeAsState("")
+    val status: Int by registroServicioViewModel.status.observeAsState(0)
 
 
     Box(
@@ -149,14 +151,23 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
                     icon = Icons.Default.Error,
                     onConfirm = { registroServicioViewModel.onDialogConfirm(navController) },
                     dialogTitle = "Error",
-                    dialogText ="Ha habido un error al completar el registro. Recuerde registrar un servicio" +
-                            "para que su usuario sea visible para otros usuarios de la aplicación." +
-                            " Intentelo mas tarde"
+                    dialogText = mensajeDialogo(status)
+
                 )
 
                 LoginButton(text = "Finalizar",
                     onClick = {registroServicioViewModel.onPressRegistroServicio(navController)})
             }
         }
+    }
+}
+
+fun mensajeDialogo(status: Int): String {
+    when (status) {
+        400 -> return "Ha habido un error al registrar el servicio. Recuerde registrar" +
+                " al menos un servicio para que su usuario sea visible para otros" +
+                " usuarios de la aplicación.\n Intentelo mas tarde"
+        404 -> return "No se pueden crear dos ofertas con el mismo tipo de servicio"
+        else -> return "Se ha producido un error. Intentelo mas tarde"
     }
 }
