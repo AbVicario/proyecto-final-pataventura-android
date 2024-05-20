@@ -8,13 +8,14 @@ data class Mascota(
     var nombre: String,
     var numChip: String,
     var edad: String = "",
-    var imagen: String = "",
-    var tamanyo: Double,
-    var peso: Double,
+    var imagen: ByteArray? = null,
+    var tamanyo: String = "",
+    var peso: Double = 0.0,
     var tipo: String,
     var raza: String = "",
     var observacion: String = "",
-    var color: String
+    var color: String,
+    var sexo: String = ""
 )
 fun MascotaModel.toDomain() = Mascota(
     idMascota,
@@ -27,7 +28,8 @@ fun MascotaModel.toDomain() = Mascota(
     tipo,
     raza,
     observacion,
-    color
+    color,
+    sexo
 )
 fun MascotaEntity.toDomain() = Mascota(
     idMascota,
@@ -40,7 +42,8 @@ fun MascotaEntity.toDomain() = Mascota(
     tipo,
     raza,
     observacion,
-    color
+    color,
+    sexo
 )
 
 fun Mascota.toModel() = MascotaModel(
@@ -54,7 +57,8 @@ fun Mascota.toModel() = MascotaModel(
     tipo,
     raza,
     observacion,
-    color
+    color,
+    sexo
 )
 fun Mascota.toEntity() = MascotaEntity(
     idMascota,
@@ -67,5 +71,6 @@ fun Mascota.toEntity() = MascotaEntity(
     tipo,
     raza,
     observacion,
-    color
+    color,
+    sexo
 )

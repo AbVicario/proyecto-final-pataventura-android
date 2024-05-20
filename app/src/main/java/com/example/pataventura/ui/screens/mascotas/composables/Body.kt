@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pataventura.R
+import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.screens.home.composables.MyBoxMap
@@ -77,14 +79,14 @@ fun BodyMascotas(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(450.dp)
+                    .height(400.dp)
             ) {
                 MyBoxMap(currentPosition)
 
             }
 
             LazyRow(
-                Modifier.height(120.dp),
+                Modifier.height(180.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -92,9 +94,8 @@ fun BodyMascotas(
                     listaMascotas.getOrNull(index).let { mascota ->
                         if (mascota != null) {
                             MyBoxMascota(
-                                imagen = mascota.imagen,
-                                nombre = mascota.nombre,
-                                color = mascota.color
+                                mascota,
+                                navController
                             )
                             Spacer(modifier = Modifier.size(20.dp))
                         }
@@ -102,7 +103,11 @@ fun BodyMascotas(
                     if (listaMascotas.size - 1 == index) {
                         MyBoxAnyadirMascota(navController)
                     }
-
+                }
+                item {
+                    if (listaMascotas.isEmpty()) {
+                        MyBoxAnyadirMascota(navController)
+                    }
                 }
 
             }
@@ -130,23 +135,27 @@ fun MyBoxAnyadirMascota(navController: NavController) {
 }
 
 @Composable
-fun MyBoxMascota(imagen: String, nombre: String, color: String) {
+fun MyBoxMascota(mascota:Mascota, navController: NavController) {
     Box(
         modifier = Modifier
             .size(180.dp)
+            .background(Tierra, RoundedCornerShape(20.dp))
             .clip(RoundedCornerShape(20.dp))
+            .clickable {
+                navController.navigate("perfilMascota/"+mascota.idMascota)
+            }
     ) {
-        if (imagen.isEmpty()) {
+        if (mascota.imagen!!.isEmpty()) {
             Icon(
                 imageVector = Icons.Default.Pets,
                 contentDescription = "Icono mascota",
                 modifier = Modifier.fillMaxSize()
             )
         } else {
-            /*Image(painter = painterResource(id = imagen), contentDescription = "Imagen mascota",
+            Image(ImageConverter.byteArrayToImageBitmap(mascota.imagen!!), contentDescription = "Imagen mascota",
                 Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds,
-            )*/
+            )
         }
 
         Row(
@@ -162,10 +171,10 @@ fun MyBoxMascota(imagen: String, nombre: String, color: String) {
             Box(
                 modifier = Modifier
                     .size(25.dp)
-                    .background(obtenerColor(color), RoundedCornerShape(100f))
+                    .background(obtenerColor(mascota.color), RoundedCornerShape(100f))
             )
             CustomText(
-                text = nombre, color = Color.White,
+                text = mascota.nombre, color = Color.White,
                 fontSize = 24.sp, fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
             )
         }

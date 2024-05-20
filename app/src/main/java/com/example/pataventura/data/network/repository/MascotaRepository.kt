@@ -11,6 +11,7 @@ import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.domain.model.toDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.Response
 import javax.inject.Inject
 
 class MascotaRepository @Inject constructor(
@@ -57,10 +58,11 @@ class MascotaRepository @Inject constructor(
     suspend fun insertMascotaToDatabase(mascotaEntity: MascotaEntity) {
         return withContext(Dispatchers.IO) {
             try {
+                Log.e("LOOK AT ME--", mascotaEntity.toString())
                 mascotaDao.insertMascota(mascotaEntity)
-
             } catch (e: Exception) {
-                Log.e("LOOK AT ME", "${e.message}")
+                Log.e("LOOK AT ME--", "${e.message}")
+
             }
         }
     }

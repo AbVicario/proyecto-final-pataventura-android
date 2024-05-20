@@ -65,7 +65,8 @@ class MascotaService @Inject constructor(
                         mascotaResponse.tipo,
                         mascotaResponse.raza,
                         mascotaResponse.observacion,
-                        mascotaResponse.color
+                        mascotaResponse.color,
+                        mascotaResponse.sexo
                     )
                     mascotas.add(mascota)
                 }

@@ -20,7 +20,7 @@ class MascotaRegisterUseCase@Inject constructor(
         val token = tokenGetUseCase.getToken().token
         val response = mascotaRepository.registerMascotaFromApi(
             token, mascota.toModel())
-        if(response.status == 200){
+        if(response.status == 201){
             mascotaRepository.insertMascotaToDatabase(mascota.toEntity())
         }
         return response

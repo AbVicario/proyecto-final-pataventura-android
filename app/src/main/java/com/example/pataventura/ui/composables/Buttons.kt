@@ -1,8 +1,9 @@
 package com.example.pataventura.ui.composables
 
+import android.content.Context
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,20 +16,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Pets
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
@@ -44,16 +38,30 @@ import com.example.pataventura.ui.theme.Tierra
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.NavController
+import com.example.pataventura.R
+import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
-import com.example.pataventura.ui.theme.Verde30
-import com.example.pataventura.ui.theme.Verde55
 import com.example.pataventura.ui.theme.VerdeOliva
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.core.content.ContextCompat
 
 
 @Composable
@@ -157,11 +165,11 @@ fun IconButtonImage(
             .clip(RoundedCornerShape(150f))
             .background(Verde.copy(alpha = 0.2f))
             .clickable(
-                onClick = {  },
+                onClick = { },
                 enabled = true,
                 role = Role.Button,
 
-            ),
+                ),
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -176,31 +184,67 @@ fun IconButtonImage(
 
 @Composable
 fun IconButtonImageMascota(
-
+    registroMascotaViewModel: RegistroMascotaViewModel
 ) {
-    Box(
-        modifier = Modifier
-            .minimumInteractiveComponentSize()
-            .size(85.dp)
-            .clip(RoundedCornerShape(100f))
-            .background(Verde.copy(alpha = 0.2f))
-            .clickable(
-                onClick = {  },
-                enabled = true,
-                role = Role.Button,
+    val context = LocalContext.current
+    var selectedImageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        selectedImageBitmap = uri?.let { uri ->
+            val inputStream = context.contentResolver.openInputStream(uri)
+            inputStream?.use { stream ->
+                BitmapFactory.decodeStream(stream)?.asImageBitmap()
+            }
+        }
+    }
 
-                ),
+    Box ( modifier = Modifier
+        .minimumInteractiveComponentSize()
+        .size(85.dp)
+        .clip(RoundedCornerShape(100f))
+        .background(Verde.copy(alpha = 0.2f))
+        .clickable(onClick = {launcher.launch("image/*") }),
         contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            Icons.Default.Pets, "Imagen de perfil",
-            modifier = Modifier.size(80.dp),
-            tint=(Verde.copy(0.5f))
-        )
-        /*val contentColor = Verde
-        CompositionLocalProvider(LocalContentColor provides contentColor, content = content)*/
+    ){
+        if (selectedImageBitmap != null) {
+            registroMascotaViewModel.onImagenChange(selectedImageBitmap!!)
+            Image(
+                bitmap = selectedImageBitmap!!,
+                contentDescription ="Imagen de perfil",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape)
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.huella_registro),
+                contentDescription = "Imagen de perfil",
+                modifier = Modifier
+                    .size(65.dp)
+            )
+        }
+        /*FloatingActionButton(
+            onClick = {
+                launcher.launch("image/*")*/
+            },
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Editar")
+        }*/
     }
 }
 
+
+fun painterToImageBitmap(context: Context, @DrawableRes resId: Int): ImageBitmap {
+    val drawable = ContextCompat.getDrawable(context, resId) ?: throw IllegalArgumentException("Drawable not found")
+    val bitmap = (drawable as BitmapDrawable).bitmap
+    return bitmap.asImageBitmap()
+}
+/*
+fun uriToImageBitmap(context: Context, uri: Uri): ImageBitmap {
+    val inputStream = context.contentResolver.openInputStream(uri)
+    val bitmap = BitmapFactory.decodeStream(inputStream)
+    return bitmap.asImageBitmap()
+}*/
 
 

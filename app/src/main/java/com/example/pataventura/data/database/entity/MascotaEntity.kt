@@ -12,13 +12,14 @@ data class MascotaEntity(
     @ColumnInfo(name = "nombre") var nombre: String,
     @ColumnInfo(name = "num_chip") var numChip: String,
     @ColumnInfo(name = "edad") var edad: String = "",
-    @ColumnInfo(name = "imagen") var imagen: String = "",
-    @ColumnInfo(name = "tamanyo") var tamanyo: Double,
-    @ColumnInfo(name = "peso") var peso: Double,
+    @ColumnInfo(name = "imagen") var imagen: ByteArray? = null,
+    @ColumnInfo(name = "tamanyo") var tamanyo: String = "",
+    @ColumnInfo(name = "peso") var peso: Double = 0.0,
     @ColumnInfo(name = "tipo") var tipo: String,
     @ColumnInfo(name = "raza") var raza: String = "",
     @ColumnInfo(name = "observacion") var observacion: String = "",
-    @ColumnInfo(name = "color") var color: String
+    @ColumnInfo(name = "color") var color: String,
+    @ColumnInfo(name = "sexo") var sexo: String = ""
 ){
-    constructor() : this(0, "", "", "", "", 0.0, 0.0, "", "", "", Color.Black.toString())
+    constructor() : this(0, "", "", "", byteArrayOf(), "", 0.0, "", "", "", Color.Black.toString(), "")
 }
