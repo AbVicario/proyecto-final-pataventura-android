@@ -1,5 +1,6 @@
 package com.example.pataventura.ui.screens.regisrtroServicio
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -60,6 +61,9 @@ class RegistroServicioViewModel @Inject constructor(
         "17.5km", "20Km"
     )
 
+    private val _status = MutableLiveData<Int>()
+    val status: LiveData<Int> = _status
+
     private fun rangoAccion(servicio: String) {
         val itemsToAdd: MutableList<String> =
             when (servicio) {
@@ -93,7 +97,9 @@ class RegistroServicioViewModel @Inject constructor(
 
     fun onDialogConfirm(navController: NavController) {
         showDialog = false
-        navController.navigate(route = Destinations.Home.route)
+        if (navController.previousBackStackEntry?.destination?.route != Destinations.Servicio.route) {
+            navController.navigate(route = Destinations.Home.route)
+        }
 
     }
 
@@ -141,8 +147,18 @@ class RegistroServicioViewModel @Inject constructor(
                 val response = servicioRegisterUseCase.registroServicio(servicio)
 
                 if (response.ok) {
-                    navController.navigate(route = Destinations.Home.route)
+                    _servicio.postValue("")
+                    _descripcion.postValue("")
+                    _precio.postValue("")
+                    _rango.postValue("")
+                    if (navController.previousBackStackEntry?.destination?.route == Destinations.Servicio.route) {
+                        navController.navigate(route = Destinations.Servicio.route)
+                    } else {
+                        navController.navigate(route = Destinations.Home.route)
+                    }
+
                 } else {
+                    _status.postValue(response.status)
                     onOpenDialog()
                 }
 

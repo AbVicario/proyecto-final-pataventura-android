@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.pataventura.R
-import com.example.pataventura.ui.composables.IconBack
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
@@ -36,10 +35,9 @@ fun HeaderRegistroMascota() {
         )
         Box(
             //horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().padding(start=15.dp)
         ) {
             Row(Modifier.padding(top=10.dp)) {
-                IconBack()
                 Image(
                     painter = painterResource(id = R.drawable.nombre),
                     contentDescription = "Nombre",

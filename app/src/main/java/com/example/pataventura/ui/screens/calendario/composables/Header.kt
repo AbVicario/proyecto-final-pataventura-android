@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.pataventura.R
-import com.example.pataventura.ui.composables.IconBack
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
@@ -37,17 +36,27 @@ fun HeaderCalendario() {
         Image(
             painter = painterResource(id = R.drawable.nombre),
             contentDescription = "nombre aplicación",
-            Modifier.width(210.dp)
-                .height(60.dp)
-                .padding( top=10.dp)
-        )
-
-        Image(
-            painter = painterResource(id = R.drawable.imagen_header_home),
-            contentDescription = "Dos perros y un gato",
             Modifier
-                .fillMaxSize(0.71f).align(Alignment.BottomEnd).padding()
+                .width(220.dp)
+                .height(75.dp)
+                .padding(start = 20.dp)
+
         )
+        Row(
+            Modifier
+                .fillMaxSize()
+                .padding(start = 5.dp, top = 10.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.imagen_header_home),
+                contentDescription = "Dos perros y un gatoo",
+                Modifier
+                    .fillMaxSize(0.71f)
+                    .align(Alignment.Bottom)
+                    .padding()
+            )
+        }
 
     }
 }

@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.pataventura.data.database.entity.MascotaEntity
 import com.example.pataventura.data.model.MascotaModel
+import okhttp3.Response
 
 @Dao
 interface MascotaDao {

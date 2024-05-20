@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -22,28 +25,69 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import com.example.pataventura.R
+import com.example.pataventura.ui.composables.CampoObligatorioText
 import com.example.pataventura.ui.composables.CustomOutlinedTextContrato
 import com.example.pataventura.ui.composables.CustomOutlinedTextField
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDes
+import com.example.pataventura.ui.composables.CustomOutlinedTextFieldUpdate
+import com.example.pataventura.ui.composables.CustomOutlinedTextFieldUpdateDes
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
-fun BodyPerfilMascotas(perfilMascotaViewModel: PerfilMascotaViewModel,
-                       navController: NavController){
-    val raza : String by perfilMascotaViewModel.raza.observeAsState("")
-    val sexo : String by perfilMascotaViewModel.sexo.observeAsState("")
-    var colorMascota = Color.Blue
-    var nombreMascota = "Nombre"
+fun BodyPerfilMascotas(
+    perfilMascotaViewModel : PerfilMascotaViewModel,
+    navController : NavController
+) {
+    val nombre by perfilMascotaViewModel.nombre.observeAsState("")
+    val edad by perfilMascotaViewModel.edad.observeAsState("")
+    val raza by perfilMascotaViewModel.raza.observeAsState("")
+    val sexo by perfilMascotaViewModel.sexo.observeAsState("")
+    val color by perfilMascotaViewModel.color.observeAsState("")
+    val observacion by perfilMascotaViewModel.observacion.observeAsState("")
+    val tamanyo by perfilMascotaViewModel.tamanyo.observeAsState("")
+    val tipo by perfilMascotaViewModel.tipo.observeAsState("")
+    val peso by perfilMascotaViewModel.peso.observeAsState("")
+    val numChip by perfilMascotaViewModel.numChip.observeAsState("")
+    val editMode by perfilMascotaViewModel.editMode.observeAsState(false)
+    val tipoEmpty by perfilMascotaViewModel.tipoEmpty.observeAsState(false)
+    val numChipEmpty by perfilMascotaViewModel.numChipEmpty.observeAsState(false)
+
+    val itemsTipo = listOf<String>(
+        "Perro",
+        "Gato"
+    )
+    val itemsEdad = listOf<String>(
+        "Cachorro",
+        "Adulto",
+        "Senior"
+    )
+
+    val itemsTamanyo = listOf<String>(
+        "Pequeño",
+        "Mediano",
+        "Grande"
+    )
+
+    val itemsSexo = listOf<String>(
+        "Macho",
+        "Hembra"
+    )
+
+
+
     Box() {
         Image(
             painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
@@ -57,114 +101,265 @@ fun BodyPerfilMascotas(perfilMascotaViewModel: PerfilMascotaViewModel,
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            RowNombre(colorMascota, nombreMascota)
+            RowNombre(perfilMascotaViewModel.obtenerColor(color), nombre)
             Spacer(modifier = Modifier.size(10.dp))
-            ColumnCaracteristicas(perfilMascotaViewModel,raza, sexo)
+            LazyColumnCaracteristicas(perfilMascotaViewModel, editMode, numChip, numChipEmpty, raza,
+                sexo, observacion, tipo, tipoEmpty, itemsTipo, itemsEdad, itemsTamanyo,
+                itemsSexo, edad, tamanyo, peso)
+        }
+    }
+
+
+}
+
+@Composable
+fun LazyColumnCaracteristicas(
+    perfilMascotaViewModel: PerfilMascotaViewModel,
+    editMode: Boolean,
+    numChip: String,
+    numChipEmpty: Boolean,
+    raza: String,
+    sexo: String,
+    observacion: String,
+    tipo: String,
+    tipoEmpty: Boolean,
+    itemsTipo: List<String>,
+    itemsEdad: List<String>,
+    itemsTamanyo: List<String>,
+    itemsSexo: List<String>,
+    edad: String,
+    tamanyo: String,
+    peso: String
+) {
+    LazyColumn() {
+        item {
+            CustomOutlinedTextFieldUpdate(
+                valueAux = numChip,
+                onValueChange = { perfilMascotaViewModel.onNumChipChange(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(90.dp),
+                enabled = editMode,
+                readOnly = !editMode,
+                placeholder = "NºChip",
+                supportingText = { if (!numChipEmpty) CampoObligatorioText() },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true
+            )
+            RowTipoRaza(
+                perfilMascotaViewModel,
+                itemsTipo,
+                tipo,
+                raza,
+                tipoEmpty,
+                editMode
+            )
+            RowEdadSexo(perfilMascotaViewModel, editMode, itemsEdad, itemsSexo, edad!!, sexo)
+            CustomOutlinedTextFieldUpdate(
+                valueAux = observacion,
+                onValueChange = { perfilMascotaViewModel.onObservacionChange(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp),
+                enabled = editMode,
+                readOnly = !editMode,
+                placeholder = "Observaciones",
+                supportingText = {},
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = false
+            )
+            RowTamanyoPeso(perfilMascotaViewModel, editMode, tamanyo, itemsTamanyo, peso)
+
+
         }
     }
 }
 
 @Composable
-fun ColumnCaracteristicas(perfilMascotaViewModel: PerfilMascotaViewModel,
-                          raza:String, sexo: String) {
-    var razas = listOf("pekines", "bichon")
-    var sexos = listOf("macho", "hembra")
-    Column (verticalArrangement = Arrangement.SpaceBetween){
-        CustomOutlinedTextFieldDes(
-            text = raza,
-            items = razas,
-            onValueChange = {perfilMascotaViewModel.onRazaChange(it)},
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp),
-            enabled = true,
-            readOnly = false,
-            placeholder = "Raza",
-            supportingText = {},
-            singleLine = true
-        )
-        Spacer(modifier = Modifier.size(10.dp))
-        Row (){
-            Box(modifier = Modifier.fillMaxWidth(0.5f)){
-                CustomOutlinedTextFieldDes(
-                    text = sexo,
-                    items = sexos,
-                    onValueChange = {perfilMascotaViewModel.onSexoChange(it)},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    enabled = true,
-                    readOnly = false,
-                    placeholder = "Sexo",
-                    supportingText = {},
-                    singleLine = true
-                )
-            }
-            Spacer(modifier = Modifier.width(10.dp))
-            CustomOutlinedTextField(
-                onValueChange = {},
-                Modifier.fillMaxWidth().height(100.dp),
-                enabled = true,
-                readOnly = false,
-                placeholder = "Peso",
-                supportingText = {},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+fun RowTipoRaza(
+    perfilMascotaViewModel: PerfilMascotaViewModel,
+    itemsTipo: List<String>,
+    tipo: String,
+    raza: String,
+    tipoEmpty: Boolean,
+    editMode: Boolean
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .height(90.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Box(modifier = Modifier
+            .fillMaxWidth(0.45f)
+            .padding(horizontal = 5.dp)) {
+            CustomOutlinedTextFieldUpdateDes(
+                valueAux = tipo,
+                items = itemsTipo,
+                onValueChange = {
+                    perfilMascotaViewModel.onTipoChange(it)
+                    perfilMascotaViewModel.onRazaChange(" ")},
+                Modifier
+                    .fillMaxWidth()
+                    .height(90.dp),
+                enabled = editMode,
+                readOnly = !editMode,
+                placeholder = "Tipo",
+                supportingText = { if (!tipoEmpty) CampoObligatorioText() },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
         }
-        Spacer(modifier = Modifier.size(10.dp))
-        Row (Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween){
-            Box(Modifier.fillMaxWidth(0.3f)){
-                CustomOutlinedTextField(
-                    onValueChange = {},
-                    Modifier.fillMaxWidth().height(100.dp),
-                    enabled = true,
-                    readOnly = false,
-                    placeholder = "Edad",
-                    supportingText = {},
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    singleLine = true
-                )
-            }
-            Spacer(modifier = Modifier.width(10.dp))
-            CustomOutlinedTextField(
-                onValueChange = {},
-                Modifier.fillMaxWidth().height(100.dp),
-                enabled = true,
-                readOnly = false,
-                placeholder = "Nº Chip",
-                supportingText = {},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp)) {
+            CustomOutlinedTextFieldUpdateDes(
+                valueAux = raza,
+                items = perfilMascotaViewModel.listaRaza,
+                onValueChange = { perfilMascotaViewModel.onRazaChange(it) },
+                Modifier
+                    .fillMaxWidth()
+                    .height(90.dp),
+                enabled = editMode,
+                readOnly = !editMode,
+                placeholder = "Raza",
+                supportingText = {  },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
         }
-        Spacer(modifier = Modifier.size(10.dp))
-        CustomOutlinedTextField(
-            onValueChange = {},
-            Modifier.fillMaxWidth().height(220.dp),
-            enabled = true,
-            readOnly = false,
-            placeholder = "Descrpción",
-            supportingText = {},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            singleLine = false
-        )
+    }
+
+}
+
+@Composable
+fun RowEdadSexo(
+    perfilMascotaViewModel: PerfilMascotaViewModel,
+    editMode: Boolean,
+    itemsEdad: List<String>,
+    itemsSexo: List<String>,
+    edad: String,
+    sexo: String
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .height(90.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Box(modifier = Modifier
+            .fillMaxWidth(0.45f)
+            .padding(horizontal = 5.dp)) {
+            CustomOutlinedTextFieldUpdateDes(
+                valueAux = edad,
+                items = itemsEdad,
+                onValueChange = {
+                    perfilMascotaViewModel.onEdadChange(it)},
+                Modifier
+                    .fillMaxWidth()
+                    .height(90.dp),
+                enabled = editMode,
+                readOnly = !editMode,
+                placeholder = "Edad",
+                supportingText = {  },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
+            )
+        }
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp)) {
+            CustomOutlinedTextFieldUpdateDes(
+                valueAux = sexo,
+                items = itemsSexo,
+                onValueChange = { perfilMascotaViewModel.onSexoChange(it) },
+                Modifier
+                    .fillMaxWidth()
+                    .height(90.dp),
+                enabled = editMode,
+                readOnly = !editMode,
+                placeholder = "Sexo",
+                supportingText = {  },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
+            )
+        }
     }
 }
 
 @Composable
-fun RowNombre(colorMascota: Color, nonbreMascota:String) {
-    Row(horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically){
+fun RowTamanyoPeso(
+    perfilMascotaViewModel: PerfilMascotaViewModel,
+    editMode: Boolean,
+    tamanyo: String,
+    itemsTamanyo: List<String>,
+    peso: String
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .height(90.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Box(modifier = Modifier
+            .fillMaxWidth(0.45f)
+            .padding(horizontal = 5.dp)) {
+            CustomOutlinedTextFieldUpdateDes(
+                valueAux = tamanyo,
+                items = itemsTamanyo,
+                onValueChange = {
+                    perfilMascotaViewModel.onTamanyoChange(it)},
+                Modifier
+                    .fillMaxWidth()
+                    .height(90.dp),
+                enabled = editMode,
+                readOnly = !editMode,
+                placeholder = "Tamaño",
+                supportingText = {  },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                singleLine = true
+            )
+        }
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp)) {
+            CustomOutlinedTextFieldUpdate(
+                valueAux = peso,
+                onValueChange = { perfilMascotaViewModel.onPesoChange(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(90.dp),
+                enabled = editMode,
+                readOnly = !editMode,
+                placeholder = "NºChip",
+                supportingText = { },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true
+            )
+        }
+    }
+}
+
+@Composable
+fun RowNombre(colorMascota : Color, nonbreMascota : String) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Box(
             Modifier
                 .size(40.dp)
-                .background(colorMascota, RoundedCornerShape(100f))){
+                .background(colorMascota, RoundedCornerShape(100f))
+        ) {
         }
         Spacer(modifier = Modifier.size(15.dp))
 
-        CustomText(text = nonbreMascota, color = Verde, fontSize = 30.sp,
-            fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily)
+        CustomText(
+            text = nonbreMascota, color = Verde, fontSize = 30.sp,
+            fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+        )
     }
 }

@@ -1,5 +1,6 @@
 package com.example.pataventura.domain.useCase.mascotaUseCase
 
+import android.util.Log
 import com.example.pataventura.data.network.repository.MascotaRepository
 import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.domain.useCase.tokenUseCase.TokenGetUseCase
@@ -13,6 +14,7 @@ class GetMascotasUseCase @Inject constructor(
         return try {
             val token = tokenGetUseCase.getToken().token
             var listaMascotas = repository.getMascotasFromDatabase()
+            Log.d("GetMascotasUseCase", "getMascotas: $listaMascotas")
             if (listaMascotas.isEmpty()) {
                 listaMascotas = repository.getMascotasFromApi(token)
             }

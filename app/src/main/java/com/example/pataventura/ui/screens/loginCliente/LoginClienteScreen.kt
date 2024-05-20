@@ -36,7 +36,6 @@ import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.HeaderLogin
-import com.example.pataventura.ui.composables.IconBack
 import com.example.pataventura.ui.composables.LoginButton
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde

@@ -28,16 +28,16 @@ interface ApiServicio {
         @Header("Authorization") token: String
     ): ServicioResponse
 
-    @PUT("updateServicio/{id_servicio}")
+    @PUT("/api/cliente/oferta/{id_oferta}")
     suspend fun updateServicio(
         @Header("Authorization") token: String,
-        @Path("id") idServicio: Int,
+        @Path("id_oferta") idServicio: Int,
         @Body servicioModel: ServicioModel
-    ): ServicioResponse
+    ): CustomResponse
 
-    @DELETE("/{id}")
+    @DELETE("/api/cliente/oferta/{id_oferta}")
     suspend fun deleteServicio(
         @Header("Authorization") token: String,
-        @Path("id") idServicio: Int
+        @Path("id_oferta") idServicio: Int
     ): CustomResponse
 }

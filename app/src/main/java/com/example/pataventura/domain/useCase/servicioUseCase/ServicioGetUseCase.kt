@@ -1,5 +1,6 @@
 package com.example.pataventura.domain.useCase.servicioUseCase
 
+import android.util.Log
 import com.example.pataventura.data.network.repository.ServicioRepository
 import com.example.pataventura.domain.model.Servicio
 import com.example.pataventura.domain.model.toEntity
@@ -13,15 +14,21 @@ class ServicioGetUseCase  @Inject constructor(
 ) {
     suspend fun getServicios(): List<Servicio> {
         return try {
+            var listaServicios : List<Servicio>
             val token = tokenGetUseCase.getToken().token
-            var listaServicios = servicioRepository.getServiciosFromDatabase()
+            listaServicios = servicioRepository.getServiciosFromDatabase()
+            Log.e("ser", "getServicios: $listaServicios")
             if (listaServicios.isEmpty()) {
                 listaServicios = servicioRepository.getServiciosFromApi(token)
+                Log.e("ser", "getServicios: $listaServicios")
+
                 if (listaServicios.isNotEmpty()){
                     for (servicio in listaServicios) {
                         val servicioEntity = servicio.toEntity()
                         servicioRepository.insertServicioToDatabase(servicioEntity)
                     }
+                } else {
+                    listaServicios = emptyList()
                 }
             }
             listaServicios

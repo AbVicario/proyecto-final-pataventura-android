@@ -96,6 +96,7 @@ dependencies {
 
     //permission
     implementation ("com.google.accompanist:accompanist-permissions:0.31.3-beta")
+
 }
 
 kapt {

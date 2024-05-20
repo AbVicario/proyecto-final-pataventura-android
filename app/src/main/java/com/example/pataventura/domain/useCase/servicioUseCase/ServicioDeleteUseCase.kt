@@ -1,5 +1,6 @@
 package com.example.pataventura.domain.useCase.servicioUseCase
 
+import android.util.Log
 import com.example.pataventura.data.network.repository.ServicioRepository
 import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.domain.model.Servicio
@@ -14,7 +15,9 @@ class ServicioDeleteUseCase@Inject constructor(
 ) {
 
     suspend fun deleteServicio(servicio: Servicio) : CustomResponse{
+        //servicioRepository.deleteServicioFromDatabase(servicio.idOferta)
         val token = tokenGetUseCase.getToken().token
+        Log.d("token",token)
         val response = servicioRepository.deleteServicioFromApi(token,servicio.toModel())
         if(response.status ==200){
             servicioRepository.deleteServicioFromDatabase(servicio.idOferta)

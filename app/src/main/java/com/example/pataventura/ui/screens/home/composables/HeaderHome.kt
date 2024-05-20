@@ -45,7 +45,7 @@ fun HeaderHome(homeViewModel: HomeViewModel){
         HeaderBox()
 
         Image(painter = painterResource(id = R.drawable.imagen_header_home),
-            contentDescription = "Dos perros y un gato",
+            contentDescription = "Dos perros y un gatoo",
             Modifier.align(Alignment.BottomEnd).fillMaxSize(0.71f))
 
         CustomText(text = "¡Hola $nombre! ", color = Color.White , fontSize = 30.sp,

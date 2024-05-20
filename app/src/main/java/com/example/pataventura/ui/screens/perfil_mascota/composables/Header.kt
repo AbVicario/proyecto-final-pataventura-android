@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -41,8 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.ColumnBotonesMascota
-import com.example.pataventura.ui.composables.CustomText
-import com.example.pataventura.ui.composables.IconBack
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
@@ -50,7 +49,9 @@ import com.example.pataventura.ui.theme.Verde
 @SuppressLint("Range")
 @Composable
 fun HeaderPerfilMascota(perfilMascotaViewModel: PerfilMascotaViewModel) {
-    val image by perfilMascotaViewModel.image.observeAsState()
+    val imagen by perfilMascotaViewModel.imagen.observeAsState(initial = ImageBitmap(1,1))
+    val editMode by perfilMascotaViewModel.editMode.observeAsState()
+
     Box(
         Modifier
             .fillMaxWidth()
@@ -59,21 +60,18 @@ fun HeaderPerfilMascota(perfilMascotaViewModel: PerfilMascotaViewModel) {
     ) {
 
         Image(
-            painter = painterResource(id = R.drawable.imagen_tyrion),
+            imagen!!,
             contentDescription = "Imagen Mascota",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .fillMaxSize()
                 .clip(shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
         )
-        Column(modifier = Modifier.align(Alignment.TopStart)) {
-            IconBack()
-        }
         Box(
             Modifier
                 .align(Alignment.TopEnd)
                 .width(55.dp)) {
-            ColumnBotonesMascota(if (image != null) false else true)
+            ColumnBotonesMascota(if (imagen != null) false else true)
         }
     }
 

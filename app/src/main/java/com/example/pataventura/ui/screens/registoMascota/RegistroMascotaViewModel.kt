@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
+import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.domain.useCase.mascotaUseCase.MascotaRegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,26 +40,40 @@ class RegistroMascotaViewModel @Inject constructor(
     val numChipEmpty: LiveData<Boolean> = _numChipEmpty
     private val _colorEmpty = MutableLiveData<Boolean>()
     val colorEmpty: LiveData<Boolean> = _colorEmpty
+
+
     private val _nombre = MutableLiveData<String>()
     val nombre: LiveData<String> = _nombre
+    private val _color = MutableLiveData<String>()
+    val color: LiveData<String> = _color
+    private val _tamanyo = MutableLiveData<String>("")
+    val tamanyo: LiveData<String> = _tamanyo
+    private val _sexo = MutableLiveData<String>("")
+    val sexo: LiveData<String> = _sexo
     private val _tipo = MutableLiveData<String>()
     val tipo: LiveData<String> = _tipo
-    private val _raza = MutableLiveData<String>()
+    private val _raza = MutableLiveData<String>("")
     val raza: LiveData<String> = _raza
-    private val _edad = MutableLiveData<String>()
+    private val _edad = MutableLiveData<String>("")
     val edad: LiveData<String> = _edad
-    private val _peso = MutableLiveData<String>()
-    val peso: LiveData<String> = _peso
-    private val _descripcion = MutableLiveData<String>()
-    val descripcion: LiveData<String> = _descripcion
+    private val _peso = MutableLiveData<Double>(0.0)
+    val peso: LiveData<Double> = _peso
+    private val _observacion = MutableLiveData<String>("")
+    val observacion: LiveData<String> = _observacion
+    private val _numChip = MutableLiveData<String>()
+    val numChip: LiveData<String> = _numChip
+    private val _imagen = MutableLiveData<ImageBitmap>()
+    val imagen: LiveData<ImageBitmap> = _imagen
+
+
     private val _listaRaza: ObservableList<String> = ObservableArrayList<String>().apply {
         add("Campo Vacio")
     }
     val listaRaza: ObservableList<String> = _listaRaza
-    private val _numChip = MutableLiveData<String>()
-    val numChip: LiveData<String> = _numChip
+
     private val _colorAsig = MutableLiveData<String>()
     val colorAsig: LiveData<String> = _colorAsig
+
     private val _isTipoElegido = MutableLiveData<Boolean>()
     val isTipoElegido: LiveData<Boolean> = _isTipoElegido
 
@@ -101,21 +117,34 @@ class RegistroMascotaViewModel @Inject constructor(
         _edad.postValue(edad)
     }
 
-    fun onPesoChange(peso: String) {
+    fun onPesoChange(peso: Double) {
         _peso.postValue(peso)
     }
 
-    fun onDescripcionChange(descripcion: String) {
-        _descripcion.postValue(descripcion)
+    fun onObservacionChange(observacion: String) {
+        _observacion.postValue(observacion)
     }
 
     fun onNumChipChange(numChip: String) {
         _numChip.postValue(numChip)
     }
 
-    fun oncolorAsigChange(colorAsig: String) {
+    fun onColorAsigChange(colorAsig: String) {
         _colorAsig.postValue(colorAsig)
     }
+
+    fun onImagenChange(imagen: ImageBitmap) {
+        _imagen.postValue(imagen)
+    }
+
+    fun onTamanyoChange(tamanyo: String) {
+        _tamanyo.postValue(tamanyo)
+    }
+
+    fun onSexoChange(sexo: String) {
+        _sexo.postValue(sexo)
+    }
+
 
     fun onDialogConfirm(navController: NavController) {
         showDialog = false
@@ -154,21 +183,41 @@ class RegistroMascotaViewModel @Inject constructor(
                 && _tipoEmpty.value == false
             ) {
 
-                val mascota = Mascota(
-                    0, _nombre.value!!, _numChip.value!!,
-                    _edad.value!!, "", tamanyo = 0.0, peso = 0.0, _tipo.value!!,
-                    _raza.value!!, observacion = "", _colorAsig.value!!
-                )
-                val response = mascotaRegisterUseCase.registroMascota(mascota)
-                if (response.ok) {
-                    Log.d("RegistroMascotaViewModel", "respuesta: $response")
-                    Toast.makeText(context, "Mascota registrada", Toast.LENGTH_SHORT).show()
-                    navController.navigate(route = Destinations.Home.route)
-                } else {
-                    onOpenDialog()
+                try {
+                    val mascota = Mascota(
+                        0, _nombre.value!!, _numChip.value!!,
+                        _edad.value!!, ImageConverter.imageBitmapToByteArray(_imagen.value!!),
+                        _tamanyo.value!!, _peso.value!!, _tipo.value!!,
+                        _raza.value!!, _observacion.value!!, _colorAsig.value!!, _sexo.value!!
+                    )
+                    val response = mascotaRegisterUseCase.registroMascota(mascota)
+                    if (response.ok) {
+                        limpiarCampos()
+
+                        Log.d("RegistroMascotaViewModel", "respuesta: $response")
+                        Toast.makeText(context, "Mascota registrada", Toast.LENGTH_SHORT).show()
+                        navController.navigate(route = Destinations.Home.route)
+                    } else {
+                        onOpenDialog()
+                    }
+                } catch (e: Exception) {
+                    Log.d("RegistroMascotaViewModel", "error: $e")
                 }
+
             }
         }
     }
 
+    private fun limpiarCampos() {
+        _nombre.postValue("")
+        _numChip.postValue("")
+        _tipo.postValue("")
+        _colorAsig.postValue("")
+        _tamanyo.postValue("")
+        _peso.postValue(0.0)
+        _observacion.postValue("")
+        _sexo.postValue("")
+        _raza.postValue("")
+        _edad.postValue("")
+    }
 }

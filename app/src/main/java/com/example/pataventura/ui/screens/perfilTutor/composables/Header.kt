@@ -69,9 +69,6 @@ fun HeaderPerfilTutor(
                 tint = Color.White
             )
         }
-        /*Column(modifier = Modifier.align(Alignment.TopStart)){
-            IconBack()
-        }*/
         Box(
             Modifier
                 .align(Alignment.TopEnd)

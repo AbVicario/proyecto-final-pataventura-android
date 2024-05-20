@@ -9,6 +9,7 @@ import com.example.pataventura.data.model.ServicioModel
 import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Servicio
 import com.example.pataventura.domain.model.Tutor
+import com.example.pataventura.domain.useCase.servicioUseCase.ServicioDeleteUseCase
 import com.example.pataventura.domain.useCase.servicioUseCase.ServicioGetUseCase
 import com.example.pataventura.domain.useCase.servicioUseCase.ServicioRegisterUseCase
 import com.example.pataventura.domain.useCase.servicioUseCase.ServicioUpdateUseCase
@@ -19,77 +20,74 @@ import javax.inject.Inject
 @HiltViewModel
 class ServicioViewModel @Inject constructor(
     private val getServicioUseCase: ServicioGetUseCase,
-    private val servicioUpdateUseCase: ServicioUpdateUseCase
+    private val servicioUpdateUseCase: ServicioUpdateUseCase,
+    private val servicioDeleteUseCase: ServicioDeleteUseCase
 ) : ViewModel() {
-
 
     private val _listaServicios = MutableLiveData<List<Servicio>>()
     val listaServicios: LiveData<List<Servicio>> = _listaServicios
 
-    private val _isPrecio = MutableLiveData<Boolean>()
-    val isPrecio: LiveData<Boolean> = _isPrecio
+    private val _servicioStates = MutableLiveData<Map<Int, ServicioState>>()
+    val servicioStates: LiveData<Map<Int, ServicioState>> = _servicioStates
 
-    private val _isDescripcion = MutableLiveData<Boolean>()
-    val isDescripcion: LiveData<Boolean> = _isDescripcion
 
-    private val _isRadio = MutableLiveData<Boolean>()
-    val isRadio: LiveData<Boolean> = _isRadio
-
-    private val _precio = MutableLiveData<String>()
-    val precio: LiveData<String> = _precio
-
-    private val _descripcion = MutableLiveData<String>()
-    val descripcion: LiveData<String> = _descripcion
-
-    private val _radio = MutableLiveData<String>()
-    val radio: LiveData<String> = _radio
-
-    private val _editMode = MutableLiveData<Boolean>()
-    val editMode: LiveData<Boolean> = _editMode
-
-    fun onValueChangePrecio(precio: String) {
-        _precio.postValue(precio)
-
-    }
-
-    fun onValueChangeDescripcion(descripcion: String) {
-        _descripcion.postValue(descripcion)
-    }
-
-    fun onValueChangeRadio(radio: String) {
-        _radio.postValue(radio)
-
-    }
-    fun pintarServicios(){
+    fun pintarServicios() {
         viewModelScope.launch {
             val servicios = getServicioUseCase.getServicios()
-            if(servicios.isNotEmpty()){
+            if (servicios.isNotEmpty()) {
                 _listaServicios.postValue(servicios)
+                val initialStates = servicios.associateBy({ it.idOferta }, { ServicioState(it) })
+                _servicioStates.postValue(initialStates)
             }
         }
     }
 
-    fun onSave(navController: NavController, idServicio: Int, tipo: String) {
+    fun onValueChangePrecio(id: Int, precio: String) {
+        updateServicioState(id) { it.copy(precio = precio) }
+    }
+
+    fun onValueChangeDescripcion(id: Int, descripcion: String) {
+        updateServicioState(id) { it.copy(descripcion = descripcion) }
+    }
+
+    fun onValueChangeRadio(id: Int, radio: String) {
+        updateServicioState(id) { it.copy(radio = radio) }
+    }
+
+    fun onValueChangeEditMode(id: Int, edit: Boolean) {
+        updateServicioState(id) { it.copy(editMode = edit) }
+    }
+
+    private fun updateServicioState(id: Int, update: (ServicioState) -> ServicioState) {
+        _servicioStates.value = _servicioStates.value?.toMutableMap()?.apply {
+            this[id] = update(this[id] ?: ServicioState())
+        }
+    }
+
+    fun onSave(navController: NavController, servicio: Servicio) {
         viewModelScope.launch {
-            if (validarCampos()) {
+            val estado = _servicioStates.value?.get(servicio.idOferta) ?: return@launch
+            if (validarCampos(estado)) {
                 val response = servicioUpdateUseCase.updateServicio(
                     Servicio(
-                        idOferta = idServicio,
-                        tipo = tipo,
-                        precio = precio.value!!.toFloat(),
-                        descripcion = _descripcion.value.toString(),
-                        radio = formatRadio(_radio.value.toString(), tipo),
-
+                        idOferta = servicio.idOferta,
+                        tipo = servicio.tipo,
+                        precio = estado.precio.toFloat(),
+                        descripcion = estado.descripcion,
+                        radio = formatRadio(estado.radio, servicio.tipo),
                     )
                 )
-                if(response.ok){
+                if (response.ok) {
+                    onValueChangeEditMode(servicio.idOferta, false)
                     navController.navigate("home")
                 }
             }
         }
     }
 
-
+    private fun validarCampos(estado: ServicioState): Boolean {
+        return estado.precio.isNotEmpty() && estado.descripcion.isNotEmpty() && estado.radio.isNotEmpty()
+    }
 
     private fun formatRadio(radio: String, tipo: String): Int {
         val distancia: Int
@@ -102,19 +100,21 @@ class ServicioViewModel @Inject constructor(
         return distancia
     }
 
-    private fun validarCampos(): Boolean {
-        val isValid = true
-        if (_precio.value.isNullOrEmpty()) {
-            !isValid
+    fun onDelete(servicio: Servicio) {
+        viewModelScope.launch {
+            val response = servicioDeleteUseCase.deleteServicio(servicio)
+            if (response.ok) {
+                _listaServicios.postValue(getServicioUseCase.getServicios())
+            }
         }
-        if (_descripcion.value.isNullOrEmpty()) {
-            !isValid
-        }
-        if (_radio.value.isNullOrEmpty()) {
-            !isValid
-        }
-        return isValid
     }
 
+    data class ServicioState(
+        val servicio: Servicio = Servicio(),
+        val precio: String = servicio.precio.toString(),
+        val descripcion: String = servicio.descripcion,
+        val radio: String = servicio.radio.toString(),
+        val editMode: Boolean = false
+    )
 
 }
