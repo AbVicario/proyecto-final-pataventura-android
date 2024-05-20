@@ -4,9 +4,12 @@ import LoginScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.pataventura.ui.screens.calendario.CalendarioScreen
 import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
 import com.example.pataventura.ui.screens.contratacion.ContratacionScreen
@@ -58,12 +61,12 @@ fun NavigationHost(
     perfilTutorViewModel: PerfilTutorViewModel,
     servicioViewModel: ServicioViewModel
 
-    ) {
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = Destinations.LoginCliente.route
-        //startDestination = Destinations.Servicio.route
+        //startDestination = Destinations.RegisterMascota.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -104,8 +107,18 @@ fun NavigationHost(
         composable(Destinations.Mascotas.route) {
             MascotasScreen(navController, mascotasViewModel, homeViewModel)
         }
-        composable(Destinations.PerfilMascota.route) {
+        composable(route = Destinations.PerfilMascota.route + "/{id_mascota}",
+            arguments = listOf(navArgument("id_mascota") { type = NavType.IntType })
+        ) {
+            val idMascota = it.arguments?.getInt("id_mascota")
+
+            if (idMascota == null) {
+                MascotasScreen(navController, mascotasViewModel, homeViewModel)
+
+                return@composable
+            }
             PerfilMascotaScreen(navController, perfilMascotaViewModel)
+            perfilMascotaViewModel.setMascotaId(idMascota)
         }
         composable(Destinations.PerfilTutor.route) {
             PerfilTutorScreen(navController, perfilTutorViewModel)

@@ -16,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.pataventura.R
-import com.example.pataventura.ui.composables.IconBack
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
@@ -37,7 +36,6 @@ fun HeaderRegistroServicio() {
             modifier = Modifier.fillMaxSize()
         ) {
             Row(Modifier.padding(top=10.dp)) {
-                IconBack()
                 Image(
                     painter = painterResource(id = R.drawable.nombre),
                     contentDescription = "Nombre",
