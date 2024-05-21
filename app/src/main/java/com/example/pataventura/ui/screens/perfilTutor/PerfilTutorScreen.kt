@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pataventura.di.RoleHolder
@@ -34,7 +35,6 @@ fun PerfilTutorScreen(
 ) {
     var selectedIcon by remember { mutableStateOf(Icons.Default.Person) }
     val editMode by perfilTutorViewModel.editMode.observeAsState(false)
-    val image by perfilTutorViewModel.image.observeAsState()
 
     LaunchedEffect (Unit){
         perfilTutorViewModel.printUserLaunch()
@@ -51,13 +51,12 @@ fun PerfilTutorScreen(
         ) {
             HeaderPerfilTutor(
                 editMode,
-                image,
                 perfilTutorViewModel,
                 navController
             )
             Spacer(modifier = Modifier.size(20.dp))
             BodyPerfilTutor(
-                editMode, image, perfilTutorViewModel, navController
+                editMode, perfilTutorViewModel, navController
             )
         }
 

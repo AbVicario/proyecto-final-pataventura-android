@@ -77,10 +77,10 @@ fun BodyLoginCliente(navController: NavController, loginClienteViewModel:LoginCl
                 fontWeight = FontWeight.Bold,
                 fontFamily = CustomFontFamily
             )
-            LoginButton(text = "Tutor",
+            LoginButton(text = "Tutor", null,
                 onClick ={ loginClienteViewModel.onPressLoginTutorButton(navController)}
             )
-            LoginButton(text = "Cuidador",
+            LoginButton(text = "Cuidador", null,
                 onClick = {
                     loginClienteViewModel.onPressLoginCuidadorButton(navController)}
             )

@@ -20,7 +20,7 @@ class CuidadorUpdateUseCase @Inject constructor(
             val token = tokenRepository.getTokenFromDatabase()
             val response = cuidadorRepository.updateCuidadorFromApi(token.token, cuidador.toModel())
             if (response.status == 200) {
-                cuidador.idUsuario = response.data.idUsuario
+               // cuidador.idUsuario = response.data.idUsuario
                 cuidadorRepository.updateCuidadorFromDatabase(cuidador.toEntity())
             }
             return response

@@ -1,10 +1,13 @@
 package com.example.pataventura.ui.screens.perfil_mascota
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.LiveData
@@ -16,16 +19,19 @@ import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.domain.useCase.mascotaUseCase.MascotaGetUseCase
+import com.example.pataventura.domain.useCase.mascotaUseCase.MascotaUpdateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PerfilMascotaViewModel @Inject constructor(
-    private val getMascotaUseCase: MascotaGetUseCase
+    private val getMascotaUseCase: MascotaGetUseCase,
+    private val updateMascotaUseCase: MascotaUpdateUseCase
 ) : ViewModel() {
 
-    private val _editMode = MutableLiveData<Boolean>(false)
+    private val _editMode = MutableLiveData<Boolean>()
     val editMode: LiveData<Boolean> = _editMode
 
     private val _mascota = MutableLiveData<Mascota>()
@@ -64,7 +70,7 @@ class PerfilMascotaViewModel @Inject constructor(
     val observacion: LiveData<String> = _observacion
     private val _numChip = MutableLiveData<String>()
     val numChip: LiveData<String> = _numChip
-    private val _imagen = MutableLiveData<ImageBitmap>()
+    private val _imagen = MutableLiveData(ImageBitmap(1, 1))
     val imagen: LiveData<ImageBitmap> = _imagen
 
 
@@ -102,10 +108,6 @@ class PerfilMascotaViewModel @Inject constructor(
         _listaRaza.addAll(itemsToAdd)
     }
 
-    fun onNombreChange(nombre: String) {
-        _nombre.postValue(nombre)
-    }
-
     fun onTipoChange(tipo: String) {
         _tipo.postValue(tipo)
         pintarItemsRaza(tipo)
@@ -129,10 +131,6 @@ class PerfilMascotaViewModel @Inject constructor(
 
     fun onNumChipChange(numChip: String) {
         _numChip.postValue(numChip)
-    }
-
-    fun onColorAsigChange(colorAsig: String) {
-        _colorAsig.postValue(colorAsig)
     }
 
     fun onImagenChange(imagen: ImageBitmap) {
@@ -162,17 +160,20 @@ class PerfilMascotaViewModel @Inject constructor(
     fun setMascotaId(idMascota: Int) {
         viewModelScope.launch {
             val mascota = getMascotaUseCase.getMascota(idMascota)
-
-            _mascota.postValue(mascota)
-            _nombre.postValue(mascota.nombre)
-            _raza.postValue(mascota.raza)
-            _sexo.postValue(mascota.sexo)
-            _imagen.postValue(ImageConverter.byteArrayToImageBitmap(mascota.imagen!!))
-            _peso.postValue(mascota.peso.toString())
-            _edad.postValue(mascota.edad)
-            _observacion.postValue(mascota.observacion)
-            _numChip.postValue(mascota.numChip)
-            _color.postValue(mascota.color)
+            if(mascota != null) {
+               //_mascota.postValue(mascota.idMascota)
+                _nombre.postValue(mascota.nombre)
+                _raza.postValue(mascota.raza)
+                _sexo.postValue(mascota.sexo)
+                _imagen.postValue(ImageConverter.byteArrayToImageBitmap(mascota.imagen!!))
+                _peso.postValue(mascota.peso.toString())
+                _edad.postValue(mascota.edad)
+                _observacion.postValue(mascota.observacion)
+                _numChip.postValue(mascota.numChip)
+                _color.postValue(mascota.color)
+                _tamanyo.postValue(mascota.tamanyo)
+                _tipo.postValue(mascota.tipo)
+            }
 
         }
     }
@@ -186,6 +187,62 @@ class PerfilMascotaViewModel @Inject constructor(
             "verde" -> return Color.Green
             "negro" -> return Color.Black
             else -> return Color.White
+        }
+    }
+
+    fun onEditModeChange(editMode: Boolean) {
+        _editMode.postValue(editMode)
+    }
+
+    fun onSave(navController: NavController) {
+        val mascotaUpdate = mascota.value
+        mascotaUpdate?.nombre = nombre.value!!
+        mascotaUpdate?.raza = raza.value!!
+        mascotaUpdate?.sexo = sexo.value!!
+        mascotaUpdate?.imagen = ImageConverter.imageBitmapToByteArray(imagen.value!!)
+        mascotaUpdate?.peso = peso.value!!.toDouble()
+        mascotaUpdate?.edad = edad.value!!
+        mascotaUpdate?.observacion = observacion.value!!
+        mascotaUpdate?.numChip = numChip.value!!
+        mascotaUpdate?.tamanyo = tamanyo.value!!
+        mascotaUpdate?.tipo = tipo.value!!
+        viewModelScope.launch {
+            updateMascotaUseCase.updateMascota(mascotaUpdate!!)
+            navController.navigate(route = Destinations.Mascotas.route)
+        }
+    }
+
+    fun validarCampos(navController: NavController, context: Context) {
+        viewModelScope.launch {
+
+            if (_numChip.value.isNullOrBlank()) {
+                _numChipEmpty.postValue(true)
+            } else {
+                _numChipEmpty.postValue(false)
+            }
+
+            if (_tipo.value.isNullOrBlank()) {
+                _tipoEmpty.postValue(true)
+            } else {
+                _tipoEmpty.postValue(false)
+            }
+
+            joinAll()
+
+            if (_numChipEmpty.value == false && _tipoEmpty.value == false
+            ) {
+                try {
+                    onSave(navController)
+                    onEditModeChange(false)
+                    Toast.makeText(context, "Mascota actualizada", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    Toast.makeText(context, "Error al actualizar la mascota", Toast.LENGTH_SHORT)
+                        .show()
+                    e.printStackTrace()
+                }
+
+            }
+
         }
     }
 }

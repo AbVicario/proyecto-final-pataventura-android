@@ -52,7 +52,6 @@ import com.example.pataventura.ui.theme.Verde
 @Composable
 fun BodyPerfilTutor(
     editMode: Boolean,
-    image: ImageBitmap?,
     perfilTutorViewModel: PerfilTutorViewModel,
     navController: NavController,
 
@@ -99,7 +98,7 @@ fun BodyPerfilTutor(
                         }
                     }
 
-                    Spacer(modifier = Modifier.size(10.dp))
+                    Spacer(modifier = Modifier.size(20.dp))
                     ColumnCaracteristicas(
                         perfilTutorViewModel, editMode, alias, phone, email, address,
                         isAlias, isPhone, isEmail, isAddress, isNotEmail
@@ -112,11 +111,9 @@ fun BodyPerfilTutor(
                             dialogTitle = "Error",
                             dialogText = "Ha habido un error al actualizar. Intentelo mas tarde"
                         )
-                        LoginButton(text = "Guardar") {
+                        LoginButton(text = "Guardar", null,) {
                             perfilTutorViewModel.onValueChangeEditMode(false)
-
-                                perfilTutorViewModel.validarCampos(navController)
-
+                            perfilTutorViewModel.validarCampos(navController)
                         }
                     }
                 }
@@ -128,14 +125,13 @@ fun BodyPerfilTutor(
 @Composable
 fun ColumnValoracion() {
     Column(Modifier.fillMaxHeight()) {
-        RowValoracion(20)
+        RowValoracion(25)
         Box(Modifier.clickable {
-
         }
         ) {
             CustomText(
                 text = "Ver", color = Color.Black,
-                fontSize = 14.sp, fontWeight = FontWeight.Bold,
+                fontSize = 16.sp, fontWeight = FontWeight.Bold,
                 fontFamily = CustomFontFamily
             )
         }
@@ -154,7 +150,7 @@ fun ColumnNombre(name: String?) {
         CustomText(
             text = if (rol == "tutor") "Tutor" else "Cuidador",
             color = Color.Black,
-            fontSize = 14.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             fontFamily = CustomFontFamily
         )
@@ -193,7 +189,7 @@ fun ColumnCaracteristicas(
             singleLine = true
         )
 
-        Spacer(modifier = Modifier.size(14.dp))
+        Spacer(modifier = Modifier.size(16.dp))
         CustomOutlinedTextFieldUpdate(
             valueAux = phone,
             onValueChange = { perfilTutorViewModel.onValueChangePhone(it) },
@@ -209,7 +205,7 @@ fun ColumnCaracteristicas(
             singleLine = true
         )
 
-        Spacer(modifier = Modifier.size(14.dp))
+        Spacer(modifier = Modifier.size(16.dp))
         CustomOutlinedTextFieldUpdate(
             valueAux = email,
             onValueChange = { perfilTutorViewModel.onValueChangeEmail(it) },
@@ -227,7 +223,7 @@ fun ColumnCaracteristicas(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             singleLine = true
         )
-        Spacer(modifier = Modifier.size(14.dp))
+        Spacer(modifier = Modifier.size(16.dp))
         CustomOutlinedTextFieldUpdate(
             valueAux = address,
             onValueChange = { perfilTutorViewModel.onValueChangeAddress(it) },

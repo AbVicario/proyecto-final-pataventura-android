@@ -18,24 +18,14 @@ class MascotaRepository @Inject constructor(
     private val mascotaService: MascotaService,
     private val mascotaDao: MascotaDao
 ) {
-    suspend fun registerMascotaFromApi(token : String, mascotaModel: MascotaModel): CustomResponse {
+    suspend fun registerMascotaFromApi(token: String, mascotaModel: MascotaModel): CustomResponse {
         return mascotaService.registerMascotaFromApi(token, mascotaModel)
     }
-    suspend fun updateMascotaFromApi(token: String, mascotaModel: MascotaModel) {
+
+    suspend fun updateMascotaFromApi(token: String, mascotaModel: MascotaModel): CustomResponse {
         return withContext(Dispatchers.IO) {
             try {
                 mascotaService.updateMascotaFromApi(token, mascotaModel)
-            } catch (e: Exception) {
-                Log.e("LOOK AT ME", "${e.message}")
-            }
-        }
-    }
-
-    suspend fun getOneMascotaFromApi( token: String , mascotaModel: MascotaModel) : Mascota {
-        return withContext(Dispatchers.IO) {
-            try {
-                val mascota = mascotaService.getOneMascota(token ,mascotaModel.idMascota)
-                mascota.toDomain()
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
                 throw e
@@ -43,11 +33,24 @@ class MascotaRepository @Inject constructor(
         }
     }
 
-    suspend fun getMascotasFromApi( token: String ) : List<Mascota> {
+    suspend fun getOneMascotaFromApi(token: String, idMascota: Int): Mascota? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val mascota = mascotaService.getOneMascota(token, idMascota)
+                mascota?.toDomain()
+            } catch (e: Exception) {
+                Log.e("LOOK AT ME", "${e.message}")
+                null
+            }
+        }
+    }
+
+    suspend fun getMascotasFromApi(token: String): List<Mascota> {
         return withContext(Dispatchers.IO) {
             try {
                 val mascotas = mascotaService.getMascotas(token)
-                mascotas.map{it.toDomain()
+                mascotas.map {
+                    it.toDomain()
                 }
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
@@ -55,6 +58,7 @@ class MascotaRepository @Inject constructor(
             }
         }
     }
+
     suspend fun insertMascotaToDatabase(mascotaEntity: MascotaEntity) {
         return withContext(Dispatchers.IO) {
             try {
@@ -66,6 +70,18 @@ class MascotaRepository @Inject constructor(
             }
         }
     }
+
+    suspend fun updateMascotaToDataBase(mascotaEntity: MascotaEntity) {
+        return withContext(Dispatchers.IO) {
+            try {
+                Log.e("LOOK AT ME--", mascotaEntity.toString())
+                mascotaDao.updateMascota(mascotaEntity)
+            } catch (e: Exception) {
+                Log.e("LOOK AT ME--", "${e.message}")
+            }
+        }
+    }
+
     suspend fun getMascotasFromDatabase(): List<Mascota> {
         return withContext(Dispatchers.IO) {
             try {
@@ -74,6 +90,18 @@ class MascotaRepository @Inject constructor(
             } catch (e: Exception) {
                 Log.e("LOOK AT ME", "${e.message}")
                 emptyList()
+            }
+        }
+    }
+
+    suspend fun getOneMascotaFromDatabase(idMascota: Int): Mascota? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val mascota = mascotaDao.getMascota(idMascota)
+                mascota.toDomain()
+            } catch (e: Exception) {
+                Log.e("LOOK AT ME", "${e.message}")
+                null
             }
         }
     }

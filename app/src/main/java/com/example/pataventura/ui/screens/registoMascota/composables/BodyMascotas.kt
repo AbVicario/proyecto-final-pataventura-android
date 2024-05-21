@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
@@ -118,12 +119,15 @@ fun BodyRegistroMascota(
                     color = Verde, fontSize = 20.sp,
                     fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
                 )
+                Spacer(modifier = Modifier.size(10.dp))
                 MyRowNombre(nombreEmpty, registroMascotaViewModel)
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 MyRowRaza(tipo, raza, tipoEmpty, itemsTipo, registroMascotaViewModel)
+                Spacer(modifier = Modifier.size(10.dp))
                 MyRowEdad(edad, sexo, itemsEdad, itemsSexo, registroMascotaViewModel)
+                Spacer(modifier = Modifier.size(10.dp))
                 MyRowPeso(tamanyo, itemsTamanyo, registroMascotaViewModel)
-
+                Spacer(modifier = Modifier.size(10.dp))
                 CustomOutlinedTextField(
                     onValueChange = { registroMascotaViewModel.onObservacionChange(it) },
                     Modifier
@@ -136,18 +140,17 @@ fun BodyRegistroMascota(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     singleLine = false
                 )
+                Spacer(modifier = Modifier.size(10.dp))
                 MyRowNumChip(
                     numChipEmpty,
                     itemsColores,
                     registroMascotaViewModel,
                     colorEmpty
                 )
-
-
+                Spacer(modifier = Modifier.size(10.dp))
                 Box(
                     Modifier
-                        .fillMaxWidth(0.7f)
-                        .height(40.dp)
+                        .fillMaxWidth()
                 )
                 {
                     MyAlertDialog(
@@ -159,13 +162,14 @@ fun BodyRegistroMascota(
                                 "para poder solicitar demandar servicios." +
                                 " Intentelo mas tarde"
                     )
-                    LoginButton(text = "Finalizar",
+                    LoginButton(text = "Finalizar", null,
                         onClick = {
                             registroMascotaViewModel.onFinalizarPress(
                                 navController,
                                 context
                             )
-                        })
+                        }
+                    )
                 }
             }
 

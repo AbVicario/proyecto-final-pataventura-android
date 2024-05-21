@@ -1,10 +1,14 @@
 package com.example.pataventura.ui.screens.login
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.domain.useCase.AuthenticateUserUseCase
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
@@ -17,6 +21,10 @@ class LoginViewModel @Inject constructor(
     private val authenticateUseCase: AuthenticateUserUseCase,
 ) : ViewModel() {
 
+
+    var showDialog by mutableStateOf(false)
+        private set
+
     private val _email = MutableLiveData<String>()
     val email: LiveData<String> = _email
     private val _password = MutableLiveData<String>()
@@ -27,6 +35,14 @@ class LoginViewModel @Inject constructor(
     val emailEmpty: LiveData<Boolean> = _emailEmpty
     private val _emailNoValido = MutableLiveData<Boolean>()
     val emailNoValido: LiveData<Boolean> = _emailNoValido
+
+    fun onOpenDialog() {
+        showDialog = true
+    }
+
+    fun onDialogConfirm() {
+        showDialog = false
+    }
 
     fun onEmailChange(email: String) {
         _email.postValue(email)
@@ -70,13 +86,18 @@ class LoginViewModel @Inject constructor(
                 navController.navigate(route = "home")
             }
         } else {
-            val result = authenticateUseCase.login(/*"bb@gmail.com", "bb"*/"aa@gmail.com", "AA", RoleHolder.rol.value.toString())
+            val result = authenticateUseCase.login("bb@gmail.com", "bb"/*"aa@gmail.com",
+                "AA"*/,
+                RoleHolder.rol.value.toString()
+            )
             if (result) {
                 if (RoleHolder.rol.value.toString() == "tutor") {
                     navController.navigate(route = "home")
-                }else{
+                } else {
                     navController.navigate(route = "perfilTrabajador")
                 }
+            } else {
+                onOpenDialog()
             }
         }
     }

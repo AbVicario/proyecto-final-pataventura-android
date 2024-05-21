@@ -248,7 +248,7 @@ fun MyServicioColumn(
         Spacer(modifier = Modifier.height(20.dp))
 
         if (editMode) {
-            LoginButton(text = "Guardar") {
+            LoginButton(text = "Guardar", null,) {
                 servicioViewModel.onSave(navController, servicio)
             }
             Spacer(modifier = Modifier.height(20.dp))

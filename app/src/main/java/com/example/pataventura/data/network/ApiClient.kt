@@ -29,21 +29,19 @@ interface ApiClient {
     @POST("/registroCuidador")
     suspend fun registerCuidador(@Body cuidadorModel: CuidadorModel): CustomResponse
 
-    @PUT("/updateCuidador/{id_cuidador}")
+    @PUT("/api/cliente/updateCuidador/{id_cuidador}")
     suspend fun updateCuidador(
         @Header("Authorization") token: String,
         @Path("id_cuidador") idCuidador: Int,
         @Body cuidadorModel: CuidadorModel
     ): CuidadorResponse
 
-    @PUT("/updateTutor/{id_tutor}")
+    @PUT("/api/cliente/updateTutor/{id_tutor}")
     suspend fun updateTutor(
         @Header("Authorization") token: String,
         @Path("id_tutor") idTutor: Int,
         @Body tutorModel: TutorModel
     ): TutorResponse
-
-
 
     @GET("/mostrarCuidadores/{tipo}")
     suspend fun getCuidadores(

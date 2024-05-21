@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.pataventura.data.network.repository.TutorRepository
 import com.example.pataventura.data.network.repository.TokenRepository
 import com.example.pataventura.domain.model.Tutor
+import com.example.pataventura.domain.model.toEntity
 import javax.inject.Inject
 
 class TutorGetUseCase @Inject constructor(
@@ -18,6 +19,9 @@ class TutorGetUseCase @Inject constructor(
             var tutor = tutorRepository.getTutorFromDatabase()
             if (tutor == null) {
                 tutor = tutorRepository.getTutorFromApi(token.token)
+                if(tutor != null) {
+                    tutorRepository.insertTutorToDatabase(tutor.toEntity())
+                }
                 Log.e("Tutor", "api")
                 return tutor
 

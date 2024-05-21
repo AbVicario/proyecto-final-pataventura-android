@@ -48,20 +48,18 @@ import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 import com.example.pataventura.ui.theme.VerdeOliva
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
+import com.example.pataventura.ui.screens.registro.RegistroViewModel
 
 
 @Composable
@@ -76,13 +74,13 @@ fun CustomButtonStyle(): ButtonColors {
 }
 
 @Composable
-fun LoginButton(text: String ,  onClick: () -> Unit) {
+fun LoginButton(text: String , padding: Int?,  onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 40.dp)
+            .padding(horizontal = padding?.dp ?: 40.dp)
             .clickable { onClick() }
-            .size(width = 200.dp, height = 60.dp)
+            .size(width = 180.dp, height = 50.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(VerdeOliva),
         Alignment.Center,
@@ -155,9 +153,23 @@ fun MyCustomButton(texto: String, color: Color) {
 
 }
 @Composable
-fun IconButtonImage(
+fun IconButtonImage( registroViewModel: RegistroViewModel
 
 ) {
+    val context = LocalContext.current
+
+    var selectedImageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        selectedImageBitmap = uri?.let { uri ->
+            val inputStream = context.contentResolver.openInputStream(uri)
+            inputStream?.use { stream ->
+                BitmapFactory.decodeStream(stream)?.asImageBitmap()
+            }
+        }
+    }
+
     Box(
         modifier = Modifier
             .minimumInteractiveComponentSize()
@@ -165,18 +177,39 @@ fun IconButtonImage(
             .clip(RoundedCornerShape(150f))
             .background(Verde.copy(alpha = 0.2f))
             .clickable(
-                onClick = { },
+                onClick = { launcher.launch("image/*") },
                 enabled = true,
                 role = Role.Button,
 
                 ),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
+        if (selectedImageBitmap != null) {
+            registroViewModel.onImagenChange(selectedImageBitmap!!)
+            Image(
+                bitmap = selectedImageBitmap!!,
+                contentDescription ="Imagen de perfil",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape)
+            )
+        } else {
+            val icon = R.drawable.icono_persona
+            registroViewModel.onImagenChange(painterToImageBitmap(context, icon))
+            Image(
+                painter = painterResource(icon),
+                contentDescription = "Imagen de perfil",
+                modifier = Modifier
+                    .size(80.dp).clip(CircleShape).alpha(0.65f)
+            )
+        }
+
+        /*Icon(
             Icons.Default.Person, "Imagen de perfil",
             modifier = Modifier.size(80.dp),
                 tint=(Verde.copy(0.5f))
-        )
+        )*/
         /*val contentColor = Verde
         CompositionLocalProvider(LocalContentColor provides contentColor, content = content)*/
     }
@@ -217,20 +250,15 @@ fun IconButtonImageMascota(
                     .clip(CircleShape)
             )
         } else {
+            val icon = R.drawable.huella_registro
+            registroMascotaViewModel.onImagenChange(painterToImageBitmap(context, icon))
             Image(
-                painter = painterResource(id = R.drawable.huella_registro),
+                painter = painterResource(icon),
                 contentDescription = "Imagen de perfil",
                 modifier = Modifier
                     .size(65.dp)
             )
         }
-        /*FloatingActionButton(
-            onClick = {
-                launcher.launch("image/*")*/
-            },
-        ) {
-            Icon(Icons.Default.Add, contentDescription = "Editar")
-        }*/
     }
 }
 
@@ -240,11 +268,6 @@ fun painterToImageBitmap(context: Context, @DrawableRes resId: Int): ImageBitmap
     val bitmap = (drawable as BitmapDrawable).bitmap
     return bitmap.asImageBitmap()
 }
-/*
-fun uriToImageBitmap(context: Context, uri: Uri): ImageBitmap {
-    val inputStream = context.contentResolver.openInputStream(uri)
-    val bitmap = BitmapFactory.decodeStream(inputStream)
-    return bitmap.asImageBitmap()
-}*/
+
 
 
