@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.ui.composables.BottomBar
+import com.example.pataventura.ui.composables.navegacionButtonBar
 import com.example.pataventura.ui.screens.calendario.composables.BodyCalendario
 import com.example.pataventura.ui.screens.calendario.composables.HeaderCalendario
 import com.example.pataventura.ui.screens.home.HomeViewModel
@@ -33,8 +34,9 @@ fun CalendarioScreen(
 ) {
     var selectedIcon by remember { mutableStateOf(Icons.Default.CalendarMonth) }
     Scaffold( bottomBar = {
-        BottomBar(selectedIcon, navController){
-            selectedIcon = it
+        BottomBar(selectedIcon, navController) { icon ->
+            selectedIcon = icon
+            navegacionButtonBar(icon, navController, RoleHolder.rol.value.toString().lowercase())
         }
     }) {
         Column(

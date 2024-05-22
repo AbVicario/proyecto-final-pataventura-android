@@ -53,52 +53,47 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onLoginButtonClicked(navController: NavController) {
-        viewModelScope.launch {
-            onLoginPress(navController)
+        if (validateInputs()) {
+            viewModelScope.launch {
+                onLoginPress(navController)
+            }
         }
     }
 
-    suspend fun onLoginPress(navController: NavController) {
+    private fun validateInputs(): Boolean {
         val regex = Regex("^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})")
         val email = _email.value
         val password = _password.value
-        _emailEmpty.postValue(false)
-        _passEmpty.postValue(false)
-        _emailNoValido.postValue(false)
+        var isValid = true
+
+        _emailEmpty.value = false
+        _passEmpty.value = false
+        _emailNoValido.value = false
 
         if (password.isNullOrBlank()) {
-            _passEmpty.postValue(true)
+            _passEmpty.value = true
+            isValid = false
         }
         if (email.isNullOrBlank()) {
-            _emailEmpty.postValue(true)
+            _emailEmpty.value = true
+            isValid = false
         } else if (!regex.matches(email)) {
-            _emailNoValido.postValue(true)
+            _emailNoValido.value = true
+            isValid = false
         }
-        if (_emailEmpty.value == false && _emailNoValido.value == false
-            && _passEmpty.value == false
-        ) {
-            val result = authenticateUseCase.login(
-                _email.value!!,
-                _password.value!!,
-                RoleHolder.rol.value.toString()
-            )
-            if (result) {
-                navController.navigate(route = "home")
-            }
+
+        return isValid
+    }
+
+    suspend fun onLoginPress(navController: NavController) {
+        val email = _email.value!!
+        val password = _password.value!!
+
+        val result = authenticateUseCase.login(email, password, RoleHolder.rol.value.toString())
+        if (result) {
+            navController.navigate(route = "home")
         } else {
-            val result = authenticateUseCase.login("bb@gmail.com", "bb"/*"aa@gmail.com",
-                "AA"*/,
-                RoleHolder.rol.value.toString()
-            )
-            if (result) {
-                if (RoleHolder.rol.value.toString() == "tutor") {
-                    navController.navigate(route = "home")
-                } else {
-                    navController.navigate(route = "perfilTrabajador")
-                }
-            } else {
-                onOpenDialog()
-            }
+            onOpenDialog()
         }
     }
 

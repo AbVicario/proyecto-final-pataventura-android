@@ -38,7 +38,10 @@ import com.example.pataventura.ui.theme.Verde
 import java.util.Locale
 
 @Composable
-fun ColumnBotonesMascota(isIcon: Boolean, perfilMascotaViewModel: PerfilMascotaViewModel) {
+fun ColumnBotonesMascota(
+    navController: NavController,
+    isIcon: Boolean,
+    perfilMascotaViewModel: PerfilMascotaViewModel) {
     Column {
         Column(
             Modifier
@@ -57,7 +60,7 @@ fun ColumnBotonesMascota(isIcon: Boolean, perfilMascotaViewModel: PerfilMascotaV
 
             }
             MyboxButton(Icons.Default.DeleteOutline, isIcon) {
-
+                perfilMascotaViewModel.onDelete(navController)
             }
         }
     }

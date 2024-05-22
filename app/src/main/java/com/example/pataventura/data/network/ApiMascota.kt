@@ -41,7 +41,7 @@ interface ApiMascota {
         @Body mascota: MascotaModel
     ): CustomResponse
 
-    @DELETE("/{id_mascota}")
+    @DELETE("/api/cliente/mascota/{id_mascota}")
     suspend fun deleteMascota(
         @Header("Authorization") token: String,
         @Path("id_mascota") idMascota: Int

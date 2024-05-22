@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Mascota
+import com.example.pataventura.domain.useCase.mascotaUseCase.MascotaDeleteUseCase
 import com.example.pataventura.domain.useCase.mascotaUseCase.MascotaGetUseCase
 import com.example.pataventura.domain.useCase.mascotaUseCase.MascotaUpdateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PerfilMascotaViewModel @Inject constructor(
     private val getMascotaUseCase: MascotaGetUseCase,
-    private val updateMascotaUseCase: MascotaUpdateUseCase
+    private val updateMascotaUseCase: MascotaUpdateUseCase,
+    private val deleteMascotaUseCase: MascotaDeleteUseCase
 ) : ViewModel() {
 
     private val _editMode = MutableLiveData<Boolean>()
@@ -50,7 +52,7 @@ class PerfilMascotaViewModel @Inject constructor(
     val colorEmpty: LiveData<Boolean> = _colorEmpty
 
 
-    private val _nombre = MutableLiveData<String>("")
+    private val _nombre = MutableLiveData("")
     val nombre: LiveData<String> = _nombre
     private val _color = MutableLiveData<String>("")
     val color: LiveData<String> = _color
@@ -161,7 +163,7 @@ class PerfilMascotaViewModel @Inject constructor(
         viewModelScope.launch {
             val mascota = getMascotaUseCase.getMascota(idMascota)
             if(mascota != null) {
-               //_mascota.postValue(mascota.idMascota)
+                _mascota.postValue(mascota!!)
                 _nombre.postValue(mascota.nombre)
                 _raza.postValue(mascota.raza)
                 _sexo.postValue(mascota.sexo)
@@ -208,6 +210,13 @@ class PerfilMascotaViewModel @Inject constructor(
         mascotaUpdate?.tipo = tipo.value!!
         viewModelScope.launch {
             updateMascotaUseCase.updateMascota(mascotaUpdate!!)
+            navController.navigate(route = Destinations.Mascotas.route)
+        }
+    }
+
+    fun onDelete(navController: NavController) {
+        viewModelScope.launch {
+            deleteMascotaUseCase.deleteMascota(mascota.value!!.idMascota)
             navController.navigate(route = Destinations.Mascotas.route)
         }
     }

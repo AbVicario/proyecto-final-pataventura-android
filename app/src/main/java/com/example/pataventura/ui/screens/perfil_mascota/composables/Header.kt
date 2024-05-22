@@ -30,10 +30,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.navigation.NavController
 
 @SuppressLint("Range")
 @Composable
-fun HeaderPerfilMascota(perfilMascotaViewModel: PerfilMascotaViewModel, editMode: Boolean) {
+fun HeaderPerfilMascota(
+    navController: NavController,
+    perfilMascotaViewModel: PerfilMascotaViewModel,
+    editMode: Boolean) {
     val context = LocalContext.current
 
     var selectedImageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
@@ -77,7 +81,7 @@ fun HeaderPerfilMascota(perfilMascotaViewModel: PerfilMascotaViewModel, editMode
                 .align(Alignment.TopEnd)
                 .width(55.dp)) {
             val isIcon = imageBitmap.width > 513
-            ColumnBotonesMascota(isIcon , perfilMascotaViewModel)
+            ColumnBotonesMascota(navController, isIcon , perfilMascotaViewModel)
         }
     }
 

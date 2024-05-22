@@ -59,6 +59,17 @@ class MascotaRepository @Inject constructor(
         }
     }
 
+    suspend fun deleteMascotasFromApi(token: String, idMascota: Int): CustomResponse {
+        return withContext(Dispatchers.IO) {
+            try {
+                mascotaService.deleteMascota(token, idMascota)
+            } catch (e: Exception) {
+                Log.e("LOOK AT ME", "${e.message}")
+                throw e
+            }
+        }
+    }
+
     suspend fun insertMascotaToDatabase(mascotaEntity: MascotaEntity) {
         return withContext(Dispatchers.IO) {
             try {
@@ -106,5 +117,15 @@ class MascotaRepository @Inject constructor(
         }
     }
 
+    suspend fun deleteMascotasFromDatabase(idMascota: Int) {
+        return withContext(Dispatchers.IO) {
+            try {
+                mascotaDao.deleteMascota(idMascota)
+            } catch (e: Exception) {
+                Log.e("LOOK AT ME", "${e.message}")
+                throw e
+            }
+        }
+    }
 
 }
