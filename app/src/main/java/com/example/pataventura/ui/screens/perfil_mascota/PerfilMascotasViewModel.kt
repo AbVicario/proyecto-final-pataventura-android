@@ -41,6 +41,7 @@ class PerfilMascotaViewModel @Inject constructor(
 
     var showDialog by mutableStateOf(false)
         private set
+    var showDialogDelete by mutableStateOf(false)
 
     private val _nombreEmpty = MutableLiveData<Boolean>()
     val nombreEmpty: LiveData<Boolean> = _nombreEmpty
@@ -153,9 +154,22 @@ class PerfilMascotaViewModel @Inject constructor(
         navController.navigate(route = Destinations.Home.route)
 
     }
+    fun onDialogDeleteConfirm(navController: NavController) {
+        viewModelScope.launch {
+        showDialogDelete = false
+        deleteMascotaUseCase.deleteMascota(mascota.value!!.idMascota)
+        navController.navigate(route = Destinations.Mascotas.route)
+        }
+    }
+    fun onDialogDeleteDismiss(navController: NavController) {
+        showDialogDelete = false
+    }
 
     fun onOpenDialog() {
         showDialog = true
+    }
+    fun onOpenDeleteDialog() {
+        showDialogDelete = true
     }
 
 
@@ -216,8 +230,7 @@ class PerfilMascotaViewModel @Inject constructor(
 
     fun onDelete(navController: NavController) {
         viewModelScope.launch {
-            deleteMascotaUseCase.deleteMascota(mascota.value!!.idMascota)
-            navController.navigate(route = Destinations.Mascotas.route)
+            onOpenDeleteDialog()
         }
     }
 
