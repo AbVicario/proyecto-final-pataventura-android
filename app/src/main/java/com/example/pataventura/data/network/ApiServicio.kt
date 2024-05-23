@@ -2,7 +2,9 @@ package com.example.pataventura.data.network
 
 import com.example.pataventura.data.model.ServicioModel
 import com.example.pataventura.data.network.response.CustomResponse
+import com.example.pataventura.data.network.response.DemandaResponse
 import com.example.pataventura.data.network.response.ServicioResponse
+import com.example.pataventura.domain.model.Demanda
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -18,11 +20,13 @@ interface ApiServicio {
         @Header("Authorization") token: String,
         @Body servicioModel: ServicioModel
     ): CustomResponse
+
     @GET("/byTipo/{tipo}")
     suspend fun getServiciosByTipo(
         @Header("Authorization") token: String,
         @Path("tipo") tipo: String
     ): List<ServicioModel>
+
     @GET("api/cliente/oferta/all")
     suspend fun getServicios(
         @Header("Authorization") token: String
@@ -39,5 +43,38 @@ interface ApiServicio {
     suspend fun deleteServicio(
         @Header("Authorization") token: String,
         @Path("id_oferta") idServicio: Int
+    ): CustomResponse
+
+    @POST("/api/cliente/demanda")
+    suspend fun guardarDemanda(
+        @Header("Authorization") token: String,
+        @Body demandaModel: Demanda
+    ): CustomResponse
+
+    @GET("/{id_mascota}/{estado}")
+    suspend fun getDemandasByEstado(
+        @Header("Authorization") token: String,
+        @Path("id_mascota") idMascota: Int,
+        @Path("estado") estado: String
+    ): List<DemandaResponse>
+
+    @GET("/{id_Demanda}")
+    suspend fun getDemanda(
+        @Header("Authorization") token: String,
+        @Path("id_demanda") idMascota: Int
+    ): DemandaResponse
+
+
+    @DELETE("/api/cliente/demanda/{id_demanda}")
+    suspend fun deleteDemanda(
+        @Header("Authorization") token: String,
+        @Path("id_demanda") idDemanda: Int
+    ): CustomResponse
+
+    @PUT("/api/cliente/demanda/{id_demanda}")
+    suspend fun updateDemanda(
+        @Header("Authorization") token: String,
+        @Path("id_demanda") idDemanda: Int,
+        @Body demandaModel: Demanda
     ): CustomResponse
 }

@@ -94,7 +94,22 @@ fun BodyPerfilTutor(
                     ) {
                         ColumnNombre(name)
                         if (RoleHolder.rol.value.toString().lowercase() == "cuidador") {
-                            ColumnValoracion()
+                            if (editMode) {
+                                MyAlertDialog(
+                                    show = perfilTutorViewModel.showDialog,
+                                    icon = Icons.Default.Error,
+                                    onConfirm = { perfilTutorViewModel.onDialogConfirm(navController) },
+                                    dialogTitle = "Error",
+                                    dialogText = "Ha habido un error al actualizar. Intentelo mas tarde"
+                                )
+                                LoginButton(text = "Guardar", 20,) {
+                                    perfilTutorViewModel.onValueChangeEditMode(false)
+                                    perfilTutorViewModel.validarCampos(navController)
+                                }
+                            }else{
+                                ColumnValoracion()
+                            }
+
                         }
                     }
 
@@ -103,19 +118,7 @@ fun BodyPerfilTutor(
                         perfilTutorViewModel, editMode, alias, phone, email, address,
                         isAlias, isPhone, isEmail, isAddress, isNotEmail
                     )
-                    if (editMode) {
-                        MyAlertDialog(
-                            show = perfilTutorViewModel.showDialog,
-                            icon = Icons.Default.Error,
-                            onConfirm = { perfilTutorViewModel.onDialogConfirm(navController) },
-                            dialogTitle = "Error",
-                            dialogText = "Ha habido un error al actualizar. Intentelo mas tarde"
-                        )
-                        LoginButton(text = "Guardar", null,) {
-                            perfilTutorViewModel.onValueChangeEditMode(false)
-                            perfilTutorViewModel.validarCampos(navController)
-                        }
-                    }
+
                 }
             }
         }

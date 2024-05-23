@@ -98,6 +98,7 @@ class PerfilTutorViewModel @Inject constructor(
     fun deleteToken(navController: NavController) {
         viewModelScope.launch {
             deleteTokenUseCase.deleteToken()
+            RoleHolder.setRol("")
             navController.navigate(Destinations.LoginCliente.route)
         }
     }

@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -34,6 +36,8 @@ import com.example.pataventura.ui.composables.CustomOutlinedTextFieldUpdate
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldUpdateDes
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.LoginButton
+import com.example.pataventura.ui.composables.MyAlertDialog
+import com.example.pataventura.ui.composables.MyAlertDialogDimiss
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
@@ -384,6 +388,11 @@ fun RowNombre(
             fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
         )
         Spacer(modifier = Modifier.size(15.dp))
+        MyAlertDialogDimiss(show = perfilMascotaViewModel.showDialogDelete ,
+            icon = Icons.Rounded.Warning,
+            onConfirm = { perfilMascotaViewModel. onDialogDeleteConfirm(navController) },
+            onDismiss = { perfilMascotaViewModel.onDialogDeleteDismiss(navController) },
+            dialogTitle = "Atención", dialogText = "¿Estás seguro que quieres borrar la mascota?")
         if (editMode) {
             LoginButton(text = "Guardar", 15) {
                 perfilMascotaViewModel.validarCampos(navController, context)
