@@ -21,6 +21,7 @@ class MascotaRegisterUseCase@Inject constructor(
         val response = mascotaRepository.registerMascotaFromApi(
             token, mascota.toModel())
         if(response.status == 201){
+            mascota.idMascota = response.data.toInt()
             mascotaRepository.insertMascotaToDatabase(mascota.toEntity())
         }
         return response

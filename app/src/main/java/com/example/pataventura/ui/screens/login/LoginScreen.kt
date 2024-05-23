@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material3.Icon
@@ -38,6 +39,7 @@ import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.EmailNoValidoText
 import com.example.pataventura.ui.composables.HeaderLogin
 import com.example.pataventura.ui.composables.LoginButton
+import com.example.pataventura.ui.composables.MyAlertDialog
 import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.VerdeOliva
@@ -107,7 +109,7 @@ fun BodyLogin(loginViewModel:LoginViewModel, navController: NavController) {
                 placeholder = "Password",
                 leadingIcon = { Icon(Icons.Default.Lock, null) },
                 supportingText = {if(passEmpty) CampoObligatorioText()},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
 
@@ -116,7 +118,15 @@ fun BodyLogin(loginViewModel:LoginViewModel, navController: NavController) {
                     .fillMaxWidth(0.7f)
                     .height(50.dp)
             ) {
-                LoginButton(text = "Acceder",
+                MyAlertDialog(
+                    show = loginViewModel.showDialog,
+                    icon = Icons.Default.Error,
+                    onConfirm = { loginViewModel.onDialogConfirm() },
+                    dialogTitle = "Error",
+                    dialogText = "Ha habido un error inesperado\n" +
+                            " Intentelo más tarde"
+                )
+                LoginButton(text = "Acceder", null,
                     onClick= { loginViewModel.onLoginButtonClicked(navController) }
                 )
             }

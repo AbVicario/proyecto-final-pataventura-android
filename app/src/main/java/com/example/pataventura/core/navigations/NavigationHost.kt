@@ -66,7 +66,7 @@ fun NavigationHost(
     NavHost(
         navController = navController,
         startDestination = Destinations.LoginCliente.route
-        //startDestination = Destinations.RegisterMascota.route
+        //startDestination = Destinations.RegisterTwo.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)

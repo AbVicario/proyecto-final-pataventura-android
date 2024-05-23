@@ -22,8 +22,6 @@ object RoomModule {
         return Room.databaseBuilder(context, PataVenturaDatabase::class.java, PATA_VENTURA_DATA_BASE_NAME)
             .build()
     }
-
-
     @Singleton
     @Provides
     fun provideTokenDao(db: PataVenturaDatabase) = db.tokenDao()

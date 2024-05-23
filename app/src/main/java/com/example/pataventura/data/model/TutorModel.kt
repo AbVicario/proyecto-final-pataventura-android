@@ -10,7 +10,7 @@ data class TutorModel(
     @SerializedName("telefono") var telefono: String,
     @SerializedName("nombre") var nombre: String,
     @SerializedName("apellido") var apellido: String,
-    @SerializedName("imagen") var imagen: String = "",
+    @SerializedName("imagen") var imagen: ByteArray,
     @SerializedName("alias") var alias: String,
     @SerializedName("direccion") var direccion: String
 )

@@ -90,7 +90,7 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                IconButtonImage()
+                IconButtonImage(registroViewModel)
                 Spacer(modifier = Modifier.width(10.dp))
 
                 CustomOutlinedTextField(
@@ -163,7 +163,7 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
                     dialogTitle = "Error",
                     dialogText ="Ha habido un error en el registro. Intentelo mas tarde"
                 )
-                LoginButton(text = "Siguiente",
+                LoginButton(text = "Siguiente", null,
                     onClick = { registroViewModel.onRegistroDosButtonClicked(navController, tipo) })
             }
         }
@@ -262,7 +262,7 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
                 .fillMaxWidth(0.7f)
                 .height(50.dp)
         ) {
-            LoginButton(text = "Siguiente",
+            LoginButton(text = "Siguiente", null,
                 onClick = {registroViewModel.onPressRegistroUno(navController)})
         }
     }

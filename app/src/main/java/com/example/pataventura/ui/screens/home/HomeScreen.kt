@@ -24,6 +24,7 @@ import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.domain.model.Mascota
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.example.pataventura.ui.composables.BottomBar
+import com.example.pataventura.ui.composables.navegacionButtonBar
 import com.example.pataventura.ui.screens.home.composables.BodyHome
 import com.example.pataventura.ui.screens.home.composables.HeaderHome
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
@@ -52,8 +53,9 @@ fun HomeScreen(
     var selectedIcon by remember { mutableStateOf(Icons.Default.Home) }
     Scaffold(bottomBar = {
         BackHandler {}
-        BottomBar(selectedIcon, navController) {
-            selectedIcon = it
+        BottomBar(selectedIcon, navController) { icon ->
+            selectedIcon = icon
+            navegacionButtonBar(icon, navController, RoleHolder.rol.value.toString().lowercase())
         }
     }) {
         Column(

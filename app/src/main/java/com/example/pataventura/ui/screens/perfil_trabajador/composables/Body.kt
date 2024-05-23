@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.screens.contratacion.composables.MyCardPerfil
+import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 

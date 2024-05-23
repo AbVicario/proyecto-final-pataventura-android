@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,6 +38,7 @@ import com.example.pataventura.ui.composables.CustomOutlinedTextContrato
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.DatePickerWithDialog
 import com.example.pataventura.ui.composables.MyCustomButton
+import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 import java.time.LocalDate

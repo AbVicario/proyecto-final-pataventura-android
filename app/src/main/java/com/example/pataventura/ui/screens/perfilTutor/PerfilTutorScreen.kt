@@ -18,10 +18,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.ui.composables.BottomBar
+import com.example.pataventura.ui.composables.navegacionButtonBar
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.perfilTutor.composables.BodyPerfilTutor
 import com.example.pataventura.ui.screens.perfilTutor.composables.HeaderPerfilTutor
@@ -34,14 +36,14 @@ fun PerfilTutorScreen(
 ) {
     var selectedIcon by remember { mutableStateOf(Icons.Default.Person) }
     val editMode by perfilTutorViewModel.editMode.observeAsState(false)
-    val image by perfilTutorViewModel.image.observeAsState()
 
     LaunchedEffect (Unit){
         perfilTutorViewModel.printUserLaunch()
     }
     Scaffold(bottomBar = {
-        BottomBar(selectedIcon, navController) {
-            selectedIcon = it
+        BottomBar(selectedIcon, navController) { icon ->
+            selectedIcon = icon
+            navegacionButtonBar(icon, navController, RoleHolder.rol.value.toString().lowercase())
         }
     }) {
 
@@ -51,13 +53,12 @@ fun PerfilTutorScreen(
         ) {
             HeaderPerfilTutor(
                 editMode,
-                image,
                 perfilTutorViewModel,
                 navController
             )
             Spacer(modifier = Modifier.size(20.dp))
             BodyPerfilTutor(
-                editMode, image, perfilTutorViewModel, navController
+                editMode, perfilTutorViewModel, navController
             )
         }
 

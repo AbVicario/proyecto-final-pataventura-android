@@ -2,8 +2,14 @@ package com.example.pataventura.data.network.response
 
 import com.google.gson.annotations.SerializedName
 
-data class MascotaResponse(
+data class MascotasResponse(
     @SerializedName("data") val data: List<DataMascota>,
+    @SerializedName("status") val status: Int,
+    @SerializedName("ok") val ok: Boolean
+)
+
+data class MascotaResponse(
+    @SerializedName("data") val data: DataMascota,
     @SerializedName("status") val status: Int,
     @SerializedName("ok") val ok: Boolean
 )

@@ -29,9 +29,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.rememberCameraPositionState
-import dagger.Component
-import dagger.hilt.android.qualifiers.ActivityContext
-import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.S)
 @SuppressLint("MissingPermission")

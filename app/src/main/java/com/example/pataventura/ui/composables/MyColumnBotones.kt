@@ -33,11 +33,15 @@ import androidx.navigation.NavController
 import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
+import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.Verde
 import java.util.Locale
 
 @Composable
-fun ColumnBotonesMascota(isIcon: Boolean) {
+fun ColumnBotonesMascota(
+    navController: NavController,
+    isIcon: Boolean,
+    perfilMascotaViewModel: PerfilMascotaViewModel) {
     Column {
         Column(
             Modifier
@@ -47,7 +51,7 @@ fun ColumnBotonesMascota(isIcon: Boolean) {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             MyboxButton(Icons.Default.Edit, isIcon) {
-
+                perfilMascotaViewModel.onEditModeChange(true)
             }
             MyboxButton(Icons.Default.CalendarMonth, isIcon) {
 
@@ -56,7 +60,7 @@ fun ColumnBotonesMascota(isIcon: Boolean) {
 
             }
             MyboxButton(Icons.Default.DeleteOutline, isIcon) {
-
+                perfilMascotaViewModel.onDelete(navController)
             }
         }
     }
@@ -79,12 +83,6 @@ fun ColumnBotonesUsuario(
         ) {
             MyboxButton(Icons.Default.PowerSettingsNew, isIcon) {
                 perfilTutorViewModel.deleteToken(navController)
-
-            }
-            if (editMode) {
-                MyboxButton(Icons.Default.Add, isIcon) {
-
-                }
             }
             MyboxButton(Icons.Default.Edit, isIcon) {
                 perfilTutorViewModel.onValueChangeEditMode(true)

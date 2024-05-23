@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.di.RoleHolder
+import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Tutor
 import com.example.pataventura.domain.useCase.AuthenticateUserUseCase
@@ -71,6 +73,8 @@ class RegistroViewModel @Inject constructor(
     val direccion: LiveData<String> = _direccion
     private val _repetirPassword = MutableLiveData<String>()
     val repetirPassword: LiveData<String> = _repetirPassword
+    private val _imagen = MutableLiveData<ImageBitmap>()
+    val imagen: LiveData<ImageBitmap> = _imagen
 
     fun onEmailChange(email: String) {
         _email.postValue(email)
@@ -102,6 +106,10 @@ class RegistroViewModel @Inject constructor(
 
     fun onDireccionChange(direccion: String) {
         _direccion.postValue(direccion)
+    }
+
+    fun onImagenChange(imagen: ImageBitmap) {
+        _imagen.postValue(imagen)
     }
 
     fun onDialogConfirm(navController: NavController) {
@@ -160,6 +168,7 @@ class RegistroViewModel @Inject constructor(
         val apellidos = _apellidos.value
         val direccion = _direccion.value
         val telefono = _telefono.value
+        val imagen = _imagen.value
         _nombreEmpty.postValue(false)
         _apellidosEmpty.postValue(false)
         _direccionEmpty.postValue(false)
@@ -186,7 +195,7 @@ class RegistroViewModel @Inject constructor(
             if (tipo == "tutor") {
                 val tutor = Tutor(
                     0, _email.value!!, _password.value!!,
-                    _telefono.value!!, _nombre.value!!, _apellidos.value!!, "",
+                    _telefono.value!!, _nombre.value!!, _apellidos.value!!, ImageConverter.imageBitmapToByteArray(imagen!!),
                     _alias.value!!, _direccion.value!!
                 )
                 response = resgisterTutor.registroTutor(tutor)
@@ -195,12 +204,10 @@ class RegistroViewModel @Inject constructor(
             } else {
                 val cuidador = Cuidador(
                     0, _email.value!!, _password.value!!,
-                    _telefono.value!!, _nombre.value!!, _apellidos.value!!, "",
+                    _telefono.value!!, _nombre.value!!, _apellidos.value!!, ImageConverter.imageBitmapToByteArray(imagen!!),
                     _alias.value!!, _direccion.value!!
                 )
                 response = resgisterCuidador.registroCuidador(cuidador)
-
-
             }
 
             navegar(response, navController, tipo)
@@ -217,7 +224,7 @@ class RegistroViewModel @Inject constructor(
             authenticateUserUseCase.login(
                 _email.value!!,
                 _password.value!!,
-                RoleHolder.rol.toString()
+                RoleHolder.rol.value.toString().lowercase()
 
             )
             if (tipo == "tutor") {

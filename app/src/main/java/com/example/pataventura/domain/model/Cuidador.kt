@@ -10,7 +10,7 @@ data class Cuidador(
     var telefono: String,
     var nombre: String,
     var apellido: String,
-    var imagen: String = "",
+    var imagen: ByteArray,
     var alias: String,
     var direccion: String
 )

@@ -52,3 +52,48 @@ fun MyAlertDialog(
         )
     }
 }
+
+@Composable
+fun MyAlertDialogDimiss(
+    show: Boolean,
+    icon: ImageVector,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    dialogTitle: String,
+    dialogText: String
+) {
+
+    val customButtonColors: ButtonColors = ButtonDefaults.textButtonColors(
+        contentColor = Color.White,
+        containerColor = Verde
+    )
+    if(show){
+        AlertDialog(onDismissRequest = {  },
+            confirmButton = {
+                TextButton( colors = customButtonColors,
+                    onClick = { onConfirm()}) {
+                    Text(text = "Confirmar", fontSize = 20.sp)
+                }
+            },
+            dismissButton = {
+                TextButton(colors = customButtonColors,
+                    onClick = { onDismiss() }) {
+                    Text(text = "Cancelar", fontSize = 20.sp)
+                }
+            },
+            icon = {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(50.dp)
+                )
+            },
+            title = { Text(text = dialogTitle, fontSize = 20.sp) },
+            text = { Text(text = dialogText, fontSize = 20.sp) },
+            containerColor = Color.White,
+            iconContentColor = Verde,
+            titleContentColor = Verde,
+            textContentColor = Verde
+        )
+    }
+}

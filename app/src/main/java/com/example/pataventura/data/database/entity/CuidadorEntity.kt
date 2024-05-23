@@ -13,7 +13,7 @@ data class CuidadorEntity(
     @ColumnInfo(name = "telefono") var telefono: String,
     @ColumnInfo(name = "nombre") var nombre: String,
     @ColumnInfo(name = "apellido") var apellido: String,
-    @ColumnInfo(name = "imagen") var imagen: String = "",
+    @ColumnInfo(name = "imagen") var imagen: ByteArray,
     @ColumnInfo(name = "alias") var alias: String,
     @ColumnInfo(name = "direccion") var direccion: String,
     )

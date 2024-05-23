@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -22,15 +24,17 @@ fun PerfilMascotaScreen(
     navController: NavController,
     perfilMascotaViewModel: PerfilMascotaViewModel
 ) {
+    val editMode by perfilMascotaViewModel.editMode.observeAsState(false)
+
     Scaffold() {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            HeaderPerfilMascota(perfilMascotaViewModel)
-            Spacer(modifier = Modifier.size(20.dp))
+            HeaderPerfilMascota(navController, perfilMascotaViewModel, editMode)
+            Spacer(modifier = Modifier.size(10.dp))
             BodyPerfilMascotas(perfilMascotaViewModel = perfilMascotaViewModel,
-                navController = navController
+                navController = navController, editMode
             )
         }
     }

@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.di.RoleHolder.rol
+import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Tutor
 import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorGetUseCase
@@ -47,8 +48,8 @@ class PerfilTutorViewModel @Inject constructor(
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
 
-    private val _image = MutableLiveData<ImageBitmap>()
-    val image: LiveData<ImageBitmap> = _image
+    private val _imagen = MutableLiveData(ImageBitmap(1,1))
+    val imagen: LiveData<ImageBitmap> = _imagen
 
     private val _alias = MutableLiveData<String>()
     val alias: LiveData<String> = _alias
@@ -97,6 +98,7 @@ class PerfilTutorViewModel @Inject constructor(
     fun deleteToken(navController: NavController) {
         viewModelScope.launch {
             deleteTokenUseCase.deleteToken()
+            RoleHolder.setRol("")
             navController.navigate(Destinations.LoginCliente.route)
         }
     }
@@ -123,7 +125,7 @@ class PerfilTutorViewModel @Inject constructor(
             onValueChangePhone(user.telefono)
             onValueChangeEmail(user.email)
             onValueChangeAddress(user.direccion)
-            //_image.postValue(user.imagen)
+            _imagen.postValue(ImageConverter.byteArrayToImageBitmap(user.imagen))
             _name.postValue(user.nombre)
 
             _isAlias.postValue(true)
@@ -144,7 +146,7 @@ class PerfilTutorViewModel @Inject constructor(
             onValueChangePhone(user.telefono)
             onValueChangeEmail(user.email)
             onValueChangeAddress(user.direccion)
-            //_image.postValue(user.imagen)
+            _imagen.postValue(ImageConverter.byteArrayToImageBitmap(user.imagen))
             _name.postValue(user.nombre)
 
             _isAlias.postValue(true)
@@ -173,6 +175,10 @@ class PerfilTutorViewModel @Inject constructor(
 
     fun onValueChangeEmail(email: String) {
         _email.postValue(email)
+    }
+
+    fun onValueChangeImage(image: ImageBitmap) {
+        _imagen.value = image
     }
 
     fun onDialogConfirm(navController: NavController) {
@@ -205,7 +211,7 @@ class PerfilTutorViewModel @Inject constructor(
                     _phone.value!!,
                     tutor!!.nombre,
                     tutor!!.apellido,
-                    tutor!!.imagen,
+                    ImageConverter.imageBitmapToByteArray(_imagen.value!!),
                     _alias.value!!,
                     _address.value!!
                 )
@@ -232,7 +238,7 @@ class PerfilTutorViewModel @Inject constructor(
                     _phone.value!!,
                     cuidador!!.nombre,
                     cuidador!!.apellido,
-                    cuidador!!.imagen,
+                    ImageConverter.imageBitmapToByteArray(_imagen.value!!),
                     _alias.value!!,
                     _address.value!!
                 )
@@ -279,20 +285,4 @@ class PerfilTutorViewModel @Inject constructor(
             }
         }
     }
-
-
-    /*fun onImageChange(image: ImageBitmap) {
-        _image.value = image
-    }
-
-    fun imageConverter(imageByte: ByteArray){
-        _image.value= toImageBitmap(imageByte)
-    }
-
-    fun onUpdatePress() {
-        var imageByet = ByteArray(0)
-        if(image.value != null) {
-            imageByet = fromImageBitmap(image.value)!!
-        }
-    }*/
 }

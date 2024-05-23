@@ -22,7 +22,7 @@ class TutorUpdateUseCase @Inject constructor(
             val token = tokenRepository.getTokenFromDatabase()
             val response = tutorRepository.updateTutorFromApi(token.token, tutor.toModel())
             if (response.status == 200) {
-                tutor.idUsuario = response.data.idUsuario
+                //tutor.idUsuario = response.data.idUsuario
                 tutorRepository.updateTutorFromDatabase(tutor.toEntity())
             }
             return response

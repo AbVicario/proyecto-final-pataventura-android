@@ -21,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.ui.composables.BottomBar
+import com.example.pataventura.ui.composables.navegacionButtonBar
 import com.example.pataventura.ui.screens.servicio.composables.BodyServicio
 import com.example.pataventura.ui.screens.servicio.composables.HeaderServicio
 
@@ -37,8 +39,9 @@ fun ServicioScreen(
     var selectedIcon by remember { mutableStateOf(Icons.Default.Badge) }
     Scaffold(
         bottomBar = {
-            BottomBar(selectedIcon, navController) {
-                selectedIcon = it
+            BottomBar(selectedIcon, navController) { icon ->
+                selectedIcon = icon
+                navegacionButtonBar(icon, navController, RoleHolder.rol.value.toString().lowercase())
             }
         }
     )
