@@ -4,13 +4,16 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pataventura.domain.model.Mascota
+import com.example.pataventura.domain.model.Ubicacion
 import com.example.pataventura.domain.useCase.mascotaUseCase.GetMascotasUseCase
 import com.example.pataventura.domain.useCase.tutorUseCase.TutorGetUseCase
+import com.example.pataventura.domain.useCase.ubicacionUseCase.UbicacionRegisterUseCase
 import com.example.pataventura.ui.screens.home.location.GetLocationUseCase
 import com.example.pataventura.ui.screens.home.location.PermissionEvent
 import com.example.pataventura.ui.screens.home.location.ViewState
@@ -26,7 +29,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getLocationUseCase: GetLocationUseCase,
     private val getTutorUseCase: TutorGetUseCase,
-    private val getMascotasUseCase: GetMascotasUseCase
+    private val getMascotasUseCase: GetMascotasUseCase,
+    private val registerUbicacionUseCase: UbicacionRegisterUseCase
 ) : ViewModel() {
 
     private val _nombre = MutableLiveData<String>()
@@ -80,6 +84,11 @@ class HomeViewModel @Inject constructor(
             PermissionEvent.Granted -> {
                 viewModelScope.launch {
                     getLocationUseCase.invoke().collect { location ->
+                        val coordendas = "("+location!!.latitude+","+location.longitude+")"
+                        val ubicacion = Ubicacion(
+                            0,
+                            coordendas)
+                        registerUbicacionUseCase.registroUbicacionTutor(ubicacion)
                         _viewState.value = ViewState.Success(location)
                     }
                 }
