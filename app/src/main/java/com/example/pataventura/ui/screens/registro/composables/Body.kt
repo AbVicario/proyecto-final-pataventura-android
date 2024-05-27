@@ -53,7 +53,7 @@ import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
-fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavController) {
+fun BodyRegistroDos(registroViewModel: RegistroViewModel, navController: NavController) {
     val nombreEmpty: Boolean by registroViewModel.nombreEmpty.observeAsState(false)
     val apellidosEmpty: Boolean by registroViewModel.apellidosEmpty.observeAsState(false)
     val direccionEmpty: Boolean by registroViewModel.direccionEmpty.observeAsState(false)
@@ -102,7 +102,7 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
                     readOnly = false,
                     placeholder = "Nombre",
                     leadingIcon = { Icon(Icons.Default.Person, null) },
-                    supportingText = {if(nombreEmpty) CampoObligatorioText() },
+                    supportingText = { if (nombreEmpty) CampoObligatorioText() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     singleLine = true
                 )
@@ -118,7 +118,7 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
                 readOnly = false,
                 placeholder = "Apellidos",
                 leadingIcon = { Icon(Icons.Default.Person, null) },
-                supportingText = {if(apellidosEmpty) CampoObligatorioText()},
+                supportingText = { if (apellidosEmpty) CampoObligatorioText() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
@@ -132,7 +132,7 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
                 readOnly = false,
                 placeholder = "Teléfono",
                 leadingIcon = { Icon(Icons.Default.Phone, null) },
-                supportingText = {if(telefonoEmpty) CampoObligatorioText() },
+                supportingText = { if (telefonoEmpty) CampoObligatorioText() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                 singleLine = true
             )
@@ -146,7 +146,7 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
                 readOnly = false,
                 placeholder = "Dirección",
                 leadingIcon = { Icon(Icons.Default.Home, null) },
-                supportingText = {if(direccionEmpty) CampoObligatorioText() },
+                supportingText = { if (direccionEmpty) CampoObligatorioText() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
@@ -161,9 +161,9 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
                     icon = Icons.Default.Error,
                     onConfirm = { registroViewModel.onDialogConfirm(navController) },
                     dialogTitle = "Error",
-                    dialogText ="Ha habido un error en el registro. Intentelo mas tarde"
+                    dialogText = "Ha habido un error en el registro. Intentelo mas tarde"
                 )
-                LoginButton(text = "Siguiente", null,
+                LoginButton(text = "Siguiente", null, null,
                     onClick = { registroViewModel.onRegistroDosButtonClicked(navController, tipo) })
             }
         }
@@ -172,7 +172,7 @@ fun BodyRegistroDos(registroViewModel: RegistroViewModel , navController: NavCon
 
 
 @Composable
-fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavController ) {
+fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavController) {
     val emailNoValido: Boolean by registroViewModel.emailNoValido.observeAsState(false)
     val emailEmpty: Boolean by registroViewModel.emailEmpty.observeAsState(false)
     val passConEmpty: Boolean by registroViewModel.passConEmpty.observeAsState(false)
@@ -194,7 +194,8 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
                 .fillMaxHeight()
                 .padding(bottom = 10.dp),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
             CustomText(
                 text = "Introduce tus datos  ",
@@ -202,7 +203,7 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
                 fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
             )
             CustomOutlinedTextField(
-                onValueChange = { registroViewModel.onAliasChange(it)},
+                onValueChange = { registroViewModel.onAliasChange(it) },
                 Modifier
                     .fillMaxWidth()
                     .height(100.dp),
@@ -211,13 +212,13 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
                 placeholder = "Alias",
                 leadingIcon = { Icon(Icons.Default.Person, null) },
                 trailingIcon = {},
-                supportingText = {if(aliasEmpty) CampoObligatorioText()},
+                supportingText = { if (aliasEmpty) CampoObligatorioText() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
 
             CustomOutlinedTextField(
-                onValueChange = { registroViewModel.onEmailChange(it)},
+                onValueChange = { registroViewModel.onEmailChange(it) },
                 Modifier
                     .fillMaxWidth()
                     .height(100.dp),
@@ -226,13 +227,15 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
                 placeholder = "Email",
                 leadingIcon = { Icon(Icons.Default.Mail, null) },
                 trailingIcon = {},
-                supportingText = {if(emailEmpty) CampoObligatorioText()
-                                 else if(emailNoValido) EmailNoValidoText()},
+                supportingText = {
+                    if (emailEmpty) CampoObligatorioText()
+                    else if (emailNoValido) EmailNoValidoText()
+                },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 singleLine = true
             )
             CustomOutlinedTextFieldPass(
-                onValueChange = { registroViewModel.onPasswordChange(it)},
+                onValueChange = { registroViewModel.onPasswordChange(it) },
                 Modifier
                     .fillMaxWidth()
                     .height(100.dp),
@@ -240,12 +243,12 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
                 readOnly = false,
                 placeholder = "Password",
                 leadingIcon = { Icon(Icons.Default.Lock, null) },
-                supportingText = {if(passEmpty) CampoObligatorioText()},
+                supportingText = { if (passEmpty) CampoObligatorioText() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
             CustomOutlinedTextFieldPass(
-                onValueChange = {registroViewModel.onPasswordConChange(it)},
+                onValueChange = { registroViewModel.onPasswordConChange(it) },
                 Modifier
                     .fillMaxWidth()
                     .height(100.dp),
@@ -253,23 +256,18 @@ fun BodyRegistroUno(registroViewModel: RegistroViewModel, navController: NavCont
                 readOnly = false,
                 placeholder = "Confirmar",
                 leadingIcon = { Icon(Icons.Default.Lock, null) },
-                supportingText = {if(passConEmpty) PassConText()},
+                supportingText = { if (passConEmpty) PassConText() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
-        Box(
-            Modifier
-                .fillMaxWidth(0.7f)
-                .height(50.dp)
-        ) {
-            LoginButton(text = "Siguiente", null,
-                onClick = {registroViewModel.onPressRegistroUno(navController)})
+            Box(
+                Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(50.dp)
+            ) {
+                LoginButton(text = "Siguiente", null, null,
+                    onClick = { registroViewModel.onPressRegistroUno(navController) })
+            }
         }
     }
-    }
 }
-
-
-
-
-

@@ -30,7 +30,7 @@ import kotlinx.coroutines.selects.select
 @Composable
 fun CalendarioScreen(
     navController: NavController,
-    calendarioModel: CalendarioViewModel,
+    calendarioModel: CalendarioViewModel
 ) {
     var selectedIcon by remember { mutableStateOf(Icons.Default.CalendarMonth) }
     Scaffold( bottomBar = {

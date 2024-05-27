@@ -40,10 +40,11 @@ fun HomeScreen(
     navController: NavController,
     homeViewModel: HomeViewModel,
 ) {
-    val currentLoc by homeViewModel.currentLoc.observeAsState()
+    val currentLoc by homeViewModel.currentLocTutor.observeAsState()
+    val listaCuidadores by homeViewModel.listaCuidadores.observeAsState(emptyList())
+    val listaCuidadoresPaseo by homeViewModel.listaCuidadoresPaseo.observeAsState(emptyList())
+    val listaCuidadoresGuarderia by homeViewModel.listaCuidadoresGuarderia.observeAsState(emptyList())
     val listaMascotas: List<Mascota> by homeViewModel.mascotas.observeAsState(emptyList())
-    //val cameraState by homeViewModel.cameraState.observeAsState()
-    /*val cameraState : rememberCameraPositionState()*/
 
     LaunchedEffect(key1 = Any()) {
         homeViewModel.setNombre()
@@ -64,7 +65,8 @@ fun HomeScreen(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             HeaderHome(homeViewModel)
-            BodyHome(currentLoc, homeViewModel, listaMascotas/*, cameraState*/)
+            BodyHome(currentLoc, homeViewModel, listaMascotas, listaCuidadores, navController,
+                listaCuidadoresPaseo, listaCuidadoresGuarderia)
         }
     }
 

@@ -23,4 +23,7 @@ interface MascotaDao {
 
     @Query("DELETE FROM mascota_table WHERE id_mascota = :idMascota")
     fun deleteMascota(idMascota: Int)
+
+    @Query("DELETE FROM mascota_table ")
+    fun clearAll()
 }

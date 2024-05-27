@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class UbicacionRegisterUseCase @Inject constructor(
     private val ubicacionRepository: UbicacionRepository,
-    private val tokenGetUseCase: TokenGetUseCase,
+    private val tokenGetUseCase: TokenGetUseCase
 ) {
     suspend fun registroUbicacionCuidador(ubicacion: Ubicacion): CustomResponse {
         val token = tokenGetUseCase.getToken().token

@@ -20,4 +20,6 @@ interface ServicioDao {
 
     @Query("DELETE FROM servicio_table WHERE id_oferta = :idServicio")
     fun deleteServicio(idServicio: Int)
+    @Query("DELETE FROM servicio_table ")
+    fun clearAll()
 }

@@ -3,8 +3,10 @@ package com.example.pataventura.core.navigations
 import LoginScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -63,6 +65,7 @@ fun NavigationHost(
 
 ) {
     val navController = rememberNavController()
+
     NavHost(
         navController = navController,
         startDestination = Destinations.LoginCliente.route
@@ -90,10 +93,22 @@ fun NavigationHost(
             RegistroServicioScreen(navController, registroServicioViewModel)
         }
         composable(Destinations.Contratacion.route) {
-            ContratacionScreen(navController, contratacionViewModel)
+            ContratacionScreen(navController, contratacionViewModel, homeViewModel)
         }
-        composable(Destinations.PerfilTrabajador.route) {
-            PerfilTrabajadorScreen(navController, perfilTrabajadorViewModel)
+        composable(Destinations.PerfilTrabajador.route + "/{id_cuidador}",
+            arguments = listOf(navArgument("id_cuidador") { type = NavType.IntType })
+        ) {
+            val idCuidador = it.arguments?.getInt("id_cuidador")
+
+            if (idCuidador == null) {
+                HomeScreen(navController, homeViewModel)
+
+                return@composable
+            }
+
+            PerfilTrabajadorScreen(navController, perfilTrabajadorViewModel,homeViewModel)
+            perfilTrabajadorViewModel.setTrabajadorId(idCuidador)
+            contratacionViewModel.setTrabajadorId(idCuidador)
         }
         composable(Destinations.Calendario.route) {
             CalendarioScreen(navController, calendarioViewModel)
@@ -125,7 +140,7 @@ fun NavigationHost(
         }
 
         composable(Destinations.Servicio.route) {
-            ServicioScreen(navController, servicioViewModel)
+            ServicioScreen(navController, servicioViewModel, perfilTrabajadorViewModel)
         }
 
     }

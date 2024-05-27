@@ -445,9 +445,10 @@ fun CustomOutlinedTextFieldDes(
 ) {
     var isDesplegado by remember { mutableStateOf(false) }
     var isItemSelected by remember { mutableStateOf(false) }
+    var textSelected by remember {mutableStateOf(items[0]) }
 
     OutlinedTextField(
-        value = text,
+        value = textSelected,
         onValueChange = {
             onValueChange(it)
         },
@@ -508,6 +509,7 @@ fun CustomOutlinedTextFieldDes(
             onItemSelected = { item ->
                 isItemSelected = true
                 isDesplegado = false
+                textSelected = item
                 onValueChange(item)
             }
         )
@@ -665,7 +667,7 @@ fun MenuDesplegable(
         expanded = isDesplegado,
         onDismissRequest = { },
         modifier = Modifier
-            .fillMaxWidth(0.5f)
+            .fillMaxWidth(0.85f)
             .background(Color.White)
             .clip(RoundedCornerShape(50.dp))
     ) {

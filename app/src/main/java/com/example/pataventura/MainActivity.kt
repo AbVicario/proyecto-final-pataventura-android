@@ -171,8 +171,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 }
+
 
 
 /*private suspend fun CameraPositionState.centerOnLocation(

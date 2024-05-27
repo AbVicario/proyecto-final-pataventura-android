@@ -8,12 +8,20 @@ plugins {
 }
 
 android {
+    /*signingConfigs {
+        getByName("debug") {
+            storeFile = file("C:\\Users\\Abel\\Desktop\\firmasApp")
+            storePassword = "secret02082010"
+            keyAlias = "firmas"
+            keyPassword = "secret02082010"
+        }
+    }*/
     namespace = "com.example.pataventura"
     compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.pataventura"
-        minSdk = 28
+        minSdk = 27
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -51,11 +59,13 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
-    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("io.coil-kt:coil-compose:2.0.0")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -77,6 +87,7 @@ dependencies {
     implementation("androidx.databinding:databinding-common:8.3.1")
     implementation("androidx.databinding:databinding-runtime:8.3.1")
     implementation("com.google.firebase:protolite-well-known-types:18.0.0")
+    implementation("com.google.firebase:firebase-auth:23.0.0")
     testImplementation("org.testng:testng:6.9.6")
     testImplementation("org.testng:testng:6.9.6")
     kapt("com.google.dagger:hilt-android-compiler:2.48.1")
@@ -91,8 +102,8 @@ dependencies {
 
     //maps
     implementation ("com.google.maps.android:maps-compose:2.9.0")
-    implementation ("com.google.android.gms:play-services-maps:18.1.0")
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.gms:play-services-maps:18.2.0")
+    implementation ("com.google.android.gms:play-services-location:21.2.0")
 
     //permission
     implementation ("com.google.accompanist:accompanist-permissions:0.31.3-beta")

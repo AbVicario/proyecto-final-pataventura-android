@@ -394,7 +394,7 @@ fun RowNombre(
             onDismiss = { perfilMascotaViewModel.onDialogDeleteDismiss(navController) },
             dialogTitle = "Atención", dialogText = "¿Estás seguro que quieres borrar la mascota?")
         if (editMode) {
-            LoginButton(text = "Guardar", 15) {
+            LoginButton(text = "Guardar", 15, 15,) {
                 perfilMascotaViewModel.validarCampos(navController, context)
             }
         }

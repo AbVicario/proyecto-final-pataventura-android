@@ -12,3 +12,13 @@ object RoleHolder {
     }
 
 }
+
+object IdCuidador {
+    private val _idCuidador = MutableLiveData<Int>()
+    val idCuidador: LiveData<Int> = _idCuidador
+
+    fun setIdCuidador(value: Int) {
+        _idCuidador.postValue(value)
+    }
+
+}

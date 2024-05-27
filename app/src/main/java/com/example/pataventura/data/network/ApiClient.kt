@@ -4,6 +4,7 @@ import com.example.pataventura.data.model.CuidadorModel
 import com.example.pataventura.data.model.LoginModel
 import com.example.pataventura.data.model.TutorModel
 import com.example.pataventura.data.network.response.CuidadorResponse
+import com.example.pataventura.data.network.response.CuidadoresResponse
 import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.data.network.response.LoginResponseCuidador
 import com.example.pataventura.data.network.response.LoginResponseTutor
@@ -53,6 +54,12 @@ interface ApiClient {
         @Header("Authorization") token: String,
     ): CuidadorResponse
 
+    @GET("/api/cliente/cuidador/{id_cuidador}")
+    suspend fun getCuidadorById(
+        @Header("Authorization") token: String,
+        @Path("id_cuidador") idCuidador: Int
+    ): CuidadorResponse
+
     @GET("/api/cliente/tutor")
     suspend fun getTutor(
         @Header("Authorization") token: String,
@@ -62,4 +69,9 @@ interface ApiClient {
         @Header("Authorization") token: String,
         @Path("id_cuidador") idCuidador: Int
     ): CustomResponse
+
+    @GET("/api/cliente/cuidadorByDistance")
+    suspend fun getCuidadorByDistance(
+        @Header("Authorization") token: String,
+    ): CuidadoresResponse
 }

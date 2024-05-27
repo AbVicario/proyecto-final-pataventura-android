@@ -1,4 +1,7 @@
 package com.example.pataventura.ui.screens.contratacion.composables
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,27 +26,49 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pataventura.R
+import com.example.pataventura.domain.converters.ImageConverter
+import com.example.pataventura.domain.model.Cuidador
+import com.example.pataventura.domain.model.Valoracion
 import com.example.pataventura.ui.composables.CustomOutlinedTextContrato
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.DatePickerWithDialog
 import com.example.pataventura.ui.composables.MyCustomButton
+import com.example.pataventura.ui.composables.MyValoracionStars
+import com.example.pataventura.ui.screens.contratacion.ContratacionViewModel
+import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 import java.time.LocalDate
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun BodyContratacion(){
+fun BodyContratacion(contratacionViewmodel: ContratacionViewModel,
+                     navController: NavController,
+                     homeViewModel: HomeViewModel){
+    val valoraciones : List<Valoracion> by contratacionViewmodel.valoraciones.observeAsState(emptyList())
+    val cuidador : Cuidador by contratacionViewmodel.cuidador.observeAsState(Cuidador())
+
+    LaunchedEffect(key1 = Any()) {
+        contratacionViewmodel.setCuidador(homeViewModel.listaCuidadores.value!!)
+    }
     Box(){
         Image(painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
             contentDescription = "Foondo",
@@ -56,7 +81,7 @@ fun BodyContratacion(){
                 .padding(start = 15.dp, end = 15.dp, bottom = 15.dp),
             verticalArrangement = Arrangement.SpaceBetween) {
 
-            MyCardPerfil()
+            MyCardPerfil(cuidador, valoraciones)
 
             MyRowFechas("Fecha inicio:", "Fecha fin:")
 
@@ -71,7 +96,7 @@ fun BodyContratacion(){
 
             MyRowPrecio()
 
-            MyRowButtons()
+            MyRowButtons(navController)
         }
     }
 
@@ -80,14 +105,18 @@ fun BodyContratacion(){
 }
 
 @Composable
-fun MyRowButtons() {
+fun MyRowButtons(navController: NavController) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 30.dp),
         horizontalArrangement = Arrangement.SpaceBetween){
-        MyCustomButton(texto = "Contartar", color = Verde)
+        MyCustomButton(texto = "Contartar", color = Verde){
+
+        }
         Spacer(modifier = Modifier.width(40.dp))
-        MyCustomButton(texto = "Cancelar", color = Color.Red)
+        MyCustomButton(texto = "Cancelar", color = Color.Red){
+            navController.navigate("home")
+        }
     }
 }
 
@@ -143,50 +172,55 @@ fun MyRowFechas(textoInicio: String, textoFin: String) {
 }
 
 
+fun valoracionMedia(valoraciones: List<Valoracion>?): Double {
+    var resultado = 0.0
+    if (valoraciones != null) {
+        for (valoracion in valoraciones) {
+            resultado += valoracion.puntuacion
+        }
+        resultado /= valoraciones.size
+    }
+
+    return resultado
+}
 
 @Composable
-fun MyCardPerfil() {
+fun MyCardPerfil(cuidador: Cuidador,
+                 valoraciones: List<Valoracion>) {
+    val media = valoracionMedia(valoraciones)
+
     Card (modifier = Modifier.padding(10.dp),
         shape = CardDefaults.elevatedShape,
         colors = CardDefaults.elevatedCardColors(),
         elevation = CardDefaults.cardElevation(),
-        border = CardDefaults.outlinedCardBorder()
+        border = BorderStroke(2.dp, Verde)
     ){
-        Row(modifier = Modifier.fillMaxWidth()){
-            Column(verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    Modifier
-                        .size(130.dp)
-                        .padding(15.dp)){
-                    Image(painter = painterResource(id = R.drawable.imagen_perfil),
-                        contentDescription = "Imagen de perfil", Modifier.fillMaxSize() )
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp),){
+            Column (horizontalAlignment = Alignment.CenterHorizontally){
+                Box ( modifier = Modifier
+                    .minimumInteractiveComponentSize()
+                    .size(85.dp)
+                    .clip(RoundedCornerShape(100f))
+                    .background(Verde.copy(alpha = 0.2f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(bitmap = ImageConverter.byteArrayToImageBitmap(cuidador!!.imagen),
+                        contentDescription = "Imagen cuidador",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.FillBounds)
                 }
-                Row (Modifier.padding(start=10.dp)){
-                    Icon(Icons.Default.StarRate, contentDescription = null,
-                        Modifier.size(30.dp),tint = Verde)
-                    Icon(Icons.Default.StarRate, contentDescription = null,
-                        Modifier.size(30.dp), tint = Verde)
-                    Icon(Icons.Default.StarRate, contentDescription = null,
-                        Modifier.size(30.dp),tint = Verde)
-                    Icon(Icons.Default.StarHalf, contentDescription = null,
-                        Modifier.size(30.dp), tint = Verde)
-                    Icon(Icons.Default.StarOutline, contentDescription = null,
-                        Modifier.size(30.dp), tint = Verde)
-                }
-
-
             }
-            Spacer(modifier = Modifier.size(10.dp))
-            Column() {
-                CustomText(text = "Nombre Cuidador", color = Color.Black, fontSize = 24.sp,
+            Spacer(modifier = Modifier.size(15.dp))
+            Column(horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center) {
+                CustomText(text = cuidador!!.alias, color = Color.Black, fontSize = 30.sp,
                     fontWeight = FontWeight.Bold , fontFamily = CustomFontFamily)
                 Spacer(modifier = Modifier.size(5.dp))
-                CustomText(text = "Rol cuidador", color = Color.Black, fontSize = 20.sp ,
-                    fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily)
-                Spacer(modifier = Modifier.size(5.dp))
-                CustomText(text = "Descripción del cuidador", color = Color.Black, fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily)
+                Row (Modifier.padding(start=10.dp)){
+                    MyValoracionStars(valoracion = media, sizeStars = 40)
+                }
             }
         }
 

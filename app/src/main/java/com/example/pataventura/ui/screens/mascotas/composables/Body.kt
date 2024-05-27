@@ -41,8 +41,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.domain.converters.ImageConverter
+import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.ui.composables.CustomText
+import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.home.composables.MyBoxMap
 import com.example.pataventura.ui.screens.mascotas.MascotasViewModel
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
@@ -56,7 +58,9 @@ import com.google.android.gms.maps.model.LatLng
 fun BodyMascotas(
     currentPosition: LatLng?,
     mascotasViewModel: MascotasViewModel,
-    navController: NavController
+    navController: NavController,
+    listaCuidadores: List<Cuidador>,
+    homeViewModel: HomeViewModel
 ) {
     LaunchedEffect(key1 = true) {
         mascotasViewModel.getMascotas()
@@ -81,7 +85,7 @@ fun BodyMascotas(
                     .fillMaxWidth()
                     .height(400.dp)
             ) {
-                MyBoxMap(currentPosition)
+                //MyBoxMap(currentPosition, listaCuidadores,navController, homeViewModel )
 
             }
 

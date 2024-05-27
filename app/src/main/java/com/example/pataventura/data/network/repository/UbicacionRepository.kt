@@ -3,6 +3,7 @@ package com.example.pataventura.data.network.repository
 import com.example.pataventura.data.model.UbicacionModel
 import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.data.network.service.UbicacionService
+import com.example.pataventura.domain.model.Cuidador
 import javax.inject.Inject
 
 class UbicacionRepository  @Inject constructor(

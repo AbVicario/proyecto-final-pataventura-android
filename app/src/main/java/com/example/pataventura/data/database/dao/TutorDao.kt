@@ -6,8 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.pataventura.data.database.entity.TutorEntity
-import com.example.pataventura.data.model.MascotaModel
-import com.example.pataventura.data.model.TutorModel
 
 @Dao
 interface TutorDao {

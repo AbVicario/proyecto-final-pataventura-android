@@ -155,7 +155,7 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
 
                 )
 
-                LoginButton(text = "Finalizar", null,
+                LoginButton(text = "Finalizar", null, null,
                     onClick = {registroServicioViewModel.onPressRegistroServicio(navController)})
             }
         }

@@ -223,12 +223,6 @@ fun MyServicioColumn(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
-
-
-
-
-
-
         }
         Spacer(modifier = Modifier.height(16.dp))
         CustomOutlinedTextFieldUpdate(
@@ -248,7 +242,7 @@ fun MyServicioColumn(
         Spacer(modifier = Modifier.height(20.dp))
 
         if (editMode) {
-            LoginButton(text = "Guardar", null,) {
+            LoginButton(text = "Guardar", null, null,) {
                 servicioViewModel.onSave(navController, servicio)
             }
             Spacer(modifier = Modifier.height(20.dp))
