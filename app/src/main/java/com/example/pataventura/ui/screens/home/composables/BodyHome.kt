@@ -170,14 +170,11 @@ fun MyBoxMap(
     listaCuidadoresGuarderia: List<Cuidador>,
     servicio: String
 ) {
-
     val showInfoDialog = remember { mutableStateOf(false) }
-
     var marker = LatLng(40.416775, -3.703790)
     var cameraStateAux = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(marker, 10f)
     }
-
     if (currentPosition != null) {
         marker = LatLng(currentPosition.latitude, currentPosition.longitude)
         cameraStateAux = rememberCameraPositionState {
@@ -199,55 +196,51 @@ fun MyBoxMap(
         properties = MapProperties(
             isMyLocationEnabled = true,
             mapType = MapType.NORMAL,
-            isTrafficEnabled = false
+            isTrafficEnabled = false,
+            minZoomPreference = 13f,
         )
     ) {
-
-        val showCuidadores =
-            remember(servicio, listaCuidadores, listaCuidadoresPaseo, listaCuidadoresGuarderia) {
-                derivedStateOf {
-                    when (servicio) {
-                        "Paseo" -> listaCuidadoresPaseo
-                        "Guardería" -> listaCuidadoresGuarderia
-                        else -> listaCuidadores
-                    }
+        val showCuidadores = remember(servicio, listaCuidadores, listaCuidadoresPaseo, listaCuidadoresGuarderia) {
+            derivedStateOf {
+                when (servicio.lowercase()) {
+                    "paseo" -> listaCuidadoresPaseo
+                    "guardería" -> listaCuidadoresGuarderia
+                    else -> listaCuidadores
                 }
-            }.value
+            }
+        }.value
 
         for (c in showCuidadores) {
             Marker(
                 state = MarkerState(
                     position = LatLng(
-                        c.ubicacion!!.latitude,
-                        c.ubicacion!!.longitude
+                        c.ubicacion?.latitude ?: 0.0,
+                        c.ubicacion?.longitude ?: 0.0
                     )
                 ),
                 title = c.alias,
                 snippet = "Esto lo peta",
                 draggable = true,
                 onClick = {
-                    //it.showInfoWindow()
                     cuidador = c
-                    Log.d("cuidador", cuidador!!.alias)
                     homeViewModel.getValoraciones(c.idUsuario)
                     showInfoDialog.value = true
                     true
                 }
             )
         }
-        if (showInfoDialog.value) {
 
+        if (showInfoDialog.value && cuidador != null) {
             AlertDialog(
                 onDismissRequest = { showInfoDialog.value = false },
                 text = {
-                    Column() {
+                    Column {
                         Row(
                             modifier = Modifier
                                 .padding(start = 5.dp, top = 10.dp, end = 5.dp)
                                 .clickable {
                                     navController.navigate(
-                                        Destinations.PerfilTrabajador.route
-                                                + "/${cuidador!!.idUsuario}"
+                                        Destinations.PerfilTrabajador.route + "/${cuidador!!.idUsuario}"
                                     )
                                 }
                         ) {
@@ -260,12 +253,10 @@ fun MyBoxMap(
                                         .background(Verde.copy(alpha = 0.2f)),
                                     contentAlignment = Alignment.Center
                                 ) {
-
                                     Image(
                                         bitmap = ImageConverter.byteArrayToImageBitmap(cuidador!!.imagen),
                                         contentDescription = "Imagen cuidador",
-                                        modifier = Modifier
-                                            .fillMaxSize(),
+                                        modifier = Modifier.fillMaxSize(),
                                         contentScale = ContentScale.FillBounds,
                                     )
                                 }
@@ -277,8 +268,7 @@ fun MyBoxMap(
                                 modifier = Modifier.padding(start = 10.dp),
                                 contentAlignment = Alignment.TopEnd
                             ) {
-                                Column(
-                                ) {
+                                Column {
                                     Text(
                                         text = cuidador!!.alias,
                                         color = Verde,
@@ -288,22 +278,19 @@ fun MyBoxMap(
                                         modifier = Modifier.padding(top = 10.dp)
                                     )
                                     Text(
-                                        text = if (cuidador!!.servicio!!.tipo.lowercase() == "paseo") "Paseador" else "Guardian",
+                                        text = if (cuidador!!.servicio?.tipo?.lowercase() == "paseo") "Paseador" else "Guardian",
                                         color = Color.Black,
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold,
                                         fontFamily = CustomFontFamily,
                                         modifier = Modifier.padding(top = 10.dp)
                                     )
-
                                 }
-
                             }
-
                         }
                         Spacer(modifier = Modifier.height(10.dp))
                         CustomText(
-                            text = cuidador!!.servicio!!.descripcion,
+                            text = cuidador!!.servicio?.descripcion.orEmpty(),
                             color = Color.Black,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Normal,
@@ -311,8 +298,7 @@ fun MyBoxMap(
                         )
                         Spacer(modifier = Modifier.height(15.dp))
                         val precio = cuidador!!.servicio!!.precio
-                        val precioFormateado = if ((precio % 1).toDouble() == 0.0) precio.toInt()
-                            .toString() else precio.toString()
+                        val precioFormateado = if ((precio % 1).toDouble() == 0.0) precio.toInt().toString() else precio.toString()
                         val text = precioFormateado.plus("€")
                         CustomText(
                             text = text,
@@ -322,21 +308,17 @@ fun MyBoxMap(
                             fontFamily = CustomFontFamily
                         )
                     }
-
                 },
                 confirmButton = {
                     LoginButton(text = "Contratar", null, null) {
                         navController.navigate(Destinations.Contratacion.route)
-
                     }
-
                 }
             )
-
         }
     }
-
 }
+
 
 
 @Composable

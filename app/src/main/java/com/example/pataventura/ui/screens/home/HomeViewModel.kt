@@ -25,6 +25,7 @@ import com.example.pataventura.ui.screens.home.location.ViewState
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -82,14 +83,11 @@ class HomeViewModel @Inject constructor(
         }
     }*/
 
-    fun getValoraciones(idCuidador: Int): MutableLiveData<List<Valoracion>> {
-        val valoracionesLiveData = MutableLiveData<List<Valoracion>>()
+    fun getValoraciones(idCuidador: Int) {
         viewModelScope.launch {
-            val valoraciones = getValoracionesUseCase.getValoraciones(idCuidador)
-            valoracionesLiveData.postValue(valoraciones)
-            Log.d("Valoraciones", valoraciones.toString())
+            _valoraciones.postValue(getValoracionesUseCase.getValoraciones(idCuidador))
+
         }
-        return valoracionesLiveData
     }
 
 
