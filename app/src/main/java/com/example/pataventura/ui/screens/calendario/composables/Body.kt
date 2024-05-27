@@ -145,7 +145,7 @@ fun MyColumnCuidador(nombreCuidador: String, precio: String) {
         Spacer(modifier = Modifier.size(10.dp))
 
         Box(modifier = Modifier.padding(5.dp)){
-            MyCustomButton(texto = "Cancelar", color = Color.Red)
+            MyCustomButton(texto = "Cancelar", color = Color.Red){}
         }
 
     }

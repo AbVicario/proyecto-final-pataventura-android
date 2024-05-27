@@ -23,6 +23,8 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -30,7 +32,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.pataventura.di.IdCuidador
 import com.example.pataventura.di.RoleHolder
+import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
@@ -38,6 +42,7 @@ fun BottomBar(
     selectedIcon: ImageVector,
     navController: NavController,
     onIconSelected: (ImageVector) -> Unit
+
 ) {
     val rol = RoleHolder.rol.value.toString().lowercase()
     val listaIconos: List<Pair<ImageVector, Boolean>> = if (rol == "cuidador") {
@@ -94,7 +99,6 @@ fun BottomBar(
 }
 
 
-
 @Composable
 fun MyIconButton(icon: ImageVector, onClick: () -> Unit) {
     Box(
@@ -112,7 +116,11 @@ fun MyIconButton(icon: ImageVector, onClick: () -> Unit) {
 }
 
 @Composable
-fun MyIconButtonSelected(icon: ImageVector, navController: NavController, rol: String) {
+fun MyIconButtonSelected(
+    icon: ImageVector,
+    navController: NavController,
+    rol: String
+) {
     Column(
 
     ) {
@@ -154,9 +162,16 @@ fun MyIconButtonSelected(icon: ImageVector, navController: NavController, rol: S
     }
 }
 
-fun navegacionButtonBar(icon: ImageVector, navController: NavController, rol: String) {
+fun navegacionButtonBar(
+    icon: ImageVector,
+    navController: NavController,
+    rol: String
+) {
+    val idCuidador = IdCuidador.idCuidador.value
     when (icon.name) {
-        Icons.Default.Home.name -> navController.navigate("home")
+        Icons.Default.Home.name -> if (rol == "tutor") navController.navigate("home") else
+            navController.navigate("perfilTrabajador/${idCuidador}")
+
         Icons.Default.CalendarMonth.name -> navController.navigate("calendario")
         Icons.Default.Pets.name -> navController.navigate("mascotas")
         Icons.Default.NotificationsNone.name -> navController.navigate("home")

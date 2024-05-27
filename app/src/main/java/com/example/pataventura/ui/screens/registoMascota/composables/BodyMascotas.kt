@@ -162,7 +162,7 @@ fun BodyRegistroMascota(
                                 "para poder solicitar demandar servicios." +
                                 " Intentelo mas tarde"
                     )
-                    LoginButton(text = "Finalizar", null,
+                    LoginButton(text = "Finalizar", null, null,
                         onClick = {
                             registroMascotaViewModel.onFinalizarPress(
                                 navController,

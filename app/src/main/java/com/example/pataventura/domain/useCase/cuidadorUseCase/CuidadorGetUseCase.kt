@@ -13,10 +13,26 @@ class CuidadorGetUseCase @Inject constructor(
     private val tokenRepository: TokenRepository
 ) {
     suspend fun getCuidador(): Cuidador? {
-        val token = tokenRepository.getTokenFromDatabase()
-        return cuidadorRepository.getCuidadorFromDatabase()
-            ?: return cuidadorRepository.getCuidadorFromApi(token.token)
-        Log.e("Cuidador", "jksjhs")
+        try {
+            val token = tokenRepository.getTokenFromDatabase()
+            return cuidadorRepository.getCuidadorFromDatabase()
+                ?: return cuidadorRepository.getCuidadorFromApi(token.token)
+        } catch (e : Exception) {
+            throw e
+        }
 
+
+    }
+
+    suspend fun getCuidadorById(id: Int): Cuidador? {
+        val token = tokenRepository.getTokenFromDatabase()
+        return cuidadorRepository.getCuidadorByIdFromApi(id, token.token)
+
+    }
+
+    suspend fun getCuidadoresByDistance(): List<Cuidador> {
+        val token = tokenRepository.getTokenFromDatabase()
+        Log.e("Cuidador", token.token)
+        return cuidadorRepository.getCuidadorByDistance(token.token)
     }
 }

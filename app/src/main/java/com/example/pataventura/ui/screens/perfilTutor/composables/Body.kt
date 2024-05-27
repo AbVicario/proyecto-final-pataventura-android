@@ -57,7 +57,6 @@ fun BodyPerfilTutor(
 
     ) {
 
-    val lifecycleScope = rememberCoroutineScope()
     val name by perfilTutorViewModel.name.observeAsState("")
     val alias by perfilTutorViewModel.alias.observeAsState("")
     val phone by perfilTutorViewModel.phone.observeAsState("")
@@ -70,7 +69,7 @@ fun BodyPerfilTutor(
     val isAddress by perfilTutorViewModel.isAddress.observeAsState()
     val isNotEmail by perfilTutorViewModel.isNotEmail.observeAsState()
 
-   Box() {
+    Box() {
         Image(
             painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
             contentDescription = "Fondo",
@@ -81,7 +80,7 @@ fun BodyPerfilTutor(
                 Column(
                     Modifier
                         .fillMaxWidth()
-                        .padding(20.dp),
+                        .padding(start = 20.dp, end = 20.dp),
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.Start
                 ) {
@@ -93,24 +92,25 @@ fun BodyPerfilTutor(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         ColumnNombre(name)
-                        if (RoleHolder.rol.value.toString().lowercase() == "cuidador") {
-                            if (editMode) {
-                                MyAlertDialog(
-                                    show = perfilTutorViewModel.showDialog,
-                                    icon = Icons.Default.Error,
-                                    onConfirm = { perfilTutorViewModel.onDialogConfirm(navController) },
-                                    dialogTitle = "Error",
-                                    dialogText = "Ha habido un error al actualizar. Intentelo mas tarde"
-                                )
-                                LoginButton(text = "Guardar", 20,) {
-                                    perfilTutorViewModel.onValueChangeEditMode(false)
-                                    perfilTutorViewModel.validarCampos(navController)
-                                }
-                            }else{
+                        if (editMode) {
+                            MyAlertDialog(
+                                show = perfilTutorViewModel.showDialog,
+                                icon = Icons.Default.Error,
+                                onConfirm = { perfilTutorViewModel.onDialogConfirm(navController) },
+                                dialogTitle = "Error",
+                                dialogText = "Ha habido un error al actualizar. Intentelo mas tarde"
+                            )
+                            LoginButton(text = "Guardar", null, 2 ) {
+                                perfilTutorViewModel.onValueChangeEditMode(false)
+                                perfilTutorViewModel.validarCampos(navController)
+                            }
+                        } else {
+                            if (RoleHolder.rol.value.toString().lowercase() == "cuidador") {
                                 ColumnValoracion()
                             }
-
                         }
+
+
                     }
 
                     Spacer(modifier = Modifier.size(20.dp))
@@ -129,16 +129,6 @@ fun BodyPerfilTutor(
 fun ColumnValoracion() {
     Column(Modifier.fillMaxHeight()) {
         RowValoracion(25)
-        Box(Modifier.clickable {
-        }
-        ) {
-            CustomText(
-                text = "Ver", color = Color.Black,
-                fontSize = 16.sp, fontWeight = FontWeight.Bold,
-                fontFamily = CustomFontFamily
-            )
-        }
-
     }
 }
 

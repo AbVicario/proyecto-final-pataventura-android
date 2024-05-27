@@ -126,7 +126,7 @@ fun BodyLogin(loginViewModel:LoginViewModel, navController: NavController) {
                     dialogText = "Ha habido un error inesperado\n" +
                             " Intentelo más tarde"
                 )
-                LoginButton(text = "Acceder", null,
+                LoginButton(text = "Acceder", null, null,
                     onClick= { loginViewModel.onLoginButtonClicked(navController) }
                 )
             }

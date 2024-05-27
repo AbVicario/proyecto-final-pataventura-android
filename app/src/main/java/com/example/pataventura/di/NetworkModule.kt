@@ -3,6 +3,8 @@ package com.example.pataventura.di
 import com.example.pataventura.data.network.ApiClient
 import com.example.pataventura.data.network.ApiMascota
 import com.example.pataventura.data.network.ApiServicio
+import com.example.pataventura.data.network.ApiUbicacion
+import com.example.pataventura.data.network.ApiValoracion
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,6 +39,18 @@ class NetworkModule {
     @Provides
     fun provideApiServicio(retrofit: Retrofit): ApiServicio {
         return retrofit.create(ApiServicio::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideApiUbicacion(retrofit: Retrofit): ApiUbicacion {
+        return retrofit.create(ApiUbicacion::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideApiValoracion(retrofit: Retrofit): ApiValoracion {
+        return retrofit.create(ApiValoracion::class.java)
     }
 
 }

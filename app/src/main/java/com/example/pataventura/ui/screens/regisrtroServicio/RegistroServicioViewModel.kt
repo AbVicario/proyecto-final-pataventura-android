@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.domain.model.Servicio
+import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorGetUseCase
 import com.example.pataventura.domain.useCase.servicioUseCase.ServicioRegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistroServicioViewModel @Inject constructor(
     private val servicioRegisterUseCase: ServicioRegisterUseCase,
+    private val getCuidadorUseCase: CuidadorGetUseCase
 ) : ViewModel() {
 
     var showDialog by mutableStateOf(false)
@@ -57,7 +59,7 @@ class RegistroServicioViewModel @Inject constructor(
         "3500m"
     )
     private var listaDistanciaGuarderia = listOf(
-        "5Km", "7,5km", "10Km", "12.5km", "15km",
+        "5Km", "7.5km", "10Km", "12.5km", "15km",
         "17.5km", "20Km"
     )
 
@@ -154,7 +156,8 @@ class RegistroServicioViewModel @Inject constructor(
                     if (navController.previousBackStackEntry?.destination?.route == Destinations.Servicio.route) {
                         navController.navigate(route = Destinations.Servicio.route)
                     } else {
-                        navController.navigate(route = Destinations.Home.route)
+                        val cuidador = getCuidadorUseCase.getCuidador()
+                        navController.navigate(route = Destinations.PerfilTrabajador.route + "/${cuidador!!.idUsuario}")
                     }
 
                 } else {

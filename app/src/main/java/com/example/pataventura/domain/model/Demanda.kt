@@ -1,6 +1,5 @@
 package com.example.pataventura.domain.model
 
-import com.google.gson.annotations.SerializedName
 import com.google.type.DateTime
 
 data class Demanda(

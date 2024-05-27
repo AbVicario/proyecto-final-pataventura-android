@@ -37,7 +37,9 @@ fun MascotasScreen(
     homeViewModel: HomeViewModel
 ){
     var selectedIcon by remember { mutableStateOf(Icons.Default.Pets) }
-    val currentLoc by homeViewModel.currentLoc.observeAsState()
+    val currentLoc by homeViewModel.currentLocTutor.observeAsState()
+    val listaCuidadores by homeViewModel.listaCuidadores.observeAsState(emptyList())
+
     Scaffold( bottomBar = {
         BottomBar(selectedIcon, navController) { icon ->
             selectedIcon = icon
@@ -50,7 +52,7 @@ fun MascotasScreen(
         ) {
             HeaderMascotas()
             Spacer(modifier = Modifier.size(10.dp))
-            BodyMascotas(currentLoc, mascotasViewModel, navController)
+            BodyMascotas(currentLoc, mascotasViewModel, navController, listaCuidadores, homeViewModel)
             HandleLocationPermissionAndState(homeViewModel)
         }
     }

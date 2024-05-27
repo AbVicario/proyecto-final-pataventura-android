@@ -2,6 +2,8 @@ package com.example.pataventura.domain.model
 
 import com.example.pataventura.data.database.entity.CuidadorEntity
 import com.example.pataventura.data.model.CuidadorModel
+import com.google.type.LatLng
+import org.json.JSONArray
 
 data class Cuidador(
     var idUsuario: Int,
@@ -12,8 +14,12 @@ data class Cuidador(
     var apellido: String,
     var imagen: ByteArray,
     var alias: String,
-    var direccion: String
-)
+    var direccion: String,
+    var ubicacion: LatLng? = null,
+    var servicio: Servicio? = null
+) {
+    constructor() : this(0, "", "", "", "", "", byteArrayOf(), "", "", null, null)
+}
 
 fun CuidadorModel.toDomain() = Cuidador(
     idUsuario,
@@ -24,7 +30,9 @@ fun CuidadorModel.toDomain() = Cuidador(
     apellido,
     imagen,
     alias,
-    direccion
+    direccion,
+    ubicacion,
+    servicio,
 )
 
 fun CuidadorEntity.toDomain() = Cuidador(
@@ -48,7 +56,9 @@ fun Cuidador.toModel() = CuidadorModel(
     apellido,
     imagen,
     alias,
-    direccion
+    direccion,
+    ubicacion,
+    servicio
 )
 
 fun Cuidador.toEntity() = CuidadorEntity(

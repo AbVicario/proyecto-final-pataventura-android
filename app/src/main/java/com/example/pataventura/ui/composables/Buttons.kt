@@ -74,11 +74,11 @@ fun CustomButtonStyle(): ButtonColors {
 }
 
 @Composable
-fun LoginButton(text: String , padding: Int?,  onClick: () -> Unit) {
+fun LoginButton(text: String , paddingStart: Int?, paddingEnd: Int?,  onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = padding?.dp ?: 40.dp)
+            .padding(start = paddingStart?.dp ?: 40.dp, end = paddingEnd?.dp ?: 40.dp)
             .clickable { onClick() }
             .size(width = 180.dp, height = 50.dp)
             .clip(RoundedCornerShape(16.dp))
@@ -134,14 +134,14 @@ fun InformationButton(
     }
 }
 @Composable
-fun MyCustomButton(texto: String, color: Color) {
+fun MyCustomButton(texto: String, color: Color , onClick: () -> Unit) {
 
     Column(
         Modifier
             .height(45.dp)
             .width(120.dp)
             .background(color, shape = RoundedCornerShape(10.dp))
-            .clickable { },
+            .clickable { onClick()},
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
 

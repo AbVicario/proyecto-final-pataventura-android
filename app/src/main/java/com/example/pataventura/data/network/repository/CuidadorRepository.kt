@@ -92,5 +92,25 @@ class CuidadorRepository @Inject constructor(
             }
     }
 
+    suspend fun getCuidadorByIdFromApi(id: Int, token: String): Cuidador? {
+        return try {
+            val cuidador = cuidadorService.getCuidadorByIdFromApi(id, token)
+            cuidador.toDomain()
+        } catch (e: Exception) {
+            Log.e("LOOK AT ME", "${e.message}")
+            null
+        }
+    }
+
+    suspend fun getCuidadorByDistance(token: String): List<Cuidador> {
+        return try {
+            val cuidadoresByTipoAndRadio = cuidadorService.getCuidadorByDistance(token)
+            cuidadoresByTipoAndRadio.map { it.toDomain() }
+        } catch (e: Exception) {
+            Log.e("LOOK AT ME", "${e.message}")
+            emptyList()
+        }
+    }
+
 
 }

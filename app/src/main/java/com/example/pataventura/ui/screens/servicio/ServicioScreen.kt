@@ -22,8 +22,11 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pataventura.di.RoleHolder
+import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.ui.composables.BottomBar
 import com.example.pataventura.ui.composables.navegacionButtonBar
+import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
+import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
 import com.example.pataventura.ui.screens.servicio.composables.BodyServicio
 import com.example.pataventura.ui.screens.servicio.composables.HeaderServicio
 
@@ -32,11 +35,13 @@ import com.example.pataventura.ui.screens.servicio.composables.HeaderServicio
 @Composable
 fun ServicioScreen(
     navController: NavController,
-    servicioViewModel: ServicioViewModel
+    servicioViewModel: ServicioViewModel,
+    perfilTrabajadorViewModel: PerfilTrabajadorViewModel
 ) {
-    val image: ImageBitmap? = null
 
     var selectedIcon by remember { mutableStateOf(Icons.Default.Badge) }
+    val cuidador by perfilTrabajadorViewModel.cuidador.observeAsState()
+
     Scaffold(
         bottomBar = {
             BottomBar(selectedIcon, navController) { icon ->
@@ -53,7 +58,7 @@ fun ServicioScreen(
             LaunchedEffect(Unit) {
                 servicioViewModel.pintarServicios()
             }
-            HeaderServicio(image)
+            HeaderServicio(ImageConverter.byteArrayToImageBitmap(cuidador!!.imagen))
             Spacer(modifier = Modifier.height(16.dp))
             BodyServicio(servicioViewModel, navController)
         }

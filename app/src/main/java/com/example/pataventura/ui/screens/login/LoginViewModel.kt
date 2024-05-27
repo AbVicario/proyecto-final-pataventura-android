@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
+import com.example.pataventura.di.IdCuidador
 import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.domain.useCase.AuthenticateUserUseCase
+import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorGetUseCase
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,8 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authenticateUseCase: AuthenticateUserUseCase,
+    private val getUseCase: CuidadorGetUseCase
 ) : ViewModel() {
-
 
     var showDialog by mutableStateOf(false)
         private set
@@ -89,9 +91,17 @@ class LoginViewModel @Inject constructor(
         val email = _email.value!!
         val password = _password.value!!
 
-        val result = authenticateUseCase.login(email, password, RoleHolder.rol.value.toString())
+        val result =
+            authenticateUseCase.login(email, password, RoleHolder.rol.value.toString().lowercase())
         if (result) {
-            navController.navigate(route = "home")
+            if (RoleHolder.rol.value.toString().lowercase() == "tutor") {
+                navController.navigate(route = "home")
+            } else {
+                val cuidador = getUseCase.getCuidador()
+                IdCuidador.setIdCuidador(cuidador!!.idUsuario)
+                navController.navigate(Destinations.PerfilTrabajador.route + "/${cuidador.idUsuario}")
+            }
+
         } else {
             onOpenDialog()
         }

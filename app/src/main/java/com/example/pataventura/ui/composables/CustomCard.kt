@@ -111,7 +111,9 @@ fun CardHistorial(nombreMascota : String, nombreCuidador  : String,
 
                     if(mascota){
                         Box(Modifier.padding()){
-                            MyCustomButton(texto = "Valorar", color = Verde )
+                            MyCustomButton(texto = "Valorar", color = Verde ){
+
+                            }
                         }
                     }
                 }

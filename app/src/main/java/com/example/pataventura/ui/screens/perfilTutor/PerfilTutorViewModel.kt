@@ -19,6 +19,7 @@ import com.example.pataventura.di.RoleHolder.rol
 import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Tutor
+import com.example.pataventura.domain.useCase.ClearDBUseCase
 import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorGetUseCase
 import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorUpdateUseCase
 import com.example.pataventura.domain.useCase.tokenUseCase.DeleteTokenUseCase
@@ -35,7 +36,7 @@ class PerfilTutorViewModel @Inject constructor(
     private val cuidadorGetUseCase: CuidadorGetUseCase,
     private val tutorUpdateUseCase: TutorUpdateUseCase,
     private val cuidadorUpdateUseCase: CuidadorUpdateUseCase,
-    private val deleteTokenUseCase: DeleteTokenUseCase,
+    private val clearDBUseCase: ClearDBUseCase
 ) : ViewModel() {
 
     private val rolObserver = Observer<String> { newValue -> newValue.lowercase() }
@@ -88,16 +89,9 @@ class PerfilTutorViewModel @Inject constructor(
         this.cuidador = cuidador
     }
 
-    fun getTutor(): Tutor? {
-        return tutor
-    }
-
-    fun getCuidador(): Cuidador? {
-        return cuidador
-    }
-    fun deleteToken(navController: NavController) {
+    fun clearDB(navController: NavController) {
         viewModelScope.launch {
-            deleteTokenUseCase.deleteToken()
+            clearDBUseCase.clearDB()
             RoleHolder.setRol("")
             navController.navigate(Destinations.LoginCliente.route)
         }

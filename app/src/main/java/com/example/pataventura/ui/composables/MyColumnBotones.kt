@@ -82,7 +82,7 @@ fun ColumnBotonesUsuario(
             verticalArrangement = Arrangement.Top
         ) {
             MyboxButton(Icons.Default.PowerSettingsNew, isIcon) {
-                perfilTutorViewModel.deleteToken(navController)
+                perfilTutorViewModel.clearDB(navController)
             }
             MyboxButton(Icons.Default.Edit, isIcon) {
                 perfilTutorViewModel.onValueChangeEditMode(true)
