@@ -19,8 +19,15 @@ class ContratacionViewModel @Inject constructor(
 ) : ViewModel(
 
 ) {
+    private val _precioTotal = MutableLiveData<String>()
+    val precioTotal: LiveData<String> = _precioTotal
+
     private val _cuidador = MutableLiveData(Cuidador())
     val cuidador: MutableLiveData<Cuidador> = _cuidador
+
+    private val _servicio = MutableLiveData<String>()
+    val servicio: LiveData<String> = _servicio
+
 
     private val _idCuidador = MutableLiveData<Int>()
     val idCuidador: LiveData<Int> = _idCuidador
@@ -56,6 +63,10 @@ class ContratacionViewModel @Inject constructor(
         }
     }
 
+    fun setServicio(servicio: String) {
+        _servicio.postValue(servicio)
+    }
+
     suspend fun getValoraciones(idCuidador: Int) {
         _valoraciones.postValue(getValoracionesUseCase.getValoraciones(idCuidador))
     }
@@ -71,4 +82,7 @@ class ContratacionViewModel @Inject constructor(
     fun onFechaFinChange(fechaFin: LocalDateTime?) {
         _fechaFin.postValue(fechaFin)
     }*/
+    fun calcularPrecio(precio: Float, numDias: Int) {
+        _precioTotal.postValue((precio * numDias).toString())
+    }
 }

@@ -1,11 +1,7 @@
 package com.example.pataventura.ui.screens.home
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,11 +21,11 @@ import com.example.pataventura.ui.screens.home.location.ViewState
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @RequiresApi(Build.VERSION_CODES.S)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -158,7 +154,7 @@ class HomeViewModel @Inject constructor(
         val listaGuarderia = mutableListOf<Cuidador>()
 
         for (cuidador in allCuidadores) {
-            if (cuidador.servicio?.tipo == "paseo") {
+            if (cuidador.servicio?.tipo?.lowercase() == "paseo") {
                 listaPaseo.add(cuidador)
             } else {
                 listaGuarderia.add(cuidador)

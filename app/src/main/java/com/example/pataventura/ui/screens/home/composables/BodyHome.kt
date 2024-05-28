@@ -82,7 +82,7 @@ fun BodyHome(
     listaCuidadoresPaseo: List<Cuidador>,
     listaCuidadoresGuarderia: List<Cuidador>
 ) {
-    val listaServicios = listOf("Todos", "Guardería", "Paseo")
+    val listaServicios = listOf("Guardería", "Paseo")
     val servicio: String by homeViewModel.servicio.observeAsState("")
     Column(
         Modifier
@@ -132,7 +132,7 @@ fun BodyHome(
 
 
         MyBoxMap(
-            currentPosition, listaCuidadores, navController, homeViewModel,
+            currentPosition, navController, homeViewModel,
             listaCuidadoresPaseo, listaCuidadoresGuarderia, servicio
         )
         HandleLocationPermissionAndState(homeViewModel)
@@ -160,7 +160,6 @@ fun ImageButton(painter: Int) {
 @Composable
 fun MyBoxMap(
     currentPosition: LatLng?,
-    listaCuidadores: List<Cuidador>,
     navController: NavController,
     homeViewModel: HomeViewModel,
     listaCuidadoresPaseo: List<Cuidador>,
@@ -196,12 +195,12 @@ fun MyBoxMap(
         )
     ) {
         val showInfoDialog = remember { mutableStateOf(false) }
-        val showCuidadores = remember(servicio, listaCuidadores, listaCuidadoresPaseo, listaCuidadoresGuarderia) {
+        val showCuidadores = remember(servicio, listaCuidadoresPaseo, listaCuidadoresGuarderia) {
             derivedStateOf {
                 when (servicio.lowercase()) {
                     "paseo" -> listaCuidadoresPaseo
-                    "guardería" -> listaCuidadoresGuarderia
-                    else -> listaCuidadores
+                     else -> listaCuidadoresGuarderia
+
                 }
             }
         }.value
@@ -307,7 +306,8 @@ fun MyBoxMap(
                 },
                 confirmButton = {
                     LoginButton(text = "Contratar", null, null) {
-                        navController.navigate(Destinations.Contratacion.route + "/${cuidador!!.idUsuario}")
+                        navController.navigate(Destinations.Contratacion.route
+                                + "/${cuidador!!.idUsuario}/${servicio.lowercase()}")
                     }
                 }
             )

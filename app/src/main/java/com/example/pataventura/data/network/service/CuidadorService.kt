@@ -112,11 +112,12 @@ class CuidadorService @Inject constructor(
                 val cuidadores = mutableListOf<CuidadorModel>()
                 val response = cuidadorApi.getCuidadorByDistance(token)
                 for (cuidadorResponse in response.data) {
-                    val latlong  = cuidadorResponse.ubicacion
+                    val latlong = cuidadorResponse.ubicacion
                     var ubicacion: LatLng? = null
-                        if (latlong != null) {
+                    if (latlong != null) {
                         val json = JSONObject(latlong)
-                        ubicacion = LatLng.newBuilder().setLatitude(json.getDouble("x")).setLongitude(json.getDouble("y")).build()
+                        ubicacion = LatLng.newBuilder().setLatitude(json.getDouble("x"))
+                            .setLongitude(json.getDouble("y")).build()
                         Log.e("LOOK AT ME", ubicacion.toString())
                     }
 

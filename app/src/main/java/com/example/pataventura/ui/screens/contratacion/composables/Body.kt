@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
@@ -71,6 +72,8 @@ fun BodyContratacion(
         emptyList()
     )
     val cuidador: Cuidador by contratacionViewmodel.cuidador.observeAsState(Cuidador())
+    val servicio: String by contratacionViewmodel.servicio.observeAsState("")
+    val precioTotal: String by contratacionViewmodel.precioTotal.observeAsState("")
 
     LaunchedEffect(key1 = Any()) {
         contratacionViewmodel.setCuidador(homeViewModel.listaCuidadores.value!!)
@@ -81,31 +84,62 @@ fun BodyContratacion(
             contentDescription = "Foondo",
             Modifier.fillMaxSize()
         )
-
-        Column(
+        LazyColumn(
             Modifier
                 .fillMaxWidth()
-                .height(700.dp),
-            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            MyCardPerfil(cuidador, valoraciones)
-            val numDias = MyRowFechas(cuidador)
-            CustomOutlinedTextField(
-                onValueChange = { contratacionViewmodel.onNotasChange(it) },
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp)
-                    .height(150.dp),
-                enabled = true,
-                readOnly = false,
-                placeholder = "Notas",
-                trailingIcon = {},
-                supportingText = {},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                singleLine = false
-            )
-            MyRowPrecio(cuidador.servicio!!.precio, cuidador.servicio!!.tipo, numDias)
-            MyRowButtons(navController)
+            item {
+                MyCardPerfil(cuidador, valoraciones)
+                Spacer(modifier = Modifier.height(15.dp))
+                Column(Modifier.fillMaxWidth().padding(horizontal = 15.dp)) {
+                    CustomText(
+                        text = if (servicio.lowercase() == "paseo") "Paseo"
+                        else "Guardería" + ":", color = Verde, fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    CustomText(
+                        text = cuidador.servicio!!.descripcion, color = Color.Black, fontSize = 22.sp,
+                        fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Row(
+                        Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        val text = if (servicio.lowercase() == "paseo") "por paseo" else "día"
+                        CustomText(
+                            text = cuidador.servicio!!.precio.toString() + "€/" + text,
+                            color = Verde, fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+                MyRowFechas(servicio, cuidador.servicio!!.precio, contratacionViewmodel)
+                Spacer(modifier = Modifier.height(15.dp))
+                CustomOutlinedTextField(
+                    onValueChange = { contratacionViewmodel.onNotasChange(it) },
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp)
+                        .height(120.dp),
+                    enabled = true,
+                    readOnly = false,
+                    placeholder = "Notas",
+                    trailingIcon = {},
+                    supportingText = {},
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    singleLine = false
+                )
+                Spacer(modifier = Modifier.height(15.dp))
+                MyRowPrecio(cuidador.servicio!!.precio, servicio, precioTotal)
+                Spacer(modifier = Modifier.height(15.dp))
+                MyRowButtons(navController)
+            }
         }
     }
 }
@@ -130,7 +164,7 @@ fun MyRowButtons(navController: NavController) {
 
 
 @Composable
-fun MyRowPrecio(precio: Float, servicio: String, numDias: Int ) {
+fun MyRowPrecio(precio: Float, servicio: String, precioTotal: String) {
     Row(
         Modifier
             .padding(horizontal = 20.dp)
@@ -143,27 +177,23 @@ fun MyRowPrecio(precio: Float, servicio: String, numDias: Int ) {
             fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily
         )
         CustomText(
-            text = if(servicio.lowercase() == "paseo") precio.toString() else calcularPrecio(precio, numDias ),
+            text = if(servicio.lowercase() == "paseo") precio.toString() else precioTotal,
             color = Color.Black, fontSize = 22.sp,
             fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily
         )
     }
 }
 
-fun calcularPrecio(precio: Float, numDias: Int): String {
-    val total = precio * numDias
-    return total.toString()
-}
 
 @Composable
-fun MyRowFechas( cuidador: Cuidador): Int {
-    val servicio = cuidador.servicio!!.tipo
+fun MyRowFechas( servicio: String, precio: Float, contratacionViewmodel: ContratacionViewModel) {
     var dateTimeInicio by remember { mutableStateOf<LocalDateTime?>(LocalDateTime.now().plusDays(1)) }
     var dateTimeFin by remember { mutableStateOf<LocalDateTime?>(if(servicio.lowercase() == "paseo") dateTimeInicio!!.plusHours(1)
     else dateTimeInicio!!.plusDays(1))}
+    var isSelected by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxWidth()
         .padding(horizontal = 12.dp)) {
-        Row(Modifier.fillMaxWidth().height(70.dp),
+        Row(Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom) {
             CustomText(
@@ -171,6 +201,7 @@ fun MyRowFechas( cuidador: Cuidador): Int {
                 fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
             )
             DatePickerWithDialog(
+                true,
                 servicio = servicio,
                 value = dateTimeInicio,
                 dateFormatter = ::formatDate,
@@ -186,7 +217,7 @@ fun MyRowFechas( cuidador: Cuidador): Int {
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        Row(Modifier.fillMaxWidth().height(70.dp),
+        Row(Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom) {
             CustomText(
@@ -195,8 +226,9 @@ fun MyRowFechas( cuidador: Cuidador): Int {
             )
             Log.d("TAG", "MyRowFechas: $dateTimeInicio")
             DatePickerWithDialog(
+                false,
                 servicio = servicio,
-                value = if(servicio.lowercase() == "paseo") dateTimeInicio!!.plusHours(1) else dateTimeInicio!!.plusDays(1),
+                value = if(isSelected)dateTimeFin else dateTimeInicio,
                 dateFormatter = ::formatDate,
                 enabled = servicio.lowercase() != "paseo",
                 placeholder = {},
@@ -204,12 +236,15 @@ fun MyRowFechas( cuidador: Cuidador): Int {
                 minDateTime = dateTimeInicio!!,
                 onChange = { newDateTime ->
                     dateTimeFin = newDateTime
+                    isSelected = true
+                    val numDias = if (servicio.lowercase() == "paseo") 1
+                    else ChronoUnit.DAYS.between(dateTimeInicio, dateTimeFin).toInt()
+                    contratacionViewmodel.calcularPrecio(precio,numDias)
                 }
 
             )
         }
     }
-    return if(servicio.lowercase() == "paseo") 1 else ChronoUnit.DAYS.between(dateTimeInicio, dateTimeFin).toInt()
 }
 fun formatDate(date: LocalDateTime): String {
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")

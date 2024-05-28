@@ -89,17 +89,19 @@ fun NavigationHost(
         composable(Destinations.RegistroServicio.route) {
             RegistroServicioScreen(navController, registroServicioViewModel)
         }
-        composable(Destinations.Contratacion.route+ "/{id_cuidador}",
-            arguments = listOf(navArgument("id_cuidador") { type = NavType.IntType })
+        composable(Destinations.Contratacion.route+ "/{id_cuidador}/{servicio}",
+            arguments = listOf(navArgument("id_cuidador") { type = NavType.IntType },
+                navArgument("servicio") { type = NavType.StringType })
         ) {
             val idCuidador = it.arguments?.getInt("id_cuidador")
-            if (idCuidador == null) {
+            val servicio = it.arguments?.getString("servicio")
+            if (idCuidador == null || servicio == null) {
                 HomeScreen(navController, homeViewModel)
-
                 return@composable
             }
             ContratacionScreen(navController, contratacionViewModel, homeViewModel)
             contratacionViewModel.setTrabajadorId(idCuidador)
+            contratacionViewModel.setServicio(servicio)
         }
 
         composable(Destinations.PerfilTrabajador.route + "/{id_cuidador}",

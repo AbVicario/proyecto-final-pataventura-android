@@ -56,6 +56,7 @@ import java.time.ZoneOffset
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerWithDialog(
+    isInicio: Boolean,
     servicio: String,
     value: LocalDateTime?,
     dateFormatter: (LocalDateTime) -> String,
@@ -213,6 +214,14 @@ fun DatePickerWithDialog(
                     Text(text = "Select Time")
 
                     Spacer(modifier = Modifier.height(16.dp))
+                    if (isInicio) {
+                        TimePicker(
+                            selectedHour = selectedHour,
+                            selectedMinute = selectedMinute,
+                            onHourChanged = { selectedHour = it },
+                            onMinuteChanged = { selectedMinute = it }
+                        )
+                    }
                     if (servicio.lowercase() == "paseo") {
                         TimePicker(
                             selectedHour = selectedHour,

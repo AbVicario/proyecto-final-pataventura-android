@@ -18,16 +18,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.LiveData
 import androidx.navigation.NavController
 import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.domain.model.Mascota
-import com.google.maps.android.compose.rememberCameraPositionState
 import com.example.pataventura.ui.composables.BottomBar
 import com.example.pataventura.ui.composables.navegacionButtonBar
 import com.example.pataventura.ui.screens.home.composables.BodyHome
 import com.example.pataventura.ui.screens.home.composables.HeaderHome
-import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
