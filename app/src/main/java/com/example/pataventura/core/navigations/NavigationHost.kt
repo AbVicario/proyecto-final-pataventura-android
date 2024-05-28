@@ -3,10 +3,7 @@ package com.example.pataventura.core.navigations
 import LoginScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,11 +30,11 @@ import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaScreen
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorScreen
 import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
+import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioScreen
+import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaScreen
 import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
 import com.example.pataventura.ui.screens.registro.RegistroDosScreen
-import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioScreen
-import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioViewModel
 import com.example.pataventura.ui.screens.registro.RegistroUnoScreen
 import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.screens.servicio.ServicioScreen
@@ -92,9 +89,19 @@ fun NavigationHost(
         composable(Destinations.RegistroServicio.route) {
             RegistroServicioScreen(navController, registroServicioViewModel)
         }
-        composable(Destinations.Contratacion.route) {
+        composable(Destinations.Contratacion.route+ "/{id_cuidador}",
+            arguments = listOf(navArgument("id_cuidador") { type = NavType.IntType })
+        ) {
+            val idCuidador = it.arguments?.getInt("id_cuidador")
+            if (idCuidador == null) {
+                HomeScreen(navController, homeViewModel)
+
+                return@composable
+            }
             ContratacionScreen(navController, contratacionViewModel, homeViewModel)
+            contratacionViewModel.setTrabajadorId(idCuidador)
         }
+
         composable(Destinations.PerfilTrabajador.route + "/{id_cuidador}",
             arguments = listOf(navArgument("id_cuidador") { type = NavType.IntType })
         ) {
@@ -108,7 +115,6 @@ fun NavigationHost(
 
             PerfilTrabajadorScreen(navController, perfilTrabajadorViewModel,homeViewModel)
             perfilTrabajadorViewModel.setTrabajadorId(idCuidador)
-            contratacionViewModel.setTrabajadorId(idCuidador)
         }
         composable(Destinations.Calendario.route) {
             CalendarioScreen(navController, calendarioViewModel)

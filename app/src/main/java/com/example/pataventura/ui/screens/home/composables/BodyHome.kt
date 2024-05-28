@@ -2,7 +2,6 @@ package com.example.pataventura.ui.screens.home.composables
 
 import HandleLocationPermissionAndState
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,7 +32,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -44,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -170,7 +167,6 @@ fun MyBoxMap(
     listaCuidadoresGuarderia: List<Cuidador>,
     servicio: String
 ) {
-    val showInfoDialog = remember { mutableStateOf(false) }
     var marker = LatLng(40.416775, -3.703790)
     var cameraStateAux = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(marker, 10f)
@@ -182,7 +178,6 @@ fun MyBoxMap(
         }
     }
 
-    val context = LocalContext.current
     val valoraciones: List<Valoracion> by homeViewModel.valoraciones.observeAsState(emptyList())
     var cuidador: Cuidador? = null
 
@@ -200,6 +195,7 @@ fun MyBoxMap(
             minZoomPreference = 13f,
         )
     ) {
+        val showInfoDialog = remember { mutableStateOf(false) }
         val showCuidadores = remember(servicio, listaCuidadores, listaCuidadoresPaseo, listaCuidadoresGuarderia) {
             derivedStateOf {
                 when (servicio.lowercase()) {
@@ -311,7 +307,7 @@ fun MyBoxMap(
                 },
                 confirmButton = {
                     LoginButton(text = "Contratar", null, null) {
-                        navController.navigate(Destinations.Contratacion.route)
+                        navController.navigate(Destinations.Contratacion.route + "/${cuidador!!.idUsuario}")
                     }
                 }
             )

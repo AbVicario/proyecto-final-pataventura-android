@@ -1,16 +1,15 @@
 package com.example.pataventura.ui.screens.contratacion
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Valoracion
 import com.example.pataventura.domain.useCase.valoracionUseCase.GetValoracionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,25 +25,31 @@ class ContratacionViewModel @Inject constructor(
     private val _idCuidador = MutableLiveData<Int>()
     val idCuidador: LiveData<Int> = _idCuidador
 
+    private val _fechaInicio = MutableLiveData<LocalDateTime>()
+    val fechaInicio: LiveData<LocalDateTime> = _fechaInicio
+
+    private val _fechaFin = MutableLiveData<LocalDateTime>()
+    val fechaFin: LiveData<LocalDateTime> = _fechaFin
+
     private val _valoraciones = MutableLiveData<List<Valoracion>>()
     val valoraciones: LiveData<List<Valoracion>> = _valoraciones
 
+    private val _notas = MutableLiveData<String>()
+    val notas: LiveData<String> = _notas
+
     fun setTrabajadorId(id: Int) {
-        _idCuidador.postValue(id)
+        _idCuidador.value = id
         viewModelScope.launch {
             getValoraciones(id)
         }
     }
 
-    suspend fun setCuidador(cuidadores: List<Cuidador>) {
+    fun setCuidador(cuidadores: List<Cuidador>) {
         try {
-            viewModelScope.launch {
-                for (cuidador in cuidadores) {
-                    if (cuidador.idUsuario == idCuidador.value) {
-                        _cuidador.postValue(cuidador)
-                    }
+            for (cuidador in cuidadores) {
+                if (cuidador.idUsuario == idCuidador.value) {
+                    _cuidador.postValue(cuidador)
                 }
-                getValoraciones(_cuidador.value!!.idUsuario)
             }
         } catch (e: Exception) {
             throw e
@@ -53,6 +58,17 @@ class ContratacionViewModel @Inject constructor(
 
     suspend fun getValoraciones(idCuidador: Int) {
         _valoraciones.postValue(getValoracionesUseCase.getValoraciones(idCuidador))
-        Log.d("Valoraciones", _valoraciones.value.toString())
     }
+
+    fun onNotasChange(notas: String) {
+        _notas.postValue(notas)
+    }
+
+    /*fun onFechaInicioChange(fechaInicio: LocalDateTime?) {
+        _fechaInicio.postValue(fechaInicio)
+    }
+
+    fun onFechaFinChange(fechaFin: LocalDateTime?) {
+        _fechaFin.postValue(fechaFin)
+    }*/
 }
