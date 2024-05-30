@@ -77,7 +77,7 @@ fun DatePickerWithDialog(
         selectedYearContentColor = Verde,
         selectedYearContainerColor = Verde.copy(0.2f),
         dayContentColor = Verde,
-        disabledDayContentColor = Verde,
+        disabledDayContentColor = Color.Gray,
         selectedDayContentColor = Verde,
         disabledSelectedDayContentColor = Verde,
         selectedDayContainerColor = Verde.copy(alpha = 0.2f),
@@ -214,7 +214,7 @@ fun DatePickerWithDialog(
                     Text(text = "Select Time")
 
                     Spacer(modifier = Modifier.height(16.dp))
-                    if (isInicio) {
+                    if (isInicio || servicio.lowercase() == "paseo") {
                         TimePicker(
                             selectedHour = selectedHour,
                             selectedMinute = selectedMinute,
@@ -222,14 +222,14 @@ fun DatePickerWithDialog(
                             onMinuteChanged = { selectedMinute = it }
                         )
                     }
-                    if (servicio.lowercase() == "paseo") {
+                    /*if (servicio.lowercase() == "paseo") {
                         TimePicker(
                             selectedHour = selectedHour,
                             selectedMinute = selectedMinute,
                             onHourChanged = { selectedHour = it },
                             onMinuteChanged = { selectedMinute = it }
                         )
-                    }
+                    }*/
 
                     Spacer(modifier = Modifier.height(16.dp))
 

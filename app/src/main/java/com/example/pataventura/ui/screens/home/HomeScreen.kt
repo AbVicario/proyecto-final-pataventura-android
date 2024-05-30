@@ -38,7 +38,6 @@ fun HomeScreen(
     homeViewModel: HomeViewModel,
 ) {
     val currentLoc by homeViewModel.currentLocTutor.observeAsState()
-    val listaCuidadores by homeViewModel.listaCuidadores.observeAsState(emptyList())
     val listaCuidadoresPaseo by homeViewModel.listaCuidadoresPaseo.observeAsState(emptyList())
     val listaCuidadoresGuarderia by homeViewModel.listaCuidadoresGuarderia.observeAsState(emptyList())
     val listaMascotas: List<Mascota> by homeViewModel.mascotas.observeAsState(emptyList())
@@ -62,7 +61,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             HeaderHome(homeViewModel)
-            BodyHome(currentLoc, homeViewModel, listaMascotas, listaCuidadores, navController,
+            BodyHome(currentLoc, homeViewModel, listaMascotas, navController,
                 listaCuidadoresPaseo, listaCuidadoresGuarderia)
         }
     }

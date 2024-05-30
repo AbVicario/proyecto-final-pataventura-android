@@ -24,6 +24,8 @@ import com.example.pataventura.ui.screens.loginCliente.LoginClienteScreen
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.mascotas.MascotasScreen
 import com.example.pataventura.ui.screens.mascotas.MascotasViewModel
+import com.example.pataventura.ui.screens.notificaciones.NotificacionesScreen
+import com.example.pataventura.ui.screens.notificaciones.NotificacionesViewModel
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorScreen
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaScreen
@@ -58,15 +60,16 @@ fun NavigationHost(
     mascotasViewModel: MascotasViewModel,
     perfilMascotaViewModel: PerfilMascotaViewModel,
     perfilTutorViewModel: PerfilTutorViewModel,
-    servicioViewModel: ServicioViewModel
+    servicioViewModel: ServicioViewModel,
+    notificacionesViewModel: NotificacionesViewModel
 
 ) {
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
-        startDestination = Destinations.LoginCliente.route
-        //startDestination = Destinations.RegisterTwo.route
+        //startDestination = Destinations.LoginCliente.route
+        startDestination = Destinations.Calendario.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -89,22 +92,27 @@ fun NavigationHost(
         composable(Destinations.RegistroServicio.route) {
             RegistroServicioScreen(navController, registroServicioViewModel)
         }
-        composable(Destinations.Contratacion.route+ "/{id_cuidador}/{servicio}",
+        composable(
+            Destinations.Contratacion.route + "/{id_cuidador}/{id_servicio}/{id_mascota}",
             arguments = listOf(navArgument("id_cuidador") { type = NavType.IntType },
-                navArgument("servicio") { type = NavType.StringType })
+                navArgument("id_servicio") { type = NavType.IntType },
+                navArgument("id_mascota") { type = NavType.IntType })
         ) {
             val idCuidador = it.arguments?.getInt("id_cuidador")
-            val servicio = it.arguments?.getString("servicio")
-            if (idCuidador == null || servicio == null) {
+            val idServicio = it.arguments?.getInt("id_servicio")
+            val idMascota = it.arguments?.getInt("id_mascota")
+            if (idCuidador == null || idServicio == null || idMascota == null) {
                 HomeScreen(navController, homeViewModel)
                 return@composable
             }
             ContratacionScreen(navController, contratacionViewModel, homeViewModel)
             contratacionViewModel.setTrabajadorId(idCuidador)
-            contratacionViewModel.setServicio(servicio)
+            contratacionViewModel.setServicioId(idServicio)
+            contratacionViewModel.setMascotaId(idMascota)
         }
 
-        composable(Destinations.PerfilTrabajador.route + "/{id_cuidador}",
+        composable(
+            Destinations.PerfilTrabajador.route + "/{id_cuidador}",
             arguments = listOf(navArgument("id_cuidador") { type = NavType.IntType })
         ) {
             val idCuidador = it.arguments?.getInt("id_cuidador")
@@ -115,7 +123,7 @@ fun NavigationHost(
                 return@composable
             }
 
-            PerfilTrabajadorScreen(navController, perfilTrabajadorViewModel,homeViewModel)
+            PerfilTrabajadorScreen(navController, perfilTrabajadorViewModel, homeViewModel)
             perfilTrabajadorViewModel.setTrabajadorId(idCuidador)
         }
         composable(Destinations.Calendario.route) {
@@ -130,7 +138,8 @@ fun NavigationHost(
         composable(Destinations.Mascotas.route) {
             MascotasScreen(navController, mascotasViewModel, homeViewModel)
         }
-        composable(route = Destinations.PerfilMascota.route + "/{id_mascota}",
+        composable(
+            route = Destinations.PerfilMascota.route + "/{id_mascota}",
             arguments = listOf(navArgument("id_mascota") { type = NavType.IntType })
         ) {
             val idMascota = it.arguments?.getInt("id_mascota")
@@ -149,6 +158,9 @@ fun NavigationHost(
 
         composable(Destinations.Servicio.route) {
             ServicioScreen(navController, servicioViewModel, perfilTrabajadorViewModel)
+        }
+        composable(Destinations.Notificaciones.route) {
+            NotificacionesScreen(navController, loginViewModel, notificacionesViewModel)
         }
 
     }

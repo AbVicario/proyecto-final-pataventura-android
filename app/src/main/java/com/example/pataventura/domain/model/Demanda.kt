@@ -1,12 +1,12 @@
 package com.example.pataventura.domain.model
 
-import com.google.type.DateTime
-
 data class Demanda(
-    var idDemanda: Int,
-    var fechaInicio: DateTime,
-    var fechaFin: DateTime,
-    var precio: Double,
-    var descripcion: String,
-    var estado: String
+    var id_demanda: Int,
+    var fechaInicio: String = "",
+    var fechaFin: String? = "",
+    var precio: Double? =0.0,
+    var descripcion: String? = "",
+    var estado: String? = "",
+    var id_mascota: Int=0,
+    var id_servicio: Int=0
 )

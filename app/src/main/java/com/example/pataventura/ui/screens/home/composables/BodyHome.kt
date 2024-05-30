@@ -37,9 +37,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -77,13 +79,15 @@ fun BodyHome(
     currentPosition: LatLng?,
     homeViewModel: HomeViewModel,
     listaMascotas: List<Mascota>,
-    listaCuidadores: List<Cuidador>,
     navController: NavController,
     listaCuidadoresPaseo: List<Cuidador>,
     listaCuidadoresGuarderia: List<Cuidador>
 ) {
     val listaServicios = listOf("Guardería", "Paseo")
     val servicio: String by homeViewModel.servicio.observeAsState("")
+    var selectedIndex by remember { mutableStateOf(-1) }
+    var navegar: Boolean by remember { mutableStateOf(false) }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -100,8 +104,32 @@ fun BodyHome(
             items(listaMascotas.size) { index ->
                 listaMascotas.getOrNull(index).let { mascota ->
                     if (mascota != null) {
-                        MyBoxMascotaHome(mascota, homeViewModel)
+                        Box(
+                            modifier = Modifier
+                                .size(80.dp)
+                                .background(
+                                    color = if (index == selectedIndex) Color.LightGray else Color.Gray,
+                                    shape = RoundedCornerShape(100.dp)
+                                )
+                                .border(
+                                    width = if (index == selectedIndex) 2.dp else 0.dp,
+                                    color = if (index == selectedIndex) Verde else Color.Transparent,
+                                    shape = RoundedCornerShape(100.dp)
+                                )
+                                .shadow(
+                                    elevation = if (index == selectedIndex) 8.dp else 0.dp,
+                                    shape = RoundedCornerShape(100.dp)
+                                )
+                                .clickable {
+                                    selectedIndex = index
+                                    navegar = true
+                                    homeViewModel.onIdMascotaChange(mascota.idMascota)
+                                }
+                        ) {
+                            MyBoxMascotaHome(mascota, homeViewModel)
+                        }
                     }
+                    Spacer(modifier = Modifier.width(15.dp))
                 }
             }
 
@@ -111,13 +139,15 @@ fun BodyHome(
             color = Verde, fontSize = 20.sp,
             fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
         )
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+        ) {
             CustomOutlinedTextFieldDes(
                 text = servicio,
                 items = listaServicios,
-                onValueChange = { homeViewModel.onRolChange(it) },
+                onValueChange = { homeViewModel.onServicioChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(80.dp),
@@ -133,7 +163,7 @@ fun BodyHome(
 
         MyBoxMap(
             currentPosition, navController, homeViewModel,
-            listaCuidadoresPaseo, listaCuidadoresGuarderia, servicio
+            listaCuidadoresPaseo, listaCuidadoresGuarderia, servicio, navegar
         )
         HandleLocationPermissionAndState(homeViewModel)
 
@@ -164,7 +194,8 @@ fun MyBoxMap(
     homeViewModel: HomeViewModel,
     listaCuidadoresPaseo: List<Cuidador>,
     listaCuidadoresGuarderia: List<Cuidador>,
-    servicio: String
+    servicio: String,
+    navegar: Boolean
 ) {
     var marker = LatLng(40.416775, -3.703790)
     var cameraStateAux = rememberCameraPositionState {
@@ -179,6 +210,7 @@ fun MyBoxMap(
 
     val valoraciones: List<Valoracion> by homeViewModel.valoraciones.observeAsState(emptyList())
     var cuidador: Cuidador? = null
+    var mostrarTexto by remember { mutableStateOf(false) }
 
     GoogleMap(
         modifier = Modifier
@@ -199,7 +231,7 @@ fun MyBoxMap(
             derivedStateOf {
                 when (servicio.lowercase()) {
                     "paseo" -> listaCuidadoresPaseo
-                     else -> listaCuidadoresGuarderia
+                    else -> listaCuidadoresGuarderia
 
                 }
             }
@@ -227,7 +259,8 @@ fun MyBoxMap(
 
         if (showInfoDialog.value && cuidador != null) {
             AlertDialog(
-                onDismissRequest = { showInfoDialog.value = false },
+                onDismissRequest = { showInfoDialog.value = false
+                                   mostrarTexto = false },
                 text = {
                     Column {
                         Row(
@@ -235,7 +268,8 @@ fun MyBoxMap(
                                 .padding(start = 5.dp, top = 10.dp, end = 5.dp)
                                 .clickable {
                                     navController.navigate(
-                                        Destinations.PerfilTrabajador.route + "/${cuidador!!.idUsuario}"
+                                        Destinations.PerfilTrabajador.route
+                                                + "/${cuidador!!.idUsuario}"
                                     )
                                 }
                         ) {
@@ -293,7 +327,8 @@ fun MyBoxMap(
                         )
                         Spacer(modifier = Modifier.height(15.dp))
                         val precio = cuidador!!.servicio!!.precio
-                        val precioFormateado = if ((precio % 1).toDouble() == 0.0) precio.toInt().toString() else precio.toString()
+                        val precioFormateado = if ((precio % 1).toDouble() == 0.0) precio.toInt()
+                            .toString() else precio.toString()
                         val text = precioFormateado.plus("€")
                         CustomText(
                             text = text,
@@ -302,19 +337,37 @@ fun MyBoxMap(
                             fontWeight = FontWeight.Bold,
                             fontFamily = CustomFontFamily
                         )
+                        if (mostrarTexto) {
+                            Spacer(modifier = Modifier.height(10.dp))
+                            CustomText(
+                                text = "Debe seleccionar una mascota para" +
+                                        "poder contratar un servicio",
+                                color = Color.Red,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = CustomFontFamily
+                            )
+                        }
                     }
                 },
                 confirmButton = {
                     LoginButton(text = "Contratar", null, null) {
-                        navController.navigate(Destinations.Contratacion.route
-                                + "/${cuidador!!.idUsuario}/${servicio.lowercase()}")
+                        if (navegar) {
+                            navController.navigate(
+                                Destinations.Contratacion.route
+                                        + "/${cuidador!!.idUsuario}/${cuidador!!.servicio!!.idOferta}" +
+                                        "/${homeViewModel.idMascota.value}"
+                            )
+                        } else {
+                            mostrarTexto = true
+                        }
+
                     }
                 }
             )
         }
     }
 }
-
 
 
 @Composable
@@ -354,24 +407,15 @@ fun RationaleAlert(onDismiss: () -> Unit, onConfirm: () -> Unit) {
 @Composable
 fun MyBoxMascotaHome(mascota: Mascota, homeViewModel: HomeViewModel) {
 
-    Box(
-        Modifier
-            .border(3.dp, Verde, RoundedCornerShape(100f))
-            .background(Color.Transparent, RoundedCornerShape(100f))
-            .size(80.dp)
-            .clickable { homeViewModel.onIdMascotaChange(mascota.idMascota) },
-        contentAlignment = Alignment.Center
-    ) {
 
-        Image(
-            ImageConverter.byteArrayToImageBitmap(mascota.imagen!!),
-            contentDescription = "Imagen mascota",
-            Modifier
-                .fillMaxSize()
-                .clip(CircleShape),
-            contentScale = ContentScale.FillBounds,
-        )
-    }
+    Image(
+        ImageConverter.byteArrayToImageBitmap(mascota.imagen!!),
+        contentDescription = "Imagen mascota",
+        Modifier
+            .fillMaxSize()
+            .clip(CircleShape),
+        contentScale = ContentScale.FillBounds,
+    )
 
     Spacer(modifier = Modifier.width(15.dp))
 

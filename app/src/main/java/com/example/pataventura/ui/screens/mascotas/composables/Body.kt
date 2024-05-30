@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,13 +16,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Pets
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +29,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,13 +42,16 @@ import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.screens.home.HomeViewModel
-import com.example.pataventura.ui.screens.home.composables.MyBoxMap
 import com.example.pataventura.ui.screens.mascotas.MascotasViewModel
-import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Tierra
 import com.example.pataventura.ui.theme.Verde
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.rememberCameraPositionState
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
@@ -85,7 +85,7 @@ fun BodyMascotas(
                     .fillMaxWidth()
                     .height(400.dp)
             ) {
-                //MyBoxMap(currentPosition, listaCuidadores,navController, homeViewModel )
+                MyBoxMapMascota(currentPosition)
 
             }
 
@@ -118,6 +118,38 @@ fun BodyMascotas(
         }
     }
 
+}
+
+
+@Composable
+fun MyBoxMapMascota(
+    currentPosition: LatLng?
+) {
+    var marker = LatLng(40.416775, -3.703790)
+    var cameraStateAux = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(marker, 10f)
+    }
+    if (currentPosition != null) {
+        marker = LatLng(currentPosition.latitude, currentPosition.longitude)
+        cameraStateAux = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(currentPosition, 12f)
+        }
+    }
+
+    GoogleMap(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 40.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .fillMaxHeight(0.9f),
+        cameraPositionState = cameraStateAux,
+        properties = MapProperties(
+            isMyLocationEnabled = true,
+            mapType = MapType.NORMAL,
+            isTrafficEnabled = false,
+            minZoomPreference = 13f,
+        )
+    )
 }
 
 @Composable

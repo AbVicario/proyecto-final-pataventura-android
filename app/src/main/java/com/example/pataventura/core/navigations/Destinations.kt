@@ -19,5 +19,6 @@ sealed class Destinations(
     object PerfilMascota : Destinations("perfilMascota")
     object PerfilTutor : Destinations("perfilTutor")
     object Servicio : Destinations("servicio")
+    object Notificaciones : Destinations("notificaciones")
 
 }

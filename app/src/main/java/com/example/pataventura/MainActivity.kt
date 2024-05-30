@@ -19,16 +19,17 @@ import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewM
 import com.example.pataventura.ui.screens.home.HomeViewModel
 import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
-import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
-import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
-import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioViewModel
-import com.example.pataventura.ui.screens.registro.RegistroViewModel
-import com.example.pataventura.ui.theme.PataVenturaTheme
-import dagger.hilt.android.AndroidEntryPoint
 import com.example.pataventura.ui.screens.mascotas.MascotasViewModel
+import com.example.pataventura.ui.screens.notificaciones.NotificacionesViewModel
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
+import com.example.pataventura.ui.screens.perfil_trabajador.PerfilTrabajadorViewModel
+import com.example.pataventura.ui.screens.regisrtroServicio.RegistroServicioViewModel
+import com.example.pataventura.ui.screens.registoMascota.RegistroMascotaViewModel
+import com.example.pataventura.ui.screens.registro.RegistroViewModel
 import com.example.pataventura.ui.screens.servicio.ServicioViewModel
+import com.example.pataventura.ui.theme.PataVenturaTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
     private val perfilMascotaViewModel: PerfilMascotaViewModel by viewModels()
     private val perfilTutorViewModel: PerfilTutorViewModel by viewModels()
     private val servicioViewModel: ServicioViewModel by viewModels()
+    private val notificacionesViewModel: NotificacionesViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint("MissingPermission")
@@ -85,7 +87,8 @@ class MainActivity : ComponentActivity() {
                         mascotasViewModel = mascotasViewModel,
                         perfilMascotaViewModel = perfilMascotaViewModel,
                         perfilTutorViewModel = perfilTutorViewModel,
-                        servicioViewModel = servicioViewModel
+                        servicioViewModel = servicioViewModel,
+                        notificacionesViewModel = notificacionesViewModel
                     )
 
                     /*LaunchedEffect(!hasLocationPermission()) {
@@ -172,7 +175,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 
 /*private suspend fun CameraPositionState.centerOnLocation(

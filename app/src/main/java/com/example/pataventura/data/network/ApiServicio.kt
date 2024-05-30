@@ -71,10 +71,9 @@ interface ApiServicio {
         @Path("id_demanda") idDemanda: Int
     ): CustomResponse
 
-    @PUT("/api/cliente/demanda/{id_demanda}")
+    @PUT("/api/cliente/demanda")
     suspend fun updateDemanda(
         @Header("Authorization") token: String,
-        @Path("id_demanda") idDemanda: Int,
-        @Body demandaModel: Demanda
+        @Body demanda: Demanda
     ): CustomResponse
 }

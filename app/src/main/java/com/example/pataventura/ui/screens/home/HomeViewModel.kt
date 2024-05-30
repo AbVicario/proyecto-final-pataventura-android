@@ -87,8 +87,8 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun onRolChange(rol: String){
-        _servicio.postValue(rol)
+    fun onServicioChange(servicio: String){
+        _servicio.postValue(servicio)
     }
 
     fun onIdMascotaChange(id: Int){

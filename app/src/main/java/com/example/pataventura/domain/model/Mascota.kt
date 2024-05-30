@@ -16,7 +16,13 @@ data class Mascota(
     var observacion: String = "",
     var color: String,
     var sexo: String = ""
-)
+) {
+    constructor() : this(
+        0, "", "", "", byteArrayOf(0),
+        "", 0.0, "", "", "", "", ""
+    )
+}
+
 fun MascotaModel.toDomain() = Mascota(
     idMascota,
     nombre,
@@ -31,6 +37,7 @@ fun MascotaModel.toDomain() = Mascota(
     color,
     sexo
 )
+
 fun MascotaEntity.toDomain() = Mascota(
     idMascota,
     nombre,
@@ -60,6 +67,7 @@ fun Mascota.toModel() = MascotaModel(
     color,
     sexo
 )
+
 fun Mascota.toEntity() = MascotaEntity(
     idMascota,
     nombre,

@@ -10,10 +10,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.di.IdCuidador
+import com.example.pataventura.di.NotificacionSize
 import com.example.pataventura.di.RoleHolder
+import com.example.pataventura.domain.model.Notificacion
 import com.example.pataventura.domain.useCase.AuthenticateUserUseCase
 import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorGetUseCase
-import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
+import com.example.pataventura.domain.useCase.notificacionUseCase.GetNotificacionesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authenticateUseCase: AuthenticateUserUseCase,
-    private val getUseCase: CuidadorGetUseCase
+    private val getUseCase: CuidadorGetUseCase,
+    private val getNotificacionesUseCase: GetNotificacionesUseCase
 ) : ViewModel() {
 
     var showDialog by mutableStateOf(false)
@@ -29,6 +32,8 @@ class LoginViewModel @Inject constructor(
 
     private val _email = MutableLiveData<String>()
     val email: LiveData<String> = _email
+    private val _notificaciones = MutableLiveData<List<Notificacion>>(emptyList())
+    val notificaciones: LiveData<List<Notificacion>> = _notificaciones
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> = _password
     private val _passEmpty = MutableLiveData<Boolean>()
@@ -60,6 +65,10 @@ class LoginViewModel @Inject constructor(
                 onLoginPress(navController)
             }
         }
+    }
+
+    fun onNotificacionesChange(notificaciones: List<Notificacion>) {
+        _notificaciones.postValue(notificaciones)
     }
 
     private fun validateInputs(): Boolean {
@@ -94,6 +103,10 @@ class LoginViewModel @Inject constructor(
         val result =
             authenticateUseCase.login(email, password, RoleHolder.rol.value.toString().lowercase())
         if (result) {
+            val notificaciones: List<Notificacion> =
+                getNotificacionesUseCase.getNotificaciones(RoleHolder.rol.value.toString().lowercase())
+            contadorNuevasNotificaciones(notificaciones)
+            _notificaciones.postValue(notificaciones)
             if (RoleHolder.rol.value.toString().lowercase() == "tutor") {
                 navController.navigate(route = "home")
             } else {
@@ -101,7 +114,6 @@ class LoginViewModel @Inject constructor(
                 IdCuidador.setIdCuidador(cuidador!!.idUsuario)
                 navController.navigate(Destinations.PerfilTrabajador.route + "/${cuidador.idUsuario}")
             }
-
         } else {
             onOpenDialog()
         }
@@ -115,5 +127,15 @@ class LoginViewModel @Inject constructor(
 
     fun onRegistrarsePress(navController: NavController) {
         navController.navigate(route = "registerOne")
+    }
+
+    fun contadorNuevasNotificaciones(notificaciones: List<Notificacion>) {
+        var cont = 0
+        for (notificacion in notificaciones) {
+            if (notificacion.estado.lowercase() == "nueva") {
+                cont++
+            }
+        }
+        NotificacionSize.setNotificacionSize(cont)
     }
 }

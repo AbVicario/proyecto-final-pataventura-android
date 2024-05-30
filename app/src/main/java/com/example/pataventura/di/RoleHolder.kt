@@ -22,3 +22,13 @@ object IdCuidador {
     }
 
 }
+
+object NotificacionSize {
+    private val _notificacionSize = MutableLiveData<Int>(0)
+    val notificacionSize: LiveData<Int> = _notificacionSize
+
+    fun setNotificacionSize(value: Int) {
+        _notificacionSize.postValue(value)
+    }
+
+}

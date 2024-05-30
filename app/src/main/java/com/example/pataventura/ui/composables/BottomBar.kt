@@ -22,9 +22,8 @@ import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -32,9 +31,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.di.IdCuidador
+import com.example.pataventura.di.NotificacionSize
 import com.example.pataventura.di.RoleHolder
-import com.example.pataventura.ui.screens.login.LoginViewModel
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
@@ -112,6 +112,21 @@ fun MyIconButton(icon: ImageVector, onClick: () -> Unit) {
             tint = Color.White,
             modifier = Modifier.padding(top = 11.dp)
         )
+        if (NotificacionSize.notificacionSize.value!! > 0 && icon.name == Icons.Default.NotificationsNone.name) {
+            Box(
+                Modifier
+                    .size(20.dp)
+                    .background(Color.Red, RoundedCornerShape(100f))
+                    .align(Alignment.TopEnd)
+            ) {
+                Text(
+                    text = NotificacionSize.notificacionSize.value.toString(),
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+        }
     }
 }
 
@@ -174,7 +189,7 @@ fun navegacionButtonBar(
 
         Icons.Default.CalendarMonth.name -> navController.navigate("calendario")
         Icons.Default.Pets.name -> navController.navigate("mascotas")
-        Icons.Default.NotificationsNone.name -> navController.navigate("home")
+        Icons.Default.NotificationsNone.name -> navController.navigate(Destinations.Notificaciones.route)
         Icons.Default.Person.name -> navController.navigate("perfilTutor")
         Icons.Default.Badge.name -> navController.navigate("servicio")
     }

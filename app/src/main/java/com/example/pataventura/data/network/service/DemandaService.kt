@@ -4,7 +4,6 @@ import com.example.pataventura.data.network.ApiServicio
 import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.data.network.response.DemandaResponse
 import com.example.pataventura.domain.model.Demanda
-import com.example.pataventura.domain.model.Mascota
 import javax.inject.Inject
 
 class DemandaService @Inject constructor(
@@ -54,7 +53,7 @@ class DemandaService @Inject constructor(
 
     suspend fun updateDemanda(token: String, demanda: Demanda): CustomResponse {
         return try {
-            val response = api.updateDemanda(token, demanda.idDemanda, demanda)
+            val response = api.updateDemanda(token, demanda)
             response
         } catch (e: Exception) {
             throw e

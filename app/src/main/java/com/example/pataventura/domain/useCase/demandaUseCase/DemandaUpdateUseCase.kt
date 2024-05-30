@@ -10,7 +10,7 @@ class DemandaUpdateUseCase@Inject constructor(
     private val getTokenUseCase: TokenGetUseCase,
     private val repository: DemandaRepository
 ){
-    suspend fun updateDemanda(id: Int, demanda: Demanda):CustomResponse{
+    suspend fun updateDemanda( demanda: Demanda):CustomResponse{
         return try{
             val token = getTokenUseCase.getToken().token
             val response=repository.updateDemanda(token, demanda)

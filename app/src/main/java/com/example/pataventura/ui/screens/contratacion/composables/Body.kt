@@ -1,7 +1,6 @@
 package com.example.pataventura.ui.screens.contratacion.composables
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -35,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Cuidador
+import com.example.pataventura.domain.model.Servicio
 import com.example.pataventura.domain.model.Valoracion
 import com.example.pataventura.ui.composables.CustomOutlinedTextField
 import com.example.pataventura.ui.composables.CustomText
@@ -72,8 +73,8 @@ fun BodyContratacion(
         emptyList()
     )
     val cuidador: Cuidador by contratacionViewmodel.cuidador.observeAsState(Cuidador())
-    val servicio: String by contratacionViewmodel.servicio.observeAsState("")
-    val precioTotal: String by contratacionViewmodel.precioTotal.observeAsState("")
+    val servicio: Servicio by contratacionViewmodel.servicio.observeAsState(Servicio())
+    val precioTotal: String by contratacionViewmodel.precioTotal.observeAsState("0")
 
     LaunchedEffect(key1 = Any()) {
         contratacionViewmodel.setCuidador(homeViewModel.listaCuidadores.value!!)
@@ -93,13 +94,13 @@ fun BodyContratacion(
                 Spacer(modifier = Modifier.height(15.dp))
                 Column(Modifier.fillMaxWidth().padding(horizontal = 15.dp)) {
                     CustomText(
-                        text = if (servicio.lowercase() == "paseo") "Paseo"
+                        text = if (servicio.tipo.lowercase() == "paseo") "Paseo"
                         else "Guardería" + ":", color = Verde, fontSize = 22.sp,
                         fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     CustomText(
-                        text = cuidador.servicio!!.descripcion, color = Color.Black, fontSize = 22.sp,
+                        text = servicio.descripcion, color = Color.Black, fontSize = 22.sp,
                         fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily
                     )
                     Spacer(modifier = Modifier.height(6.dp))
@@ -109,9 +110,9 @@ fun BodyContratacion(
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.Bottom
                     ) {
-                        val text = if (servicio.lowercase() == "paseo") "por paseo" else "día"
+                        val text = if (servicio.tipo.lowercase() == "paseo") "por paseo" else "día"
                         CustomText(
-                            text = cuidador.servicio!!.precio.toString() + "€/" + text,
+                            text = servicio.precio.toString() + "€/" + text,
                             color = Verde, fontSize = 22.sp,
                             fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
                         )
@@ -119,7 +120,7 @@ fun BodyContratacion(
                 }
 
                 Spacer(modifier = Modifier.height(20.dp))
-                MyRowFechas(servicio, cuidador.servicio!!.precio, contratacionViewmodel)
+                MyRowFechas(servicio.tipo, cuidador.servicio!!.precio, contratacionViewmodel)
                 Spacer(modifier = Modifier.height(15.dp))
                 CustomOutlinedTextField(
                     onValueChange = { contratacionViewmodel.onNotasChange(it) },
@@ -136,16 +137,17 @@ fun BodyContratacion(
                     singleLine = false
                 )
                 Spacer(modifier = Modifier.height(15.dp))
-                MyRowPrecio(cuidador.servicio!!.precio, servicio, precioTotal)
+                MyRowPrecio(servicio.precio, servicio.tipo, precioTotal)
                 Spacer(modifier = Modifier.height(15.dp))
-                MyRowButtons(navController)
+                MyRowButtons(navController, contratacionViewmodel)
             }
         }
     }
 }
 
 @Composable
-fun MyRowButtons(navController: NavController) {
+fun MyRowButtons(navController: NavController, contratacionViewmodel: ContratacionViewModel) {
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -153,7 +155,7 @@ fun MyRowButtons(navController: NavController) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         MyCustomButton(texto = "Contartar", color = Verde) {
-
+            contratacionViewmodel.contratar(navController, context)
         }
         Spacer(modifier = Modifier.width(40.dp))
         MyCustomButton(texto = "Cancelar", color = Color.Red) {
@@ -177,7 +179,7 @@ fun MyRowPrecio(precio: Float, servicio: String, precioTotal: String) {
             fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily
         )
         CustomText(
-            text = if(servicio.lowercase() == "paseo") precio.toString() else precioTotal,
+            text = if(servicio.lowercase() == "paseo") precio.toString() + "€" else precioTotal + "€",
             color = Color.Black, fontSize = 22.sp,
             fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily
         )
@@ -186,49 +188,58 @@ fun MyRowPrecio(precio: Float, servicio: String, precioTotal: String) {
 
 
 @Composable
-fun MyRowFechas( servicio: String, precio: Float, contratacionViewmodel: ContratacionViewModel) {
-    var dateTimeInicio by remember { mutableStateOf<LocalDateTime?>(LocalDateTime.now().plusDays(1)) }
-    var dateTimeFin by remember { mutableStateOf<LocalDateTime?>(if(servicio.lowercase() == "paseo") dateTimeInicio!!.plusHours(1)
-    else dateTimeInicio!!.plusDays(1))}
-    var isSelected by remember { mutableStateOf(false) }
-    Column(Modifier.fillMaxWidth()
-        .padding(horizontal = 12.dp)) {
-        Row(Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom) {
+fun MyRowFechas(servicio: String, precio: Float, contratacionViewmodel: ContratacionViewModel) {
+    var dateTimeInicio by remember { mutableStateOf<LocalDateTime?>(
+        LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0)
+    ) }
+    var dateTimeFin by remember { mutableStateOf<LocalDateTime?>(
+        if (servicio.lowercase() == "paseo") dateTimeInicio!!.plusDays(1).withHour(1).withMinute(0).withSecond(0).withNano(0)
+        else dateTimeInicio!!.plusDays(1)
+    ) }
+
+    contratacionViewmodel.onFechaInicioChange(dateTimeInicio!!)
+    contratacionViewmodel.onFechaFinChange(dateTimeFin!!)
+    val numDias = if (servicio.lowercase() == "paseo") 1
+    else ChronoUnit.DAYS.between(dateTimeInicio, dateTimeFin).toInt()
+    contratacionViewmodel.calcularPrecio(precio, numDias)
+
+
+    Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp)) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
             CustomText(
                 text = "Inicio:", color = Verde, fontSize = 22.sp,
                 fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
             )
             DatePickerWithDialog(
-                true,
+                isInicio = true,
                 servicio = servicio,
                 value = dateTimeInicio,
                 dateFormatter = ::formatDate,
                 enabled = true,
                 placeholder = {},
                 dateValidator = { true },
-                minDateTime = LocalDateTime.now().plusDays(1),
+                minDateTime = LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0),
                 onChange = { newDateTime ->
                     dateTimeInicio = newDateTime
+                    dateTimeFin = if (servicio.lowercase() == "paseo") dateTimeInicio!!.plusHours(1)
+                    else dateTimeInicio!!.plusDays(1)
+                    contratacionViewmodel.onFechaInicioChange(dateTimeInicio!!)
+                    contratacionViewmodel.onFechaFinChange(dateTimeFin!!)
                 }
             )
         }
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        Row(Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
             CustomText(
                 text = "Fin:", color = Verde, fontSize = 22.sp,
                 fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
             )
-            Log.d("TAG", "MyRowFechas: $dateTimeInicio")
             DatePickerWithDialog(
-                false,
+                isInicio = false,
                 servicio = servicio,
-                value = if(isSelected)dateTimeFin else dateTimeInicio,
+                value = dateTimeFin,
                 dateFormatter = ::formatDate,
                 enabled = servicio.lowercase() != "paseo",
                 placeholder = {},
@@ -236,16 +247,16 @@ fun MyRowFechas( servicio: String, precio: Float, contratacionViewmodel: Contrat
                 minDateTime = dateTimeInicio!!,
                 onChange = { newDateTime ->
                     dateTimeFin = newDateTime
-                    isSelected = true
+                    contratacionViewmodel.onFechaFinChange(dateTimeFin!!)
                     val numDias = if (servicio.lowercase() == "paseo") 1
                     else ChronoUnit.DAYS.between(dateTimeInicio, dateTimeFin).toInt()
-                    contratacionViewmodel.calcularPrecio(precio,numDias)
+                    contratacionViewmodel.calcularPrecio(precio, numDias)
                 }
-
             )
         }
     }
 }
+
 fun formatDate(date: LocalDateTime): String {
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
     return date.format(formatter)
