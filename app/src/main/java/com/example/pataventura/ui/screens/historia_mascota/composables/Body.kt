@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,10 +18,11 @@ import androidx.compose.ui.unit.dp
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CardHistorial
 import com.example.pataventura.ui.composables.RowHistorial
+import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewModel
 
 
 @Composable
-fun BodyHistorialMascota(){
+fun BodyHistorialMascota(historialMascotaViewModel: HistorialMascotaViewModel){
     var nombreMascota = "Tyrion"
     var nombreCuidador = "Pepe"
     var fechaInicio = "12/04/2024"
@@ -59,7 +58,7 @@ fun BodyHistorialMascota(){
                     repeat(7) {
                         CardHistorial(
                             nombreMascota, nombreCuidador, fechaInicio, fehaFin, precio,
-                            imageMascota, imageCuidador, servicio, true
+                            imageMascota, imageCuidador, servicio, true, historialMascotaViewModel
                         )
                         Spacer(modifier = Modifier.size(30.dp))
                     }

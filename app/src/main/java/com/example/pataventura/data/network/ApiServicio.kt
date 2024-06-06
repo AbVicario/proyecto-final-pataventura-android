@@ -2,8 +2,10 @@ package com.example.pataventura.data.network
 
 import com.example.pataventura.data.model.ServicioModel
 import com.example.pataventura.data.network.response.CustomResponse
+import com.example.pataventura.data.network.response.DemandaAceptadaReponse
 import com.example.pataventura.data.network.response.DemandaResponse
 import com.example.pataventura.data.network.response.ServicioResponse
+import com.example.pataventura.data.network.response.TiposOfertaResponse
 import com.example.pataventura.domain.model.Demanda
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -76,4 +78,21 @@ interface ApiServicio {
         @Header("Authorization") token: String,
         @Body demanda: Demanda
     ): CustomResponse
+
+    @GET("/api/cliente/demanda/aceptadas/{rol}")
+    suspend fun getDemandasAceptadas(
+        @Header("Authorization") token: String,
+        @Path("rol") rol: String
+    ): DemandaAceptadaReponse
+
+    @GET("/api/cliente/demanda/realizadas/{rol}")
+    suspend fun getDemandasRealizadas(
+        @Header("Authorization") token: String,
+        @Path("rol") rol: String
+    ): DemandaAceptadaReponse
+
+    @GET("api/cliente/tiposOferta")
+    suspend fun getTiposOferta(
+        @Header("Authorization") token: String
+    ): TiposOfertaResponse
 }

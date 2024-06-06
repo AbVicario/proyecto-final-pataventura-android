@@ -8,7 +8,7 @@ data class Mascota(
     var nombre: String,
     var numChip: String,
     var edad: String = "",
-    var imagen: ByteArray? = null,
+    var imagen: ByteArray? = byteArrayOf(0),
     var tamanyo: String = "",
     var peso: Double = 0.0,
     var tipo: String,

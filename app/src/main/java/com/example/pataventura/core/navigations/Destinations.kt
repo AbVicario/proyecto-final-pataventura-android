@@ -20,5 +20,6 @@ sealed class Destinations(
     object PerfilTutor : Destinations("perfilTutor")
     object Servicio : Destinations("servicio")
     object Notificaciones : Destinations("notificaciones")
+    object Splash : Destinations("splash")
 
 }

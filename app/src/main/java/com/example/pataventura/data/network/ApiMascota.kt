@@ -1,13 +1,10 @@
 package com.example.pataventura.data.network
 
-import androidx.room.Delete
 import com.example.pataventura.data.model.MascotaModel
-import com.example.pataventura.data.model.TutorModel
 import com.example.pataventura.data.network.response.CustomResponse
-import com.example.pataventura.data.network.response.DataMascota
 import com.example.pataventura.data.network.response.MascotaResponse
 import com.example.pataventura.data.network.response.MascotasResponse
-import com.example.pataventura.domain.model.Tutor
+import com.example.pataventura.data.network.response.TiposMascotaResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -46,4 +43,9 @@ interface ApiMascota {
         @Header("Authorization") token: String,
         @Path("id_mascota") idMascota: Int
     ): CustomResponse
+
+    @GET("api/cliente/tiposMascota")
+    suspend fun getTiposMascota(
+        @Header("Authorization") token: String
+    ): TiposMascotaResponse
 }

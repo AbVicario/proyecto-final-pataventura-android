@@ -18,10 +18,11 @@ import androidx.compose.ui.unit.dp
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CardHistorial
 import com.example.pataventura.ui.composables.RowHistorial
+import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewModel
 
 
 @Composable
-fun BodyHistorialCuidador(){
+fun BodyHistorialCuidador(historialMascotaViewModel: HistorialMascotaViewModel){
     var nombreMascota = "Tyrion"
     var nombreCuidador = "Pepe"
     var fechaInicio = "12/04/2024"
@@ -30,8 +31,6 @@ fun BodyHistorialCuidador(){
     var imageMascota = R.drawable.imagen_boton_perro
     var imageCuidador = R.drawable.imagen_perfil
     var servicio = "Guardería"
-
-
     Box() {
         Image(
             painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
@@ -57,7 +56,7 @@ fun BodyHistorialCuidador(){
                     repeat(7) {
                         CardHistorial(
                             nombreMascota, nombreCuidador, fechaInicio, fehaFin, precio,
-                            imageMascota, imageCuidador, servicio, false
+                            imageMascota, imageCuidador, servicio, false, historialMascotaViewModel
                         )
                         Spacer(modifier = Modifier.size(30.dp))
                     }

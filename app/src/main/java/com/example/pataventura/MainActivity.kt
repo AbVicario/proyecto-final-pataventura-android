@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.pataventura.core.navigations.NavigationHost
+import com.example.pataventura.ui.screens.MySplashViewModel
 import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
 import com.example.pataventura.ui.screens.contratacion.ContratacionViewModel
 import com.example.pataventura.ui.screens.historia_mascota.HistorialCuidadorViewModel
@@ -49,6 +50,7 @@ class MainActivity : ComponentActivity() {
     private val perfilTutorViewModel: PerfilTutorViewModel by viewModels()
     private val servicioViewModel: ServicioViewModel by viewModels()
     private val notificacionesViewModel: NotificacionesViewModel by viewModels()
+    private val mySplashViewModel: MySplashViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint("MissingPermission")
@@ -88,7 +90,8 @@ class MainActivity : ComponentActivity() {
                         perfilMascotaViewModel = perfilMascotaViewModel,
                         perfilTutorViewModel = perfilTutorViewModel,
                         servicioViewModel = servicioViewModel,
-                        notificacionesViewModel = notificacionesViewModel
+                        notificacionesViewModel = notificacionesViewModel,
+                        mySplashViewModel = mySplashViewModel
                     )
 
                     /*LaunchedEffect(!hasLocationPermission()) {

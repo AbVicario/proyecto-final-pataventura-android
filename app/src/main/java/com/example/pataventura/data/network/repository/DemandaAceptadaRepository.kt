@@ -1,0 +1,27 @@
+package com.example.pataventura.data.network.repository
+
+import com.example.pataventura.data.network.service.DemandaAceptadaService
+import com.example.pataventura.domain.model.DemandaAceptada
+import javax.inject.Inject
+
+class DemandaAceptadaRepository @Inject constructor(
+    private val demandaAceptadaService: DemandaAceptadaService
+) {
+    suspend fun getDemandasAceptadas(token: String, rol: String): List<DemandaAceptada> {
+        return try {
+            val demandasAceptadas = demandaAceptadaService.getDemandasAceptadas(token, rol)
+            demandasAceptadas
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    suspend fun getDemandasRealizadas(token: String, rol: String): List<DemandaAceptada> {
+        return try {
+            val demandasAceptadas = demandaAceptadaService.getDemandasRealizadas(token, rol)
+            demandasAceptadas
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+}

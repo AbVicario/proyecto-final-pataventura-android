@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pataventura.ui.theme.CustomFontFamily
@@ -202,7 +203,7 @@ fun CustomOutlinedTextField(
             text = it
             onValueChange(it)
         },
-        textStyle = TextStyle(fontSize = 20.sp),
+        textStyle = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Start),
         modifier = modifier,
         enabled = enabled,
         readOnly = readOnly,
@@ -212,6 +213,7 @@ fun CustomOutlinedTextField(
                 .padding(horizontal = 2.dp))},
         supportingText = supportingText,
         placeholder = { Text(text = "", fontWeight = FontWeight.Bold, fontSize = 22.sp,
+            textAlign = TextAlign.Start,
             modifier = Modifier
                 .background(Color.White)
                 .padding(horizontal = 2.dp))},

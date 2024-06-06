@@ -26,7 +26,7 @@ fun HistorialMascotaScreen(
         ) {
             HeaderHistorialMascota()
             Spacer(modifier = Modifier.size(10.dp))
-            BodyHistorialMascota()
+            BodyHistorialMascota(historialMascotaViewModel)
 
         }
     }

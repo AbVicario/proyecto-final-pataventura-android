@@ -99,6 +99,7 @@ class LoginViewModel @Inject constructor(
     suspend fun onLoginPress(navController: NavController) {
         val email = _email.value!!
         val password = _password.value!!
+        var nombre = ""
 
         val result =
             authenticateUseCase.login(email, password, RoleHolder.rol.value.toString().lowercase())
@@ -108,7 +109,7 @@ class LoginViewModel @Inject constructor(
             contadorNuevasNotificaciones(notificaciones)
             _notificaciones.postValue(notificaciones)
             if (RoleHolder.rol.value.toString().lowercase() == "tutor") {
-                navController.navigate(route = "home")
+                navController.navigate(route = "Home")
             } else {
                 val cuidador = getUseCase.getCuidador()
                 IdCuidador.setIdCuidador(cuidador!!.idUsuario)

@@ -13,7 +13,9 @@ class Tutor (
     var imagen: ByteArray,
     var alias: String,
     var direccion: String
-)
+){
+    constructor() : this(0, "", "", "", "", "", byteArrayOf(), "", "")
+}
 
 fun TutorModel.toDomain() = Tutor(
     idUsuario,

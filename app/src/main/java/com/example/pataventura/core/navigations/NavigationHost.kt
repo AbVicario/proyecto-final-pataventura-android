@@ -9,6 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.pataventura.ui.screens.MySplash
+import com.example.pataventura.ui.screens.MySplashViewModel
 import com.example.pataventura.ui.screens.calendario.CalendarioScreen
 import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
 import com.example.pataventura.ui.screens.contratacion.ContratacionScreen
@@ -61,7 +63,8 @@ fun NavigationHost(
     perfilMascotaViewModel: PerfilMascotaViewModel,
     perfilTutorViewModel: PerfilTutorViewModel,
     servicioViewModel: ServicioViewModel,
-    notificacionesViewModel: NotificacionesViewModel
+    notificacionesViewModel: NotificacionesViewModel,
+    mySplashViewModel: MySplashViewModel
 
 ) {
     val navController = rememberNavController()
@@ -69,7 +72,7 @@ fun NavigationHost(
     NavHost(
         navController = navController,
         //startDestination = Destinations.LoginCliente.route
-        startDestination = Destinations.Calendario.route
+        startDestination = Destinations.HistorialMascota.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -133,7 +136,7 @@ fun NavigationHost(
             HistorialMascotaScreen(navController, historialMascotaViewModel)
         }
         composable(Destinations.HistorialCuidador.route) {
-            HistorialCuidadorScreen(navController, historialCuidadorViewModel)
+            HistorialCuidadorScreen(navController, historialMascotaViewModel)
         }
         composable(Destinations.Mascotas.route) {
             MascotasScreen(navController, mascotasViewModel, homeViewModel)
@@ -162,6 +165,8 @@ fun NavigationHost(
         composable(Destinations.Notificaciones.route) {
             NotificacionesScreen(navController, loginViewModel, notificacionesViewModel)
         }
-
+        composable(Destinations.Splash.route) {
+            MySplash(navController, mySplashViewModel)
+        }
     }
 }

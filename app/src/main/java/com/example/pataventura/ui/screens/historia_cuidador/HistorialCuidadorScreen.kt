@@ -10,14 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.pataventura.ui.screens.historia_cuidador.composables.HeaderHistorialCuidador
 import com.example.pataventura.ui.screens.historia_cuidador.composables.BodyHistorialCuidador
+import com.example.pataventura.ui.screens.historia_cuidador.composables.HeaderHistorialCuidador
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HistorialCuidadorScreen(
     navController: NavController,
-    historialCuidadorViewModel: HistorialCuidadorViewModel
+   historialMascotaViewModel: HistorialMascotaViewModel
 ) {
     Scaffold() {
         Column(
@@ -26,7 +26,7 @@ fun HistorialCuidadorScreen(
         ) {
             HeaderHistorialCuidador()
             Spacer(modifier = Modifier.size(10.dp))
-            BodyHistorialCuidador()
+            BodyHistorialCuidador(historialMascotaViewModel)
 
         }
     }
