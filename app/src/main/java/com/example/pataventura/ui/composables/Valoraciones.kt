@@ -29,25 +29,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
 
 @Composable
 fun ValoracionesScreen(
+    navController: NavController,
     historialMascotaViewModel: HistorialMascotaViewModel
 ) {
     val showDialog by historialMascotaViewModel.showDialog.observeAsState(false)
-    var rating by remember { mutableStateOf(0) }
+    var rating by remember { mutableStateOf(1) }
 
     MyAlertDialogValoraciones(
+        navController = navController,
+        historialMascotaViewModel = historialMascotaViewModel,
         show = showDialog,
         icon = Icons.Default.ThumbUpOffAlt,
-        onConfirm = { historialMascotaViewModel.hideDialog() },
         dialogTitle = {
             CustomText(
                 text = "Valoración", color = Verde,
@@ -99,23 +103,25 @@ fun ValoracionesScreen(
 
 @Composable
 fun MyAlertDialogValoraciones(
+    navController: NavController,
+    historialMascotaViewModel: HistorialMascotaViewModel,
     show: Boolean,
     icon: ImageVector,
-    onConfirm: () -> Unit,
     dialogTitle: @Composable () -> Unit,
     dialogText: @Composable () -> Unit
 ): Unit {
+    val context = LocalContext.current
     val customButtonColors: ButtonColors = ButtonDefaults.textButtonColors(
         contentColor = Color.White,
         containerColor = Verde
     )
     if (show) {
         AlertDialog(
-            onDismissRequest = { },
+            onDismissRequest = { historialMascotaViewModel.hideDialog() },
             confirmButton = {
                 TextButton(colors = customButtonColors,
-                    onClick = { onConfirm() }) {
-                    Text(text = "Guardar", fontSize = 20.sp)
+                    onClick = { historialMascotaViewModel.registerValoracion(context, navController)}) {
+                    Text(text = "Valorar", fontSize = 20.sp)
                 }
             },
             icon = {

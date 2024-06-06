@@ -20,8 +20,9 @@ data class DataDemandaAceptada(
     @SerializedName("descripcion") val descripcion: String = "",
     @SerializedName("precio") val precio: Double = 0.0,
     @SerializedName("estado") val estado: String = "",
+    @SerializedName("isValorada") val isValorada: Boolean = false,
     @SerializedName("oferta") val oferta: Servicio = Servicio(),
     @SerializedName("mascota") val mascota: Mascota = Mascota(),
     @SerializedName("tutor") val tutor: Tutor = Tutor(),
-    @SerializedName("cuidador") val cuidador: Cuidador = Cuidador(),
+    @SerializedName("cuidador") val cuidador: Cuidador = Cuidador()
 )

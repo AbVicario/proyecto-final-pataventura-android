@@ -11,10 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.pataventura.R
 import com.example.pataventura.ui.composables.CardHistorial
 import com.example.pataventura.ui.composables.RowHistorial
@@ -22,15 +25,13 @@ import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewM
 
 
 @Composable
-fun BodyHistorialCuidador(historialMascotaViewModel: HistorialMascotaViewModel){
-    var nombreMascota = "Tyrion"
-    var nombreCuidador = "Pepe"
-    var fechaInicio = "12/04/2024"
-    var fehaFin = "14/04/2024"
-    var precio = "15€"
-    var imageMascota = R.drawable.imagen_boton_perro
-    var imageCuidador = R.drawable.imagen_perfil
-    var servicio = "Guardería"
+fun BodyHistorialCuidador(
+    navController: NavController,
+    historialMascotaViewModel: HistorialMascotaViewModel) {
+    val nombreCuidador by historialMascotaViewModel.nombreCuidador.observeAsState("")
+    val imageCuidador by historialMascotaViewModel.imagenCuidador.observeAsState()
+    val demandasRealizadas by historialMascotaViewModel.demandasRealizadas.observeAsState(emptyList())
+
     Box() {
         Image(
             painter = painterResource(id = R.drawable.fondo_perro_gato_perro),
@@ -49,16 +50,20 @@ fun BodyHistorialCuidador(historialMascotaViewModel: HistorialMascotaViewModel){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            RowHistorial(text = nombreCuidador, image = imageCuidador)
+            RowHistorial(text = nombreCuidador, imageCuidador!!)
             Spacer(modifier = Modifier.size(20.dp))
             LazyColumn(Modifier.padding(horizontal = 10.dp)) {
-                item {
-                    repeat(7) {
-                        CardHistorial(
-                            nombreMascota, nombreCuidador, fechaInicio, fehaFin, precio,
-                            imageMascota, imageCuidador, servicio, false, historialMascotaViewModel
-                        )
-                        Spacer(modifier = Modifier.size(30.dp))
+                items(demandasRealizadas.size) { index ->
+                    demandasRealizadas.getOrNull(index).let { demanda ->
+                        if (demanda != null) {
+                            CardHistorial(
+                                navController,
+                                demanda,
+                                false,
+                                historialMascotaViewModel
+                            )
+                            Spacer(modifier = Modifier.size(20.dp))
+                        }
                     }
 
                 }

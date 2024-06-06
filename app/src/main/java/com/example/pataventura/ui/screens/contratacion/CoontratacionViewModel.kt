@@ -125,7 +125,7 @@ class ContratacionViewModel @Inject constructor(
                     descripcion = notas.value ?:"",
                     estado = "demanda tutor",
                     id_mascota = idMascota.value!!,
-                    id_servicio = idServicio.value!!,
+                    id_oferta  = idServicio.value!!,
                 )
             )
             if (response.ok) {

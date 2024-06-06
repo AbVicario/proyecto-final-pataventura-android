@@ -15,7 +15,7 @@ import com.example.pataventura.ui.screens.calendario.CalendarioScreen
 import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
 import com.example.pataventura.ui.screens.contratacion.ContratacionScreen
 import com.example.pataventura.ui.screens.contratacion.ContratacionViewModel
-import com.example.pataventura.ui.screens.historia_mascota.HistorialCuidadorScreen
+import com.example.pataventura.ui.screens.historia_cuidador.HistorialCuidadorScreen
 import com.example.pataventura.ui.screens.historia_mascota.HistorialCuidadorViewModel
 import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaScreen
 import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewModel
@@ -71,8 +71,8 @@ fun NavigationHost(
 
     NavHost(
         navController = navController,
-        //startDestination = Destinations.LoginCliente.route
-        startDestination = Destinations.HistorialMascota.route
+        startDestination = Destinations.LoginCliente.route
+        //startDestination = Destinations.HistorialMascota.route
     ) {
         composable(Destinations.Login.route) {
             LoginScreen(navController, loginViewModel)
@@ -132,8 +132,14 @@ fun NavigationHost(
         composable(Destinations.Calendario.route) {
             CalendarioScreen(navController, calendarioViewModel)
         }
-        composable(Destinations.HistorialMascota.route) {
-            HistorialMascotaScreen(navController, historialMascotaViewModel)
+        composable(Destinations.HistorialMascota.route + "/{id_mascota}",
+            arguments = listOf(navArgument("id_mascota") { type = NavType.IntType })) {
+            val idMascota = it.arguments?.getInt("id_mascota")
+            if (idMascota != null) {
+                historialMascotaViewModel.setMascotaId(idMascota)
+                HistorialMascotaScreen(navController, historialMascotaViewModel)
+            }
+
         }
         composable(Destinations.HistorialCuidador.route) {
             HistorialCuidadorScreen(navController, historialMascotaViewModel)

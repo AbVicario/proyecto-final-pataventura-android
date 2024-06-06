@@ -31,10 +31,10 @@ interface ApiValoracion {
         @Body notificacion: NotificacionModel
     ): CustomResponse
 
-    @POST("/api/cliente/notificacion")
+    @POST("/api/cliente/valoracion")
     suspend fun registerValoracion(
         @Header("Authorization") token: String,
-        @Body idDemanda: ValoracionRequest,
+        @Body valoracionRequest: ValoracionRequest,
     ): CustomResponse
 
 

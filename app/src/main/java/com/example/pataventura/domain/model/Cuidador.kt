@@ -15,9 +15,10 @@ data class Cuidador(
     var alias: String,
     var direccion: String,
     var ubicacion: LatLng? = null,
-    var servicio: Servicio? = null
+    var servicio: Servicio? = null,
+    var valoraciones: List<Valoracion>? = emptyList(),
 ) {
-    constructor() : this(0, "", "", "", "", "", byteArrayOf(), "", "", null, Servicio())
+    constructor() : this(0, "", "", "", "", "", byteArrayOf(), "", "", null, Servicio(), emptyList())
 }
 
 fun CuidadorModel.toDomain() = Cuidador(
@@ -32,6 +33,7 @@ fun CuidadorModel.toDomain() = Cuidador(
     direccion,
     ubicacion,
     servicio,
+    valoraciones
 )
 
 fun CuidadorEntity.toDomain() = Cuidador(
@@ -57,7 +59,8 @@ fun Cuidador.toModel() = CuidadorModel(
     alias,
     direccion,
     ubicacion,
-    servicio
+    servicio,
+    valoraciones
 )
 
 fun Cuidador.toEntity() = CuidadorEntity(

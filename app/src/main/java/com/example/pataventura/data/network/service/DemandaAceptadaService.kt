@@ -19,6 +19,7 @@ class DemandaAceptadaService @Inject constructor(
                     demandaResponse.descripcion,
                     demandaResponse.precio,
                     demandaResponse.estado,
+                    demandaResponse.isValorada,
                     demandaResponse.oferta,
                     demandaResponse.mascota,
                     demandaResponse.tutor,
@@ -33,9 +34,9 @@ class DemandaAceptadaService @Inject constructor(
         }
     }
 
-    suspend fun getDemandasRealizadas(token: String, rol: String): List<DemandaAceptada> {
+    suspend fun getDemandasRealizadas(token: String, idMascota: Int): List<DemandaAceptada> {
         return try {
-            val response = apiServicio.getDemandasRealizadas(token, rol)
+            val response = apiServicio.getDemandasRealizadas(token, idMascota)
             val demandaAceptadas = mutableListOf<DemandaAceptada>()
             for (demandaResponse in response.data) {
                 val demanda = DemandaAceptada(
@@ -45,6 +46,7 @@ class DemandaAceptadaService @Inject constructor(
                     demandaResponse.descripcion,
                     demandaResponse.precio,
                     demandaResponse.estado,
+                    demandaResponse.isValorada,
                     demandaResponse.oferta,
                     demandaResponse.mascota,
                     demandaResponse.tutor,

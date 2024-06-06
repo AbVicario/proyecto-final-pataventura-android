@@ -85,10 +85,10 @@ interface ApiServicio {
         @Path("rol") rol: String
     ): DemandaAceptadaReponse
 
-    @GET("/api/cliente/demanda/realizadas/{rol}")
+    @GET("/api/cliente/demanda/realizadasMascota/{id_mascota}")
     suspend fun getDemandasRealizadas(
         @Header("Authorization") token: String,
-        @Path("rol") rol: String
+        @Path("id_mascota") idMascota: Int
     ): DemandaAceptadaReponse
 
     @GET("api/cliente/tiposOferta")

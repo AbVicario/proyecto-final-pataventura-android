@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
@@ -26,16 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.motion.widget.MotionScene.Transition.TransitionOnClick
 import androidx.navigation.NavController
-import com.example.pataventura.di.RoleHolder
-import com.example.pataventura.ui.screens.loginCliente.LoginClienteViewModel
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.Verde
-import java.util.Locale
 
 @Composable
 fun ColumnBotonesMascota(
@@ -57,7 +51,7 @@ fun ColumnBotonesMascota(
 
             }
             MyboxButton(Icons.AutoMirrored.Filled.MenuBook, isIcon) {
-
+                navController.navigate("historialMascota" + "/" + perfilMascotaViewModel.mascota.value!!.idMascota)
             }
             MyboxButton(Icons.Default.DeleteOutline, isIcon) {
                 perfilMascotaViewModel.onDelete(navController)

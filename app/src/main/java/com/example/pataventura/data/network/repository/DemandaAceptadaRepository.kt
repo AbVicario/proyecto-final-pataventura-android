@@ -16,9 +16,9 @@ class DemandaAceptadaRepository @Inject constructor(
         }
     }
 
-    suspend fun getDemandasRealizadas(token: String, rol: String): List<DemandaAceptada> {
+    suspend fun getDemandasRealizadas(token: String, idMascota: Int): List<DemandaAceptada> {
         return try {
-            val demandasAceptadas = demandaAceptadaService.getDemandasRealizadas(token, rol)
+            val demandasAceptadas = demandaAceptadaService.getDemandasRealizadas(token, idMascota)
             demandasAceptadas
         } catch (e: Exception) {
             emptyList()

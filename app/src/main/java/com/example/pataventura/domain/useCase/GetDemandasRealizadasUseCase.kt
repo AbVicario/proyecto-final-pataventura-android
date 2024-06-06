@@ -9,10 +9,10 @@ class GetDemandasRealizadasUseCase@Inject constructor(
     private val demandasAceptadasrepository: DemandaAceptadaRepository,
     private val getTokenUseCase: TokenGetUseCase
 ){
-    suspend fun getDemandasRealizadas(rol: String): List<DemandaAceptada>{
+    suspend fun getDemandasRealizadas(idMascota: Int): List<DemandaAceptada>{
         return try{
             val token = getTokenUseCase.getToken().token
-            val demandas = demandasAceptadasrepository.getDemandasRealizadas(token,rol)
+            val demandas = demandasAceptadasrepository.getDemandasRealizadas(token,idMascota)
             demandas
         }catch (e: Exception){
             throw e

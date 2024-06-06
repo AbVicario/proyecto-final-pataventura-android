@@ -54,7 +54,7 @@ class ValoracionService @Inject constructor(
 }
 
 data class ValoracionRequest(
-    val idDemanda: Int,
-    val valoracion: Int,
-    val comentario: String,
+    val id_demanda: Int,
+    val puntuacion: Int,
+    val descripcion: String,
 )

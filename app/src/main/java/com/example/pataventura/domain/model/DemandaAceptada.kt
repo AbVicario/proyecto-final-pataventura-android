@@ -9,6 +9,7 @@ data class DemandaAceptada(
     var descripcion: String = "",
     var precio: Double = 0.0,
     var estado: String = "",
+    var isValorada: Boolean = false,
     var oferta: Servicio = Servicio(),
     var mascota: Mascota = Mascota(),
     var tutor: Tutor = Tutor(),
@@ -16,7 +17,7 @@ data class DemandaAceptada(
 ) {
     constructor() : this(
         0, "", "", "",
-        0.0, "", Servicio(), Mascota(), Tutor(), Cuidador()
+        0.0, "", false, Servicio(), Mascota(), Tutor(), Cuidador()
     )
 }
 
@@ -27,6 +28,7 @@ fun DemandaAceptadaModel.toDomain() = DemandaAceptada(
     descripcion,
     precio,
     estado,
+    isValorada,
     oferta,
     mascota,
     tutor,
@@ -41,6 +43,7 @@ fun DemandaAceptada.toModel() = DemandaAceptadaModel(
     descripcion,
     precio,
     estado,
+    isValorada,
     oferta,
     mascota,
     tutor,

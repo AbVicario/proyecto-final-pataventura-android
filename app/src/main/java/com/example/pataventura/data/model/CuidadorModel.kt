@@ -1,7 +1,7 @@
 package com.example.pataventura.data.model
 
-import com.example.pataventura.data.network.ApiUbicacion
 import com.example.pataventura.domain.model.Servicio
+import com.example.pataventura.domain.model.Valoracion
 import com.google.gson.annotations.SerializedName
 import com.google.type.LatLng
 
@@ -16,5 +16,6 @@ class CuidadorModel(
     @SerializedName("alias") var alias: String,
     @SerializedName("direccion") var direccion: String,
     @SerializedName("ubicacion") var ubicacion: LatLng? = null,
-    @SerializedName("servicio") var servicio: Servicio? = null
+    @SerializedName("servicio") var servicio: Servicio? = null,
+    @SerializedName("valoraciones") var valoraciones: List<Valoracion>? = emptyList(),
 )
