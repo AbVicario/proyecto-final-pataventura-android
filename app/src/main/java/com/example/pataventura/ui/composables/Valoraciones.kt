@@ -89,7 +89,6 @@ fun ValoracionesScreen(
                         enabled = true,
                         readOnly = false,
                         placeholder = "Comentario",
-                        leadingIcon = { },
                         supportingText = { },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         singleLine = false
@@ -99,8 +98,6 @@ fun ValoracionesScreen(
         }
     )
 }
-
-
 @Composable
 fun MyAlertDialogValoraciones(
     navController: NavController,

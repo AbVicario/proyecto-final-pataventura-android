@@ -13,9 +13,13 @@ import com.example.pataventura.di.IdCuidador
 import com.example.pataventura.di.NotificacionSize
 import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.domain.model.Notificacion
+import com.example.pataventura.domain.model.TiposMascota
+import com.example.pataventura.domain.model.TiposServicio
 import com.example.pataventura.domain.useCase.AuthenticateUserUseCase
 import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorGetUseCase
 import com.example.pataventura.domain.useCase.notificacionUseCase.GetNotificacionesUseCase
+import com.example.pataventura.domain.useCase.tiposUseCase.GetTipoMascotaUseCase
+import com.example.pataventura.domain.useCase.tiposUseCase.GetTipoOfertaUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,7 +28,9 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val authenticateUseCase: AuthenticateUserUseCase,
     private val getUseCase: CuidadorGetUseCase,
-    private val getNotificacionesUseCase: GetNotificacionesUseCase
+    private val getNotificacionesUseCase: GetNotificacionesUseCase,
+    private val getTipoMascotaUseCase: GetTipoMascotaUseCase,
+    private val getTipoOfertaUseCase: GetTipoOfertaUseCase
 ) : ViewModel() {
 
     var showDialog by mutableStateOf(false)
@@ -109,15 +115,33 @@ class LoginViewModel @Inject constructor(
             contadorNuevasNotificaciones(notificaciones)
             _notificaciones.postValue(notificaciones)
             if (RoleHolder.rol.value.toString().lowercase() == "tutor") {
+                setTipoMascota(getTipoMascotaUseCase.getTiposMascota())
                 navController.navigate(route = "Home")
             } else {
                 val cuidador = getUseCase.getCuidador()
                 IdCuidador.setIdCuidador(cuidador!!.idUsuario)
+                setTipoOferta(getTipoOfertaUseCase.getTiposOferta())
                 navController.navigate(Destinations.PerfilTrabajador.route + "/${cuidador.idUsuario}")
             }
         } else {
             onOpenDialog()
         }
+    }
+
+    private fun setTipoOferta(tiposOferta: List<TiposServicio>) {
+        var tipos: MutableList<String> = mutableListOf()
+        for(tipo in tiposOferta){
+            tipos.add(tipo.tipo_oferta)
+        }
+        com.example.pataventura.di.TiposServicio.setTiposServicio(tipos)
+    }
+
+    private fun setTipoMascota(tiposMascota: List<TiposMascota>) {
+        var tipos: MutableList<String> = mutableListOf()
+        for(tipo in tiposMascota){
+            tipos.add(tipo.tipo_mascota)
+        }
+        com.example.pataventura.di.TiposMascota.setTiposMascota(tipos)
     }
 
     fun onGooglePress(navController: NavController) {

@@ -91,9 +91,7 @@ class HistorialMascotaViewModel @Inject constructor(
                     )
                 if(result.status == 200){
                     Toast.makeText(context,"Valoracion registrada", Toast.LENGTH_SHORT).show()
-                    navController.context
-
-
+                    navController.popBackStack()
                 }else{
                     Toast.makeText(context,"Error al registrar valoracion", Toast.LENGTH_SHORT).show()
                 }
@@ -101,7 +99,6 @@ class HistorialMascotaViewModel @Inject constructor(
                 valoracion.postValue(1)
                 comentario.postValue("")
             }
-
         }
     }
 

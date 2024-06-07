@@ -142,7 +142,11 @@ fun NavigationHost(
 
         }
         composable(Destinations.HistorialCuidador.route) {
-            HistorialCuidadorScreen(navController, historialMascotaViewModel)
+            HistorialCuidadorScreen(
+                navController,
+                historialCuidadorViewModel,
+                historialMascotaViewModel
+            )
         }
         composable(Destinations.Mascotas.route) {
             MascotasScreen(navController, mascotasViewModel, homeViewModel)

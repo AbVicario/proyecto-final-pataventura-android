@@ -9,7 +9,6 @@ import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.data.network.response.LoginResponseCuidador
 import com.example.pataventura.data.network.response.LoginResponseTutor
 import com.example.pataventura.data.network.response.TutorResponse
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -74,4 +73,6 @@ interface ApiClient {
     suspend fun getCuidadorByDistance(
         @Header("Authorization") token: String,
     ): CuidadoresResponse
+
+
 }

@@ -15,22 +15,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pataventura.R
-import com.example.pataventura.ui.composables.CardHistorial
+import com.example.pataventura.ui.composables.CardHistorialCuidador
 import com.example.pataventura.ui.composables.RowHistorial
+import com.example.pataventura.ui.screens.historia_mascota.HistorialCuidadorViewModel
 import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewModel
-
-
 @Composable
 fun BodyHistorialCuidador(
     navController: NavController,
-    historialMascotaViewModel: HistorialMascotaViewModel) {
-    val nombreCuidador by historialMascotaViewModel.nombreCuidador.observeAsState("")
-    val imageCuidador by historialMascotaViewModel.imagenCuidador.observeAsState()
-    val demandasRealizadas by historialMascotaViewModel.demandasRealizadas.observeAsState(emptyList())
+    historialCuidadorViewModel: HistorialCuidadorViewModel,
+    historialMascotaViewModel: HistorialMascotaViewModel
+) {
+    val emptyImage = ImageBitmap(1,1)
+    val nombreCuidador by historialCuidadorViewModel.nombre.observeAsState("")
+    val imageCuidador by historialCuidadorViewModel.imagen.observeAsState(emptyImage)
+    val demandasRealizadas by historialCuidadorViewModel.demandasRealizadas.observeAsState(emptyList())
 
     Box() {
         Image(
@@ -56,20 +59,18 @@ fun BodyHistorialCuidador(
                 items(demandasRealizadas.size) { index ->
                     demandasRealizadas.getOrNull(index).let { demanda ->
                         if (demanda != null) {
-                            CardHistorial(
+                            CardHistorialCuidador(
                                 navController,
                                 demanda,
                                 false,
+                                historialCuidadorViewModel,
                                 historialMascotaViewModel
                             )
                             Spacer(modifier = Modifier.size(20.dp))
                         }
                     }
-
                 }
             }
-
-
         }
     }
 }

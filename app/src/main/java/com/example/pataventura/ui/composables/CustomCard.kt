@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.DemandaAceptada
 import com.example.pataventura.ui.screens.contratacion.composables.valoracionMedia
+import com.example.pataventura.ui.screens.historia_mascota.HistorialCuidadorViewModel
 import com.example.pataventura.ui.screens.historia_mascota.HistorialMascotaViewModel
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Verde
@@ -142,6 +143,163 @@ fun CardHistorial(
                             MyCustomButton(texto = "Valorar", color = Verde) {
                                 historialMascotaViewModel.showDialog()
                                 historialMascotaViewModel.idDemanda.postValue(demanda.idDemanda)
+                            }
+                            ValoracionesScreen(navController ,historialMascotaViewModel)
+                        }
+                    }
+
+                }
+
+
+                Spacer(modifier = Modifier.size(8.dp))
+                Column(
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    CustomText(
+                        text = "Fecha inicio: ${demanda.fechaInicio}",
+                        color = Color.Black,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = CustomFontFamily
+                    )
+                    Spacer(modifier = Modifier.size(5.dp))
+
+                    CustomText(
+                        text = "Fecha fin: ${demanda.fechaFin}",
+                        color = Color.Black,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = CustomFontFamily
+                    )
+                    Spacer(modifier = Modifier.size(5.dp))
+                    CustomText(
+                        text = "Precio: $precioFormateado",
+                        color = Color.Black,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = CustomFontFamily
+                    )
+                    Spacer(modifier = Modifier.size(5.dp))
+
+                }
+            }
+
+        }
+
+    }
+}
+
+@Composable
+fun CardHistorialCuidador(
+    navController: NavController,
+    demanda: DemandaAceptada,
+    mascota: Boolean,
+    historialCuidadorViewModel: HistorialCuidadorViewModel,
+    historialMascotaViewModel: HistorialMascotaViewModel
+) {
+
+    var precioFormateado = ""
+    if (demanda.precio.toString().contains(".0")) {
+        precioFormateado = demanda.precio.toString().split(".")[0] + "€"
+    } else {
+        precioFormateado = demanda.precio.toString() + "€"
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        shape = CardDefaults.elevatedShape,
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White.copy(0.5f)
+        ),
+        elevation = CardDefaults.cardElevation(),
+        border = BorderStroke(2.dp, Verde)
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(15.dp),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                Modifier
+                    .fillMaxHeight()
+                    .width(80.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (mascota) {
+                    Image(
+                        ImageConverter.byteArrayToImageBitmap(demanda.cuidador.imagen),
+                        contentDescription = null,
+                        Modifier
+                            .size(60.dp)
+                            .clip(RoundedCornerShape(100f))
+                    )
+                    Spacer(modifier = Modifier.size(5.dp))
+
+                } else {
+                    Image(
+                        ImageConverter.byteArrayToImageBitmap(demanda.mascota.imagen!!),
+                        contentDescription = "",
+                        Modifier
+                            .size(60.dp)
+                            .clip(RoundedCornerShape(100f)),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+
+            }
+            Spacer(modifier = Modifier.size(15.dp))
+            Column(
+                Modifier
+                    .fillMaxHeight()
+                    .width(300.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Column(
+                        Modifier
+                            .fillMaxHeight()
+                            .width(120.dp),
+                        horizontalAlignment = Alignment.Start
+                    ) {
+
+                        CustomText(
+                            text = demanda.oferta.tipo.capitalize(),
+                            color = Color.Black,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = CustomFontFamily
+                        )
+                        Spacer(modifier = Modifier.size(8.dp))
+
+                        CustomText(
+                            text = if (mascota) demanda.cuidador.nombre
+                            else demanda.mascota.nombre,
+                            color = Color.Black,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = CustomFontFamily
+                        )
+                        Spacer(modifier = Modifier.size(8.dp))
+                       /* val valoracion = valoracionMedia(demanda.cuidador.valoraciones!!)
+                        MyValoracionStars(valoracion, 25)*/
+                    }
+
+                    if (mascota && !demanda.isValorada) {
+                        Box() {
+                            MyCustomButton(texto = "Valorar", color = Verde) {
+                                historialCuidadorViewModel.showDialog()
+                                historialCuidadorViewModel.idDemanda.postValue(demanda.idDemanda)
                             }
                             ValoracionesScreen(navController ,historialMascotaViewModel)
                         }

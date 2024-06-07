@@ -3,16 +3,11 @@ package com.example.pataventura.data.network.service
 import android.annotation.SuppressLint
 import android.util.Log
 import com.example.pataventura.data.model.CuidadorModel
-import com.example.pataventura.data.model.LoginModel
-import com.example.pataventura.data.model.MascotaModel
 import com.example.pataventura.data.model.ServicioModel
-import com.example.pataventura.data.model.TokenModel
-import com.example.pataventura.data.model.TutorModel
 import com.example.pataventura.data.network.ApiClient
 import com.example.pataventura.data.network.response.CuidadorResponse
 import com.example.pataventura.data.network.response.CustomResponse
 import com.example.pataventura.domain.model.toDomain
-import com.google.gson.Gson
 import com.google.type.LatLng
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

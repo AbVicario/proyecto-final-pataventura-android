@@ -44,8 +44,9 @@ interface ApiMascota {
         @Path("id_mascota") idMascota: Int
     ): CustomResponse
 
-    @GET("api/cliente/tiposMascota")
+    @GET("/api/cliente/tiposMascota")
     suspend fun getTiposMascota(
-        @Header("Authorization") token: String
+        @Header("Authorization") token: String,
     ): TiposMascotaResponse
+
 }

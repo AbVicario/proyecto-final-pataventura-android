@@ -91,6 +91,11 @@ interface ApiServicio {
         @Path("id_mascota") idMascota: Int
     ): DemandaAceptadaReponse
 
+    @GET("/api/cliente/demanda/realizadasCuidador")
+    suspend fun getDemandasRealizadasCuidador(
+        @Header("Authorization") token: String,
+    ): DemandaAceptadaReponse
+
     @GET("api/cliente/tiposOferta")
     suspend fun getTiposOferta(
         @Header("Authorization") token: String

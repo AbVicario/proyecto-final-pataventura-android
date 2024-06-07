@@ -61,4 +61,31 @@ class DemandaAceptadaService @Inject constructor(
         }
     }
 
+    suspend fun getDemandasRealizadasCuidador(token: String): List<DemandaAceptada> {
+        return try {
+            val response = apiServicio.getDemandasRealizadasCuidador(token)
+            val demandaAceptadas = mutableListOf<DemandaAceptada>()
+            for (demandaResponse in response.data) {
+                val demanda = DemandaAceptada(
+                    demandaResponse.idDemanda,
+                    demandaResponse.fechaFin,
+                    demandaResponse.fechaInicio,
+                    demandaResponse.descripcion,
+                    demandaResponse.precio,
+                    demandaResponse.estado,
+                    demandaResponse.isValorada,
+                    demandaResponse.oferta,
+                    demandaResponse.mascota,
+                    demandaResponse.tutor,
+                    demandaResponse.cuidador
+                )
+                demandaAceptadas.add(demanda)
+            }
+            demandaAceptadas
+
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
 }

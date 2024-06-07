@@ -26,7 +26,6 @@ object IdCuidador {
 object NotificacionSize {
     private val _notificacionSize = MutableLiveData<Int>(0)
     val notificacionSize: LiveData<Int> = _notificacionSize
-
     fun setNotificacionSize(value: Int) {
         _notificacionSize.postValue(value)
     }
@@ -35,35 +34,18 @@ object NotificacionSize {
 object TiposMascota {
     private val _tiposMascota = MutableLiveData<List<String>>()
     val tiposMascota: LiveData<List<String>> = _tiposMascota
-
     fun setTiposMascota(value: List<String>) {
         _tiposMascota.postValue(value)
     }
 }
 
-object RazasMascota {
-    private val _razasMascota = MutableLiveData<List<String>>()
-    val razasMascota: LiveData<List<String>> = _razasMascota
-
-    fun setTiposMascota(value: List<String>) {
-        _razasMascota.postValue(value)
-    }
-}
 
 object TiposServicio {
     private val _tiposServicio = MutableLiveData<List<String>>()
     val tiposServicio: LiveData<List<String>> = _tiposServicio
-
     fun setTiposServicio(value: List<String>) {
         _tiposServicio.postValue(value)
     }
 }
 
-object DistanciasServicio {
-    private val _distanciasServicio = MutableLiveData<List<String>>()
-    val distanciasServicio: LiveData<List<String>> = _distanciasServicio
 
-    fun setDistanciasServicio(value: List<String>) {
-        _distanciasServicio.postValue(value)
-    }
-}

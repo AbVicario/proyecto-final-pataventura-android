@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.pataventura.di.RoleHolder
 import com.example.pataventura.ui.screens.perfilTutor.PerfilTutorViewModel
 import com.example.pataventura.ui.screens.perfil_mascota.PerfilMascotaViewModel
 import com.example.pataventura.ui.theme.Verde
@@ -67,6 +68,7 @@ fun ColumnBotonesUsuario(
     editMode: Boolean,
     navController: NavController
 ) {
+    var rol = RoleHolder.rol.value.toString().lowercase()
     Column {
         Column(
             Modifier
@@ -80,6 +82,11 @@ fun ColumnBotonesUsuario(
             }
             MyboxButton(Icons.Default.Edit, isIcon) {
                 perfilTutorViewModel.onValueChangeEditMode(true)
+            }
+            if(rol == "cuidador"){
+                MyboxButton(Icons.AutoMirrored.Filled.MenuBook, isIcon) {
+                    navController.navigate("historialCuidador")
+                }
             }
         }
     }

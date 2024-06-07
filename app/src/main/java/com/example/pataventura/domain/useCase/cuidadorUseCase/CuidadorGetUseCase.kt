@@ -4,8 +4,6 @@ import android.util.Log
 import com.example.pataventura.data.network.repository.CuidadorRepository
 import com.example.pataventura.data.network.repository.TokenRepository
 import com.example.pataventura.domain.model.Cuidador
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CuidadorGetUseCase @Inject constructor(
@@ -15,8 +13,8 @@ class CuidadorGetUseCase @Inject constructor(
     suspend fun getCuidador(): Cuidador? {
         try {
             val token = tokenRepository.getTokenFromDatabase()
-            return cuidadorRepository.getCuidadorFromDatabase()
-                ?: return cuidadorRepository.getCuidadorFromApi(token.token)
+           /* return cuidadorRepository.getCuidadorFromDatabase()
+                ?:*/ return cuidadorRepository.getCuidadorFromApi(token.token)
         } catch (e : Exception) {
             throw e
         }
