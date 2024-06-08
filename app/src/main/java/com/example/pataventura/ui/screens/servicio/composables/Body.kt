@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pataventura.R
+import com.example.pataventura.di.TiposServicio
 import com.example.pataventura.domain.model.Servicio
 import com.example.pataventura.ui.composables.CampoObligatorioText
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldUpdate
@@ -268,7 +268,7 @@ fun MyRowServicio(
             fontWeight = FontWeight.Bold,
             fontFamily = CustomFontFamily
         )
-        if (listaServicios.size < 2) {
+        if (listaServicios.size < TiposServicio.tiposServicio.value!!.size) {
             Box(
                 Modifier
                     .size(40.dp)

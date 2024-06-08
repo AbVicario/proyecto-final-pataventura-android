@@ -12,9 +12,9 @@ import com.example.pataventura.core.navigations.Destinations
 import com.example.pataventura.di.IdCuidador
 import com.example.pataventura.di.NotificacionSize
 import com.example.pataventura.di.RoleHolder
+import com.example.pataventura.di.TiposMascota
+import com.example.pataventura.di.TiposServicio
 import com.example.pataventura.domain.model.Notificacion
-import com.example.pataventura.domain.model.TiposMascota
-import com.example.pataventura.domain.model.TiposServicio
 import com.example.pataventura.domain.useCase.AuthenticateUserUseCase
 import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorGetUseCase
 import com.example.pataventura.domain.useCase.notificacionUseCase.GetNotificacionesUseCase
@@ -114,34 +114,18 @@ class LoginViewModel @Inject constructor(
                 getNotificacionesUseCase.getNotificaciones(RoleHolder.rol.value.toString().lowercase())
             contadorNuevasNotificaciones(notificaciones)
             _notificaciones.postValue(notificaciones)
+            TiposMascota.setTiposMascota(getTipoMascotaUseCase.getTiposMascota())
+            TiposServicio.setTiposServicio(getTipoOfertaUseCase.getTiposOferta())
             if (RoleHolder.rol.value.toString().lowercase() == "tutor") {
-                setTipoMascota(getTipoMascotaUseCase.getTiposMascota())
                 navController.navigate(route = "Home")
             } else {
                 val cuidador = getUseCase.getCuidador()
                 IdCuidador.setIdCuidador(cuidador!!.idUsuario)
-                setTipoOferta(getTipoOfertaUseCase.getTiposOferta())
                 navController.navigate(Destinations.PerfilTrabajador.route + "/${cuidador.idUsuario}")
             }
         } else {
             onOpenDialog()
         }
-    }
-
-    private fun setTipoOferta(tiposOferta: List<TiposServicio>) {
-        var tipos: MutableList<String> = mutableListOf()
-        for(tipo in tiposOferta){
-            tipos.add(tipo.tipo_oferta)
-        }
-        com.example.pataventura.di.TiposServicio.setTiposServicio(tipos)
-    }
-
-    private fun setTipoMascota(tiposMascota: List<TiposMascota>) {
-        var tipos: MutableList<String> = mutableListOf()
-        for(tipo in tiposMascota){
-            tipos.add(tipo.tipo_mascota)
-        }
-        com.example.pataventura.di.TiposMascota.setTiposMascota(tipos)
     }
 
     fun onGooglePress(navController: NavController) {

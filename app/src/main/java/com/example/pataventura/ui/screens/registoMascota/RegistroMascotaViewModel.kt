@@ -1,16 +1,13 @@
 package com.example.pataventura.ui.screens.registoMascota
 
 import android.content.Context
-import android.database.Observable
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableField
 import androidx.databinding.ObservableList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
+import com.example.pataventura.di.TiposMascota
 import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Mascota
 import com.example.pataventura.domain.useCase.mascotaUseCase.MascotaRegisterUseCase
@@ -65,6 +63,8 @@ class RegistroMascotaViewModel @Inject constructor(
     private val _imagen = MutableLiveData<ImageBitmap>()
     val imagen: LiveData<ImageBitmap> = _imagen
 
+    private val _tiposMascota = MutableLiveData<List<com.example.pataventura.domain.model.TiposMascota>>()
+    val tiposMascota: LiveData<List<com.example.pataventura.domain.model.TiposMascota>> = _tiposMascota
 
     private val _listaRaza: ObservableList<String> = ObservableArrayList<String>().apply {
         add("Campo Vacio")
@@ -90,6 +90,8 @@ class RegistroMascotaViewModel @Inject constructor(
     )
 
 
+
+
     fun pintarItemsRaza(tipo: String) {
         val itemsToAdd: MutableList<String> = when (tipo) {
             "Perro" -> itemsRazaPerro.toMutableList()
@@ -106,7 +108,13 @@ class RegistroMascotaViewModel @Inject constructor(
 
     fun onTipoChange(tipo: String) {
         _tipo.postValue(tipo)
-        pintarItemsRaza(tipo)
+        _listaRaza.clear()
+        for(tipoA in TiposMascota.tiposMascota.value!!){
+            if(tipoA.tipo_mascota == tipo){
+                _listaRaza.addAll(tipoA.razas)
+                break
+            }
+        }
     }
 
     fun onRazaChange(raza: String) {

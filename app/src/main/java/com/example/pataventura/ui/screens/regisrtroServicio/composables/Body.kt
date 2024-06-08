@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pataventura.R
+import com.example.pataventura.di.TiposServicio
 import com.example.pataventura.ui.composables.CampoObligatorioText
 import com.example.pataventura.ui.composables.CustomOutlinedTextField
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDes
@@ -41,10 +41,11 @@ import com.example.pataventura.ui.theme.Verde
 
 
 @Composable
-fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
-                         navController: NavController
+fun BodyRegistroServicio(
+    registroServicioViewModel: RegistroServicioViewModel,
+    navController: NavController
 ) {
-    val listaServicios = listOf("Paseo", "Guardería")
+    val listaServicios = TiposServicio.tiposServicio.value ?: emptyList()
     val isDescripcion: Boolean by registroServicioViewModel.isDescripcion.observeAsState(false)
     val isRango: Boolean by registroServicioViewModel.isRango.observeAsState(false)
     val isServicio: Boolean
@@ -72,71 +73,80 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
                 .fillMaxHeight()
                 .padding(top = 15.dp, bottom = 10.dp),
             verticalArrangement = Arrangement.SpaceBetween,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-            CustomText(text = "Introduce los datos de tu servicio",
-                color = Verde , fontSize = 20.sp ,
-                fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily )
+            CustomText(
+                text = "Introduce los datos de tu servicio",
+                color = Verde, fontSize = 20.sp,
+                fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+            )
 
-            Row (
+            Row(
                 Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween){
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
 
                 CustomOutlinedTextFieldDes(
+                    false,
                     text = servicio,
-                    items = listaServicios,
-                    onValueChange = {registroServicioViewModel.onChangeServicio(it)},
+                    items = listaServicios.map { it.tipo_oferta },
+                    onValueChange = { registroServicioViewModel.onChangeServicio(it) },
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(100.dp),
                     enabled = true,
                     readOnly = true,
                     placeholder = "Servicio",
-                    supportingText = {if(isServicio) CampoObligatorioText() },
+                    supportingText = { if (isServicio) CampoObligatorioText() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 CustomOutlinedTextField(
-                    onValueChange = {registroServicioViewModel.onChangePrecio(it)},
+                    onValueChange = {
+                        registroServicioViewModel.onChangePrecio(it)
+                    },
                     Modifier
                         .fillMaxWidth()
                         .height(100.dp),
                     enabled = true,
                     readOnly = false,
                     placeholder = "Precio",
-                    supportingText = {if(isPrecio) CampoObligatorioText()
-                    else if(isPrecioValido) PrecioValText()
+                    supportingText = {
+                        if (isPrecio) CampoObligatorioText()
+                        else if (isPrecioValido) PrecioValText()
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true
                 )
             }
-
             CustomOutlinedTextFieldDes(
+                false,
                 text = rango,
                 items = registroServicioViewModel.listaRango,
-                onValueChange = {registroServicioViewModel.onChangeRango(it)},
+                onValueChange = { registroServicioViewModel.onChangeRango(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp),
                 enabled = true,
                 readOnly = true,
                 placeholder = "Radio de acción",
-                supportingText = {if(isRango) CampoObligatorioText() },
+                supportingText = { if (isRango) CampoObligatorioText() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = true
             )
 
+
             CustomOutlinedTextField(
-                onValueChange = {registroServicioViewModel.onChangeDescripcion(it)},
+                onValueChange = { registroServicioViewModel.onChangeDescripcion(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp),
                 enabled = true,
                 readOnly = false,
                 placeholder = "Descripción",
-                supportingText = {if(isDescripcion) CampoObligatorioText() },
+                supportingText = { if (isDescripcion) CampoObligatorioText() },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 singleLine = false
             )
@@ -156,7 +166,7 @@ fun BodyRegistroServicio(registroServicioViewModel: RegistroServicioViewModel,
                 )
 
                 LoginButton(text = "Finalizar", null, null,
-                    onClick = {registroServicioViewModel.onPressRegistroServicio(navController)})
+                    onClick = { registroServicioViewModel.onPressRegistroServicio(navController) })
             }
         }
     }
@@ -167,6 +177,7 @@ fun mensajeDialogo(status: Int): String {
         400 -> return "Ha habido un error al registrar el servicio. Recuerde registrar" +
                 " al menos un servicio para que su usuario sea visible para otros" +
                 " usuarios de la aplicación.\n Intentelo mas tarde"
+
         404 -> return "No se pueden crear dos ofertas con el mismo tipo de servicio"
         else -> return "Se ha producido un error. Intentelo mas tarde"
     }

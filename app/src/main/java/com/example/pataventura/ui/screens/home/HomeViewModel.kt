@@ -37,6 +37,9 @@ class HomeViewModel @Inject constructor(
     private val getValoracionesUseCase: GetValoracionUseCase
 ) : ViewModel() {
 
+    private val _listaServicios: MutableLiveData<List<String>> = MutableLiveData(emptyList())
+    val listaServicios: LiveData<List<String>> = _listaServicios
+
     private val _nombre = MutableLiveData<String>()
     val nombre: LiveData<String> = _nombre
 
@@ -71,6 +74,10 @@ class HomeViewModel @Inject constructor(
 
     private val _idMascota = MutableLiveData<Int>(0)
     val idMascota: MutableLiveData<Int> = _idMascota
+
+    /*fun getServicios() {
+        _listaServicios.postValue(TiposServicio.tiposServicio.value!!.map { it.tipo_oferta })
+    }*/
 
     /*fun getValoraciones(idCuidador: Int) {
         viewModelScope.launch {

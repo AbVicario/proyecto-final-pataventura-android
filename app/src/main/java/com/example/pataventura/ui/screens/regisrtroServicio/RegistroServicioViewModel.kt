@@ -1,6 +1,5 @@
 package com.example.pataventura.ui.screens.regisrtroServicio
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
+import com.example.pataventura.di.TiposServicio
 import com.example.pataventura.domain.model.Servicio
 import com.example.pataventura.domain.useCase.cuidadorUseCase.CuidadorGetUseCase
 import com.example.pataventura.domain.useCase.servicioUseCase.ServicioRegisterUseCase
@@ -49,33 +49,14 @@ class RegistroServicioViewModel @Inject constructor(
     private val _rango = MutableLiveData<String>("")
     val rango: LiveData<String> = _rango
 
+
     private val _listaRango: ObservableList<String> = ObservableArrayList<String>().apply {
         add("")
     }
     val listaRango: ObservableList<String> = _listaRango
 
-    private var listaDistanciaPaseo = listOf(
-        "500m", "1000m", "1500m", "2000m", "2500m", "3000m",
-        "3500m"
-    )
-    private var listaDistanciaGuarderia = listOf(
-        "5Km", "7.5km", "10Km", "12.5km", "15km",
-        "17.5km", "20Km"
-    )
-
     private val _status = MutableLiveData<Int>()
     val status: LiveData<Int> = _status
-
-    private fun rangoAccion(servicio: String) {
-        val itemsToAdd: MutableList<String> =
-            when (servicio) {
-                "Paseo" -> listaDistanciaPaseo.toMutableList()
-                "Guardería" -> listaDistanciaGuarderia.toMutableList()
-                else -> listOf("").toMutableList()
-            }
-        _listaRango.clear()
-        _listaRango.addAll(itemsToAdd)
-    }
 
     fun onChangeDescripcion(descripcion: String) {
         _descripcion.postValue(descripcion)
@@ -88,8 +69,14 @@ class RegistroServicioViewModel @Inject constructor(
     fun onChangeServicio(servicio: String) {
 
         _servicio.postValue(servicio)
-        rangoAccion(servicio)
-        onChangeRango("")
+        _listaRango.clear()
+        for(tipo in TiposServicio.tiposServicio.value!!){
+            if(tipo.tipo_oferta == servicio){
+                _listaRango.addAll(tipo.kilometros)
+                onChangeRango("")
+                break
+            }
+        }
     }
 
     fun onChangePrecio(precio: String) {
@@ -113,10 +100,10 @@ class RegistroServicioViewModel @Inject constructor(
     fun onPressRegistroServicio(navController: NavController) {
         viewModelScope.launch {
             val regex = Regex("^\\d*([,.]\\d+)?\$")
-            var descripcion = _descripcion.value
-            var precio = _precio.value
-            var rango = _rango.value
-            var servicio = _servicio.value
+            val descripcion = _descripcion.value
+            val precio = _precio.value
+            val rango = _rango.value
+            val servicio = _servicio.value
             _isDescripcion.postValue(false)
             _isPrecio.postValue(false)
             _isRango.postValue(false)

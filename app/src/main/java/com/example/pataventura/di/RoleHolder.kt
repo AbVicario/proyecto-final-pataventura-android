@@ -2,6 +2,8 @@ package com.example.pataventura.di
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.pataventura.domain.model.TiposMascota
+import com.example.pataventura.domain.model.TiposServicio
 
 object RoleHolder {
     private val _rol = MutableLiveData<String>()
@@ -32,20 +34,22 @@ object NotificacionSize {
 }
 
 object TiposMascota {
-    private val _tiposMascota = MutableLiveData<List<String>>()
-    val tiposMascota: LiveData<List<String>> = _tiposMascota
-    fun setTiposMascota(value: List<String>) {
+    private val _tiposMascota = MutableLiveData<List<TiposMascota>>()
+    val tiposMascota: LiveData<List<TiposMascota>> = _tiposMascota
+    fun setTiposMascota(value: List<TiposMascota>) {
         _tiposMascota.postValue(value)
     }
 }
 
 
 object TiposServicio {
-    private val _tiposServicio = MutableLiveData<List<String>>()
-    val tiposServicio: LiveData<List<String>> = _tiposServicio
-    fun setTiposServicio(value: List<String>) {
+    private val _tiposServicio = MutableLiveData<List<TiposServicio>>()
+    val tiposServicio: LiveData<List<TiposServicio>> = _tiposServicio
+
+    fun setTiposServicio(value: List<TiposServicio>) {
         _tiposServicio.postValue(value)
     }
+
 }
 
 

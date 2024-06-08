@@ -407,6 +407,7 @@ fun CustomOutlinedTextFieldUpdateDes(
 
 @Composable
 fun CustomOutlinedTextFieldDes(
+    isHome: Boolean,
     items: List<String>,
     text: String,
     onValueChange: (String) -> Unit,
@@ -426,7 +427,7 @@ fun CustomOutlinedTextFieldDes(
     }
     var isDesplegado by remember { mutableStateOf(false) }
     var isItemSelected by remember { mutableStateOf(false) }
-    var textSelected by remember {mutableStateOf(items[i]) }
+    var textSelected by remember {mutableStateOf(if(isHome) items[i] else "") }
 
     OutlinedTextField(
         value = textSelected,

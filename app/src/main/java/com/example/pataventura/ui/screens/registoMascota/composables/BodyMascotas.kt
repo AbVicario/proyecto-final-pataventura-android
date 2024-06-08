@@ -1,10 +1,8 @@
 package com.example.pataventura.ui.screens.registoMascota.composables
 
-import android.media.CamcorderProfile
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -18,18 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pataventura.R
+import com.example.pataventura.di.TiposMascota
 import com.example.pataventura.ui.composables.CampoObligatorioText
 import com.example.pataventura.ui.composables.CustomOutlinedTextField
 import com.example.pataventura.ui.composables.CustomOutlinedTextFieldDes
@@ -68,10 +62,6 @@ fun BodyRegistroMascota(
 
 
     val context = LocalContext.current
-    var itemsTipo = listOf<String>(
-        "Perro",
-        "Gato"
-    )
     var itemsColores = listOf<String>(
         "Rojo",
         "Azul",
@@ -122,7 +112,7 @@ fun BodyRegistroMascota(
                 Spacer(modifier = Modifier.size(10.dp))
                 MyRowNombre(nombreEmpty, registroMascotaViewModel)
                 Spacer(modifier = Modifier.height(10.dp))
-                MyRowRaza(tipo, raza, tipoEmpty, itemsTipo, registroMascotaViewModel)
+                MyRowRaza(tipo, raza, tipoEmpty, registroMascotaViewModel)
                 Spacer(modifier = Modifier.size(10.dp))
                 MyRowEdad(edad, sexo, itemsEdad, itemsSexo, registroMascotaViewModel)
                 Spacer(modifier = Modifier.size(10.dp))
@@ -269,6 +259,7 @@ fun MyRowPeso(
         )
         {
             CustomOutlinedTextFieldDes(
+                false,
                 items = itemsTamanyo,
                 text = tamanyo,
                 onValueChange = { registroMascotaViewModel.onTamanyoChange(it) },
@@ -305,6 +296,7 @@ fun MyRowEdad(
                 .padding(horizontal = 5.dp)
         ) {
             CustomOutlinedTextFieldDes(
+                false,
                 text = edad,
                 items = itemsEdad,
                 onValueChange = {
@@ -328,6 +320,7 @@ fun MyRowEdad(
         )
         {
             CustomOutlinedTextFieldDes(
+                false,
                 text = sexo,
                 items = itemsSexo,
                 onValueChange = { registroMascotaViewModel.onSexoChange(it) },
@@ -351,7 +344,6 @@ fun MyRowRaza(
     tipo: String,
     raza: String,
     tipoEmpty: Boolean,
-    itemsTipo: List<String>,
     registroMascotaViewModel: RegistroMascotaViewModel,
 ) {
     Row(
@@ -365,8 +357,9 @@ fun MyRowRaza(
                 .padding(horizontal = 5.dp)
         ) {
             CustomOutlinedTextFieldDes(
+                false,
                 text = tipo,
-                items = itemsTipo,
+                items = TiposMascota.tiposMascota.value!!.map { it.tipo_mascota } ,
                 onValueChange = {
                     registroMascotaViewModel.onTipoChange(it)
                     registroMascotaViewModel.onRazaChange(" ")
@@ -389,6 +382,7 @@ fun MyRowRaza(
         )
         {
             CustomOutlinedTextFieldDes(
+                false,
                 text = raza,
                 items = registroMascotaViewModel.listaRaza,
                 onValueChange = { registroMascotaViewModel.onRazaChange(it) },

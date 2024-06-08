@@ -52,6 +52,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.example.pataventura.core.navigations.Destinations
+import com.example.pataventura.di.TiposServicio
 import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.Cuidador
 import com.example.pataventura.domain.model.Mascota
@@ -83,7 +84,6 @@ fun BodyHome(
     listaCuidadoresPaseo: List<Cuidador>,
     listaCuidadoresGuarderia: List<Cuidador>
 ) {
-    val listaServicios = listOf("Guardería", "Paseo")
     val servicio: String by homeViewModel.servicio.observeAsState("")
     var selectedIndex by remember { mutableStateOf(-1) }
     var navegar: Boolean by remember { mutableStateOf(false) }
@@ -145,8 +145,9 @@ fun BodyHome(
                 .height(80.dp)
         ) {
             CustomOutlinedTextFieldDes(
+                true,
                 text = servicio,
-                items = listaServicios,
+                items = TiposServicio.tiposServicio.value!!.map { it.tipo_oferta },
                 onValueChange = { homeViewModel.onServicioChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
