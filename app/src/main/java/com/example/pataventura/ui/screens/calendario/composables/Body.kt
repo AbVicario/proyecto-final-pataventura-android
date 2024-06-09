@@ -3,7 +3,6 @@ package com.example.pataventura.ui.screens.calendario.composables
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +40,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,11 +50,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pataventura.R
 import com.example.pataventura.di.RoleHolder
+import com.example.pataventura.domain.converters.ImageConverter
 import com.example.pataventura.domain.model.DemandaAceptada
 import com.example.pataventura.ui.composables.CustomText
 import com.example.pataventura.ui.composables.MyCustomButton
+import com.example.pataventura.ui.composables.ObtenerColor
 import com.example.pataventura.ui.screens.calendario.CalendarioViewModel
-import com.example.pataventura.ui.screens.mascotas.composables.obtenerColor
 import com.example.pataventura.ui.theme.CustomFontFamily
 import com.example.pataventura.ui.theme.Marron
 import com.example.pataventura.ui.theme.Tierra
@@ -61,6 +63,7 @@ import com.example.pataventura.ui.theme.Verde
 import com.example.pataventura.ui.theme.VerdeOliva
 import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -68,7 +71,7 @@ import java.util.Locale
 @Composable
 fun BodyCalendario(calendarioViewModel: CalendarioViewModel) {
     val demandas: List<DemandaAceptada> by calendarioViewModel.demandas.observeAsState(emptyList())
-    val demandasDay = mutableListOf<DemandaAceptada>()
+    val demandasDay: List<DemandaAceptada> by calendarioViewModel.demandasDay.observeAsState(emptyList())
     val rol = RoleHolder.rol.value.toString().lowercase()
     Box() {
         Image(
@@ -83,13 +86,13 @@ fun BodyCalendario(calendarioViewModel: CalendarioViewModel) {
             Modifier
                 .fillMaxWidth()
         ) {
-            CalendarScreen(demandas, demandasDay,"")
+            CalendarScreen(demandas, calendarioViewModel)
             //EventCard()
 
             Spacer(modifier = Modifier.width(20.dp))
             LazyColumn(Modifier.padding(25.dp)) {
-                items(demandas.size) { index ->
-                    demandas.getOrNull(index).let { demanda ->
+                items(demandasDay.size) { index ->
+                    demandasDay.getOrNull(index).let { demanda ->
                         if (demanda != null) {
                             MyCardServicio(rol, demanda)
                             Spacer(modifier = Modifier.size(20.dp))
@@ -112,8 +115,7 @@ fun MyCardServicio(
     Card(
         modifier = Modifier
             .padding(bottom = 15.dp)
-            .fillMaxWidth()
-            .height(150.dp),
+            .fillMaxWidth(),
         shape = CardDefaults.elevatedShape,
         colors = CardDefaults.cardColors(
             containerColor = Color.White.copy(0.5f)
@@ -127,11 +129,11 @@ fun MyCardServicio(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            MyColumnMascota(demanda.oferta.tipo, demanda.mascota.nombre,
-                obtenerColor(demanda.mascota.color), demanda.fechaInicio)
+            MyColumnMascota(demanda)
             Spacer(modifier = Modifier.size(10.dp))
-            MyColumnCuidador(demanda.cuidador.nombre, demanda.precio.toString(),
-                demanda.oferta.descripcion, rol)
+            MyColumnCuidador(
+                demanda, rol
+            )
         }
 
     }
@@ -139,38 +141,43 @@ fun MyCardServicio(
 }
 
 @Composable
-fun MyColumnCuidador(nombreCuidador: String, precio: String, descripcion: String, rol: String) {
+fun MyColumnCuidador(demanda: DemandaAceptada, rol: String) {
     Column(
-        Modifier
-            .padding(5.dp)
-            .fillMaxHeight(),
+        Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start
     ) {
         Row() {
             Image(
-                painter = painterResource(id = R.drawable.imagen_perfil),
-                contentDescription = null, Modifier.size(50.dp)
+                ImageConverter.byteArrayToImageBitmap(demanda.cuidador.imagen),
+                contentDescription = null,
+                Modifier
+                    .size(50.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.FillBounds
             )
-            Spacer(modifier = Modifier.size(10.dp))
-            Column() {
-                CustomText(
-                    text = nombreCuidador, color = Color.Black,
-                    fontSize = 14.sp, fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
-                )
-                CustomText(text = descripcion, color = Color.Black,
-                    fontSize = 16.sp, fontWeight = FontWeight.Normal,
-                    fontFamily = CustomFontFamily)
-                CustomText(
-                    text = precio, color = Color.Black,
-                    fontSize = 16.sp, fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
-                )
-            }
-
+            Spacer(modifier = Modifier.size(5.dp))
+            CustomText(
+                text = demanda.cuidador.nombre, color = Color.Black,
+                fontSize = 16.sp, fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+            )
         }
-        Spacer(modifier = Modifier.size(10.dp))
 
-        Box(modifier = Modifier.padding(5.dp)) {
+        Spacer(modifier = Modifier.size(5.dp))
+        Column(Modifier.fillMaxHeight()) {
+            CustomText(
+                text = demanda.oferta.descripcion, color = Color.Black,
+                fontSize = 16.sp, fontWeight = FontWeight.Normal,
+                fontFamily = CustomFontFamily
+            )
+            Spacer(modifier = Modifier.size(5.dp))
+            CustomText(
+                text = "Total: ${demanda.precio} €", color = Color.Black,
+                fontSize = 16.sp, fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+            )
+        }
+        Spacer(modifier = Modifier.size(15.dp))
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd) {
             MyCustomButton(texto = "Cancelar", color = Color.Red) {}
         }
 
@@ -204,52 +211,82 @@ fun RowValoracion() {
 }
 
 @Composable
-fun MyColumnMascota(servicio: String, nombreMascota: String, color: Color, horaServicio: String) {
+fun MyColumnMascota(demanda: DemandaAceptada) {
+    var fecha = demanda.fechaInicio.slice(0..9)
+    var hora = demanda.fechaInicio.slice(11..15)
+
     Column(
         Modifier
             .padding(start = 10.dp)
-            .width(120.dp)
+            .width(150.dp)
             .fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.Start
     ) {
-        RowCita(color, horaServicio)
+        RowCita(demanda)
+        Spacer(modifier = Modifier.size(5.dp))
+
         CustomText(
-            text = "$servicio $nombreMascota", color = Color.Black, fontSize = 16.sp,
+            text = demanda.oferta.tipo, color = Color.Black, fontSize = 16.sp,
             fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
         )
-        Image(
-            painter = painterResource(id = R.drawable.imagen_boton_perro),
-            contentDescription = null, Modifier.size(50.dp)
+        Spacer(modifier = Modifier.size(5.dp))
+        CustomText(
+            text = demanda.descripcion, color = Color.Black, fontSize = 16.sp,
+            fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily
         )
-    }
-
-}
-
-@Composable
-fun RowCita(color: Color, horaServicio: String) {
-    Row(
-        Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            Modifier
-                .size(20.dp)
-                .border(2.dp, color, RoundedCornerShape(100f)),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(3.dp)
-                    .border(3.dp, color, RoundedCornerShape(100f)),
+        Spacer(modifier = Modifier.size(5.dp))
+        Column {
+            CustomText(
+                text = "Fecha: ", color = Color.Black, fontSize = 16.sp,
+                fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+            )
+            Spacer(modifier = Modifier.size(5.dp))
+            CustomText(
+                text = fecha, color = Color.Black, fontSize = 16.sp,
+                fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily
             )
         }
 
+        Spacer(modifier = Modifier.size(5.dp))
+        Row {
+            CustomText(
+                text = "Hora: ", color = Color.Black, fontSize = 16.sp,
+                fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
+            )
+            CustomText(
+                text = hora, color = Color.Black, fontSize = 16.sp,
+                fontWeight = FontWeight.Normal, fontFamily = CustomFontFamily
+            )
+        }
+    }
+}
+
+@Composable
+fun RowCita(demanda: DemandaAceptada) {
+    Row(
+        Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Top
+    ) {
+        Box(
+            Modifier
+                .size(53.dp)
+                .clip(CircleShape)
+                .background(ObtenerColor(demanda.mascota.color)),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                ImageConverter.byteArrayToImageBitmap(demanda.mascota.imagen!!),
+                contentDescription = null,
+                Modifier
+                    .size(47.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.FillBounds
+            )
+        }
+        Spacer(modifier = Modifier.size(5.dp))
         CustomText(
-            text = horaServicio, color = Color.Black, fontSize = 14.sp,
+            text = demanda.mascota.nombre, color = Color.Black, fontSize = 16.sp,
             fontWeight = FontWeight.Bold, fontFamily = CustomFontFamily
         )
     }
@@ -257,9 +294,10 @@ fun RowCita(color: Color, horaServicio: String) {
 
 
 @Composable
-fun CalendarScreen(demandas: List<DemandaAceptada>,
-                   demandasDay: MutableList<DemandaAceptada>,
-                   fechaSeleccionada: String) {
+fun CalendarScreen(
+    demandas: List<DemandaAceptada>,
+    calendarioViewModel: CalendarioViewModel
+) {
     var currentMonth by remember { mutableStateOf(YearMonth.now()) }
     val currentDate = LocalDate.now()
 
@@ -279,9 +317,8 @@ fun CalendarScreen(demandas: List<DemandaAceptada>,
         Spacer(modifier = Modifier.height(10.dp))
 
         CalendarDays(
-            demandasDay,
             demandas,
-            fechaSeleccionada,
+            calendarioViewModel,
             yearMonth = currentMonth,
             currentDate = currentDate,
             month = currentMonth.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
@@ -344,10 +381,13 @@ fun CalendarHeader(currentMonth: YearMonth, onPreviousMonth: () -> Unit, onNextM
 }
 
 @Composable
-fun CalendarDays(demandasDay: MutableList<DemandaAceptada>,
-                 demandasAceptadas: List<DemandaAceptada>,
-                 fechaSeleccionada: String,
-                 yearMonth: YearMonth, currentDate: LocalDate, month: String) {
+fun CalendarDays(
+    demandasAceptadas: List<DemandaAceptada>,
+    calendarioViewModel: CalendarioViewModel,
+    yearMonth: YearMonth,
+    currentDate: LocalDate,
+    month: String
+) {
     val daysInMonth = yearMonth.lengthOfMonth()
     val firstDayOfMonth = yearMonth.atDay(1).dayOfWeek.value % 7
     val weeksInMonth = (daysInMonth + firstDayOfMonth + 6) / 7
@@ -389,10 +429,19 @@ fun CalendarDays(demandasDay: MutableList<DemandaAceptada>,
                         ) {
                             isCurrentDay = true
                         }
-                        //Colores y isDemanda harcodeado
-                        DayCell(demandasDay, demandasAceptadas, fechaSeleccionada , dayOfMonth, isCurrentDay = isCurrentDay,  listOf(Color.White, Tierra),
-                        rol,
-                        isDemanda = true)
+                        DayCell(
+                            demandasAceptadas,
+                            calendarioViewModel,
+                            dayOfMonth,
+                            isCurrentDay = isCurrentDay,
+                            listOf(Color.White, Tierra),
+                            rol,
+                            isDemanda = true,
+                            onDayClick = { clickedDay ->
+                                calendarioViewModel.selectedDate.value = LocalDate.of(yearMonth.year, yearMonth.month, clickedDay)
+                            },
+                            yearMonth
+                        )
                     } else {
                         Spacer(modifier = Modifier.weight(0.8f))
                     }
@@ -404,15 +453,17 @@ fun CalendarDays(demandasDay: MutableList<DemandaAceptada>,
 
 @Composable
 fun DayCell(
-    demandasDay: MutableList<DemandaAceptada>,
     demandasAceptadas: List<DemandaAceptada>,
-    fechaSeleccionada: String,
+    calendarioViewModel: CalendarioViewModel,
     day: Int,
     isCurrentDay: Boolean,
     colores: List<Color>,
     rol: String,
-    isDemanda: Boolean
+    isDemanda: Boolean,
+    onDayClick: (Int) -> Unit,
+    yearMonth: YearMonth
 ) {
+
     var index = 0
     Box(
         modifier = Modifier
@@ -422,9 +473,10 @@ fun DayCell(
             .padding(8.dp)
             .background(if (isCurrentDay) VerdeOliva else Verde, CircleShape)
             .clickable {
-                demandasDay.clear()
-                demandasDay.addAll(getDemandasDay(demandasAceptadas, fechaSeleccionada))
-                       },
+                calendarioViewModel.demandasDay.value = emptyList()
+                onDayClick(day)
+                calendarioViewModel.demandasDay.value = getDemandasDay(demandasAceptadas, calendarioViewModel)
+            },
         contentAlignment = Alignment.Center
     ) {
         CustomText(
@@ -434,16 +486,21 @@ fun DayCell(
             fontWeight = FontWeight.Bold,
             fontFamily = CustomFontFamily
         )
-        if (isDemanda) {
             if (rol == "tutor") {
                 while (colores.size - 1 >= index) {
                     MyBoxColor(colores[index], index, colores.size)
                     index++
                 }
             } else {
-                MyBoxColor(Marron, 1, 1)
+                val date = LocalDate.of(yearMonth.year, yearMonth.month, day)
+                val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                val formattedDate = date!!.format(formatter)
+                for (demanda in demandasAceptadas) {
+                    if (demanda.fechaInicio.slice(0..9) == formattedDate) {
+                        MyBoxColor(Marron, 1, 1)
+                    }
+                }
             }
-        }
     }
 }
 
@@ -466,10 +523,13 @@ fun MyBoxColor(color: Color, index: Int, totalColors: Int) {
     )
 }
 
-fun getDemandasDay(demandas: List<DemandaAceptada>, day: String): List<DemandaAceptada> {
+fun getDemandasDay(demandas: List<DemandaAceptada>, calendarioViewModel: CalendarioViewModel): List<DemandaAceptada> {
+    val date = calendarioViewModel.selectedDate.value
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    val formattedDate = date!!.format(formatter)
     val demandasDay = mutableListOf<DemandaAceptada>()
     for (demanda in demandas) {
-        if (demanda.fechaInicio == day) {
+        if (demanda.fechaInicio.slice(0..9) == formattedDate) {
             demandasDay.add(demanda)
         }
     }

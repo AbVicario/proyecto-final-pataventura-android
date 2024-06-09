@@ -427,10 +427,10 @@ fun CustomOutlinedTextFieldDes(
     }
     var isDesplegado by remember { mutableStateOf(false) }
     var isItemSelected by remember { mutableStateOf(false) }
-    var textSelected by remember {mutableStateOf(if(isHome) items[i] else "") }
+    var textSelected by remember {mutableStateOf(if(isHome) items[i] else text) }
 
     OutlinedTextField(
-        value = textSelected,
+        value = if(!isHome)text else textSelected,
         onValueChange = {
             onValueChange(it)
         },
@@ -449,7 +449,7 @@ fun CustomOutlinedTextFieldDes(
         supportingText = supportingText,
         placeholder = {
             Text(
-                text = "", fontWeight = FontWeight.Bold, fontSize = 22.sp,
+                text = " ", fontWeight = FontWeight.Bold, fontSize = 22.sp,
                 modifier = Modifier
                     .background(Color.White)
                     .padding(horizontal = 2.dp)

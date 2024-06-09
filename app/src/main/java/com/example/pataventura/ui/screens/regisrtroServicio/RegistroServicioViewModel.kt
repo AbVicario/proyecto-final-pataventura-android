@@ -3,8 +3,6 @@ package com.example.pataventura.ui.screens.regisrtroServicio
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -50,10 +48,8 @@ class RegistroServicioViewModel @Inject constructor(
     val rango: LiveData<String> = _rango
 
 
-    private val _listaRango: ObservableList<String> = ObservableArrayList<String>().apply {
-        add("")
-    }
-    val listaRango: ObservableList<String> = _listaRango
+    private val _listaRango = MutableLiveData<List<String>>(emptyList())
+    val listaRango: LiveData<List<String>> = _listaRango
 
     private val _status = MutableLiveData<Int>()
     val status: LiveData<Int> = _status
@@ -67,13 +63,12 @@ class RegistroServicioViewModel @Inject constructor(
     }
 
     fun onChangeServicio(servicio: String) {
-
         _servicio.postValue(servicio)
-        _listaRango.clear()
+        _rango.postValue("")
+        _listaRango.value = emptyList()
         for(tipo in TiposServicio.tiposServicio.value!!){
             if(tipo.tipo_oferta == servicio){
-                _listaRango.addAll(tipo.kilometros)
-                onChangeRango("")
+                _listaRango.value=tipo.kilometros
                 break
             }
         }

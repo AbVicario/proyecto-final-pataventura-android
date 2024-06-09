@@ -91,7 +91,8 @@ fun BodyRegistroServicio(
                     false,
                     text = servicio,
                     items = listaServicios.map { it.tipo_oferta },
-                    onValueChange = { registroServicioViewModel.onChangeServicio(it) },
+                    onValueChange = { registroServicioViewModel.onChangeServicio(it)
+                                    registroServicioViewModel.onChangeRango(" ") },
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(100.dp),
@@ -124,7 +125,7 @@ fun BodyRegistroServicio(
             CustomOutlinedTextFieldDes(
                 false,
                 text = rango,
-                items = registroServicioViewModel.listaRango,
+                items = registroServicioViewModel.listaRango.value!!,
                 onValueChange = { registroServicioViewModel.onChangeRango(it) },
                 modifier = Modifier
                     .fillMaxWidth()

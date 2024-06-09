@@ -105,7 +105,6 @@ class LoginViewModel @Inject constructor(
     suspend fun onLoginPress(navController: NavController) {
         val email = _email.value!!
         val password = _password.value!!
-        var nombre = ""
 
         val result =
             authenticateUseCase.login(email, password, RoleHolder.rol.value.toString().lowercase())

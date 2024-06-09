@@ -8,6 +8,7 @@ import com.example.pataventura.domain.model.DemandaAceptada
 import com.example.pataventura.domain.useCase.GetDemandasAceptadasUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 @HiltViewModel
 class CalendarioViewModel @Inject constructor(
@@ -16,6 +17,15 @@ class CalendarioViewModel @Inject constructor(
     private val _demandas = MutableLiveData<List<DemandaAceptada>>()
     val demandas: MutableLiveData<List<DemandaAceptada>> = _demandas
 
+    private val _demandasDay = MutableLiveData<List<DemandaAceptada>>()
+    val demandasDay: MutableLiveData<List<DemandaAceptada>> = _demandasDay
+
+    private val _selectedDate = MutableLiveData(LocalDate.now())
+    val selectedDate: MutableLiveData<LocalDate> = _selectedDate
+
+    fun onSelectedDateChange(date: LocalDate){
+        _selectedDate.postValue(date)
+    }
 
     fun getDemandasAceptadas() {
         viewModelScope.launch {
